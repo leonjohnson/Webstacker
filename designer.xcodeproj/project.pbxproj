@@ -66,6 +66,8 @@
 		F7026F06167BBE9800606211 /* LayerPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = F7026F05167BBE9800606211 /* LayerPanel.m */; };
 		F7026F13167CB26C00606211 /* INAppStoreWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F7026F03167BAABF00606211 /* INAppStoreWindow.m */; };
 		F70AF48F16302EFB00912A6F /* DocumentWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70AF48E16302EFB00912A6F /* DocumentWindowController.m */; };
+		F71E3D9816F48F2B0081B0E4 /* StageView+conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = F71E3D9716F48F2B0081B0E4 /* StageView+conversion.m */; };
+		F71E3D9A16F492B00081B0E4 /* Element+ActionsAndDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = F71E3D9916F492B00081B0E4 /* Element+ActionsAndDataSources.m */; };
 		F727459D169CB9A500CAD9DD /* element_7_Dynamic_row.png in Resources */ = {isa = PBXBuildFile; fileRef = F727459C169CB9A500CAD9DD /* element_7_Dynamic_row.png */; };
 		F72745A4169CBAD000CAD9DD /* DynamicRow.m in Sources */ = {isa = PBXBuildFile; fileRef = F72745A3169CBAD000CAD9DD /* DynamicRow.m */; };
 		F72745A7169F408D00CAD9DD /* DynamicImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F72745A6169F408D00CAD9DD /* DynamicImage.m */; };
@@ -196,6 +198,8 @@
 		F7026F05167BBE9800606211 /* LayerPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerPanel.m; sourceTree = "<group>"; };
 		F70AF48D16302EFB00912A6F /* DocumentWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentWindowController.h; sourceTree = "<group>"; };
 		F70AF48E16302EFB00912A6F /* DocumentWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentWindowController.m; sourceTree = "<group>"; };
+		F71E3D9716F48F2B0081B0E4 /* StageView+conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StageView+conversion.m"; sourceTree = "<group>"; };
+		F71E3D9916F492B00081B0E4 /* Element+ActionsAndDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Element+ActionsAndDataSources.m"; sourceTree = "<group>"; };
 		F727459C169CB9A500CAD9DD /* element_7_Dynamic_row.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = element_7_Dynamic_row.png; sourceTree = "<group>"; };
 		F72745A2169CBAD000CAD9DD /* DynamicRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicRow.h; sourceTree = "<group>"; };
 		F72745A3169CBAD000CAD9DD /* DynamicRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicRow.m; sourceTree = "<group>"; };
@@ -407,6 +411,7 @@
 			children = (
 				5877F054155589D0005FF829 /* Element.h */,
 				5877F055155589D0005FF829 /* Element.m */,
+				F71E3D9916F492B00081B0E4 /* Element+ActionsAndDataSources.m */,
 				5877F0BB1556A6EC005FF829 /* ElementAttributes.m */,
 				582B4CA5158BC246006E1AFF /* GroupingBox.h */,
 				582B4CA6158BC246006E1AFF /* GroupingBox.m */,
@@ -444,6 +449,7 @@
 				5877F04C155589C5005FF829 /* OperationInsideShapeDelegate.h */,
 				5877F04D155589C5005FF829 /* StageView.h */,
 				5877F04E155589C5005FF829 /* StageView.m */,
+				F71E3D9716F48F2B0081B0E4 /* StageView+conversion.m */,
 				AD62501315DEBB590004325A /* SBCenteringClipView.h */,
 				AD62501415DEBB590004325A /* SBCenteringClipView.m */,
 				582B9F18156C041200E0256E /* StageTextViewDelegate.h */,
@@ -760,6 +766,8 @@
 				3F01BB0F16E36386007DE404 /* DataSourcePanel.m in Sources */,
 				3F994E3416E5B1BC005BA72A /* WarningMenuView.m in Sources */,
 				3FC1BC4816EA511400C350C9 /* CustomButton.m in Sources */,
+				F71E3D9816F48F2B0081B0E4 /* StageView+conversion.m in Sources */,
+				F71E3D9A16F492B00081B0E4 /* Element+ActionsAndDataSources.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

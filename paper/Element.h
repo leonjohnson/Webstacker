@@ -155,17 +155,15 @@ typedef NSInteger LayoutTag;
     
     //Actions - this array contains other arrays, each one is a list of actions created by the user or the system.
     NSString *actionStringEntered;
-    NSString *dataSourceStringEntered;
+    NSString *dataSourceStringEntered;  // stores the string the user entered into the dataSource textField
+    NSString *visibilityActionStringEntered;
+    NSString *prefixText; // enter any text you want to appear before the output
 	
 	NSMutableArray			*arrayShadows;
     
     
     /**********************************************/
 }
-
-@property float    width_as_percentage;
-@property float    height_as_percentage;
-@property (assign, nonatomic) NSString *layoutType;
 
 
 @property (assign, nonatomic) ElementType				uType;
@@ -174,6 +172,11 @@ typedef NSInteger LayoutTag;
 @property (nonatomic) BOOL                           isUnderneathOtherElement;
 @property (nonatomic) NSRect						rtFrame;
 @property (assign) id<OperationInsideElementDelegate>				insideOperationElement;
+
+
+@property float    width_as_percentage;
+@property float    height_as_percentage;
+@property (assign, nonatomic) NSString *layoutType;
 
 @property (assign, nonatomic) NSString *elementTag;
 
@@ -206,6 +209,8 @@ typedef NSInteger LayoutTag;
 
 @property (assign, nonatomic) NSString *actionStringEntered;
 @property (assign, nonatomic) NSString *dataSourceStringEntered;
+@property (assign, nonatomic) NSString *visibilityActionStringEntered; //
+@property (assign, nonatomic) NSString *prefixText;
 
 @property (nonatomic) BOOL							isPtInElement;
 @property (assign) NSMutableArray					*arrayShadows;
@@ -327,6 +332,36 @@ typedef NSInteger LayoutTag;
  */
 - (void)removeShapeShadow:(NSInteger)index;
 
+
+/*
+ @function:		createHandleArray
+ @params:		nothing
+ @return:		void
+ @purpose:		This function create the handle pointer's array of the shape
+ */
+- (void)createHandleArray;
+
+/*
+ @function:		DeselectShape
+ @params:		void
+ @return:		void
+ @purpose:		This function deselect the shape.
+ */
+- (void)deSelectElement;
+
+/*
+ @function:		setBoundRect
+ @params:		rt:   shape's bound rect
+ @return:       void
+ @purpose:		It's abstract function. Function's body definitions are implemented at every shape classes.
+ Set the shape's bound rect "rtFrame" to rt.
+ */
+- (void)setBoundRect:(NSRect)rt;
+
+
+
+- (NSInteger)IsPointInShape:(NSPoint)pt;
+
 @end
 
 @interface Element (ElementAttributes)
@@ -353,5 +388,16 @@ typedef NSInteger LayoutTag;
 -(void)setRtFrame:(NSRect)rtFrame;
 -(void)postNotificationToRedraw;
 
-
 @end
+
+
+@interface Element (ActionsAndDataSources)
+
+-(NSString *)actionCodeString;
+-(NSString *)dataSourceCodeString;
+@end
+
+
+
+
+

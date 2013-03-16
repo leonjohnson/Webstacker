@@ -76,6 +76,7 @@ static NSImage *bottomImage;
 
 
 
+
 #pragma mark - INITIALIZE AND DRAW THE STAGE
 
 + (void)initialize

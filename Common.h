@@ -39,6 +39,28 @@
 #define DROP_DOWN_MENU_TAG                      @"dropDownMenu"
 
 
+
+
+#define ELEMENT_ID                              @"elementID"
+#define RT_FRAME                                @"rtframe"
+
+#define TRIGGER                                 @"trigger"
+#define IMAGE_TO_DISPLAY                        @"image"
+#define DOCUMENTATION                           @"documentation"
+
+#define ACTION                                  @"action"
+#define NAME                                    @"name"
+
+#define BUILDER_ICON_SIZE                       17
+
+#define BUILDER_NAME_TAB                        @"name"
+#define BUILDER_TRIGGERS_TAB                    @"triggers"
+#define BUILDER_COMMANDS_TAB                    @"commands"
+
+
+
+
+
 #define IN_RUNNING_LION (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6)
 #define IN_COMPILING_LION __MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
 
