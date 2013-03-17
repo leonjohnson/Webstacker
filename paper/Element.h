@@ -329,19 +329,13 @@ typedef NSInteger LayoutTag;
 
 @end
 
+
 @interface Element (ElementAttributes)
-
 -(NSNumber *)borderColor;
-
 -(NSNumber *)borderStyle;
 -(void)setborderStyle:(NSNumber *)borderStyle;
-
-
-
 -(NSString *)buttonString;
 - (void)setButtonString:(NSString *)text;
-
-//-(id<NSObject>)border;
 -(void)setBackgroundAttributes:(NSDictionary *)backgroundAttributes;
 -(void)setFloatAttribute:(NSString *)floatAttribute;
 //-(void)setColor:(NSDictionary *)colorDictionary;
@@ -352,6 +346,8 @@ typedef NSInteger LayoutTag;
 -(void)setlinkAttributes:(NSMutableDictionary *)link;
 -(void)setRtFrame:(NSRect)rtFrame;
 -(void)postNotificationToRedraw;
-
-
 @end
+
+
+
+

@@ -133,7 +133,7 @@
 @property(assign) IBOutlet AlignmentPanel *alignmentPanel;
 @property(assign) IBOutlet NSPanel *buttonPanel;
 
-@property (assign, nonatomic) NSMutableArray *actionsArray; // see -(IBAction)pressSaveButton:(id)sender on BuilderWindow class.
+
 @property (assign, nonatomic) NSMutableDictionary *masterDataSource;
 
 // for Data Source Window
