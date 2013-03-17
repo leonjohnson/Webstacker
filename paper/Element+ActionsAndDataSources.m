@@ -295,16 +295,18 @@
     
     // look through each headers values which be availableMeals and look through it's variables. If found return the name of that Model.
     [arrayToSearchThrough removeObjectAtIndex:0]; // remove the headers and we now only search through the one row remaining (most probably
-    
+    /*
     for (NSArray *array in arrayToSearchThrough)
     {
-        for (NSString *value in array) {
+        for (NSString *value in array) 
+     {
             if ([value isEqualToString:attribute])
             {
                 return <#expression#>
             }
         }
     }
+     */
     
     
     

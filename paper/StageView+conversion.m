@@ -1,8 +1,18 @@
 #import "StageView.h"
-#import "StageView.m"
-#import "GroupingBox.h"
 #import "Common.h"
-
+#import "AppDelegate.h"
+#import "Document.h"
+#import "GroupingBox.h"
+#import "Box.h"
+#import "Circle.h"
+#import "TextBox.h"
+#import "Singleton.h"
+#import "Image.h"
+#import "Button.h"
+#import "TextInputField.h"
+#import "DropDown.h"
+#import "DynamicRow.h"
+#import "Triangle.h"
 
 
 @interface StageView (conversion)
@@ -11,6 +21,14 @@
 
 @implementation StageView (conversion)
 
+#define STR_LEFT   @"Left Edge"
+#define STR_RIGHT  @"Right Edge"
+#define STR_TOP    @"Top Edge"
+#define STR_BOTTOM @"Bottom Edge"
+
+#define xcoordinate @"xcoordinate"
+#define ycoordinate @"ycoordinate"
+#define bottomYcoordinate @"bottomYcoordinate"
 
 #pragma mark - ASSOCIATIVE GENERATION METHODS
 
@@ -3250,7 +3268,8 @@
             
             //Set the flexible margin Right
             NSLog(@"GOT HERE");
-            CGFloat containingElementWidth = [self sizeOfHighestContainingElement:g].width;
+            Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+            CGFloat containingElementWidth = [[curDoc stageView] sizeOfHighestContainingElement:g].width; // just changed to make it work with categories
             CGFloat mRight = [[[g.insideTheBox objectAtIndex:0] objectForKey:@"GroupBoxMarginRight"] floatValue];
             NSNumber *flexibleMarginRight = [NSNumber numberWithFloat:(mRight/containingElementWidth)*100];
             [header setObject:flexibleMarginRight forKey:MARGIN_RIGHT_AS_A_PERCENTAGE];
@@ -4803,4 +4822,17 @@
     }
     
 }
+
+
+
+-(CGFloat)convertTarget:(float)target inContext:(float)context
+{
+    CGFloat flexibleMeasurement = (target/context)*100;
+    return flexibleMeasurement;
+}
+
+
+
+
+
 @end

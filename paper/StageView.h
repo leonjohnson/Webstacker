@@ -470,4 +470,8 @@ typedef NSInteger		ShapeCutCopyType;
 
 - (void)selectFontofCurrentTextBox:(NSString *)fontName;
 
+-(CGSize)sizeOfHighestContainingElement: (Element*)selElement;
+
 @end
+
+

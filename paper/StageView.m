@@ -267,6 +267,52 @@ static NSImage *bottomImage;
 	CGContextSetRGBStrokeColor( contextref, 0.0, 0.0, 0.0, 1.0 );
 	CGContextStrokeRect( contextref, CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) );
     CGContextFillRect(contextref, stageRect);
+    
+    // gridlines
+    //CGFloat numberOfLines =  floorf(self.frame.size.width/5);
+    CGFloat gridBlockSize = 20;
+    CGFloat blocksUntilThickLine = 10;
+    
+    for (CGFloat x = 0; x < self.frame.size.width; x+=gridBlockSize)
+    {
+        // Set line width and colour
+        CGContextSetLineWidth(contextref, 1);
+        CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.1);
+        
+        // draw the horizontal line
+        CGContextBeginPath(contextref);
+        CGContextMoveToPoint(contextref, x, 0);
+        CGContextAddLineToPoint(contextref, x, self.frame.size.height);
+        
+        CGFloat division = x / (gridBlockSize * blocksUntilThickLine);
+        if ( floorf(division) == division ) // if it's an integer
+        {
+            CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.2);
+        }
+        CGContextDrawPath(contextref, kCGPathStroke);
+    }
+    
+    // draw vertically
+    for (CGFloat y = 0; y < self.frame.size.height; y+=gridBlockSize)
+    {
+        // Set line width and colour
+        CGContextSetLineWidth(contextref, 1);
+        CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.1);
+        
+        // draw the horizontal line
+        CGContextBeginPath(contextref);
+        CGContextMoveToPoint(contextref, 0, y);
+        CGContextAddLineToPoint(contextref, self.frame.size.width, y);
+        
+        CGFloat division = y / (gridBlockSize * blocksUntilThickLine);
+        if ( floorf(division) == division ) // if it's an integer
+        {
+            CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.2);
+        }
+        CGContextDrawPath(contextref, kCGPathStroke);
+    }
+    
+    
 	
 	// draw all shapes in shape array
 	for (Element *shape in elementArray) {
@@ -3158,11 +3204,6 @@ static NSImage *bottomImage;
     
 }
 
--(CGFloat)convertTarget:(float)target inContext:(float)context
-{
-    CGFloat flexibleMeasurement = (target/context)*100;
-    return flexibleMeasurement;
-}
 
 
 
