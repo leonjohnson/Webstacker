@@ -13,6 +13,7 @@
 #import "DropDown.h"
 #import "DynamicRow.h"
 #import "Triangle.h"
+#import "Container.h"
 #import "NSColor+NSColorHexadecimalValue.h"
 #import "NSColor+colorToHex.h"
 
@@ -997,7 +998,7 @@
     
     NSDictionary *highestElement = [sortedItemsInRow lastObject];
     int rowMarginTop = [[highestElement valueForKey:@"ycoordinate"]intValue];
-    NSLog(@"Returning fom highestYcoordinateInMyRow : %i", rowMarginTop);
+    NSLog(@"  **** Returning fom highestYcoordinateInMyRow : %i", rowMarginTop);
     return rowMarginTop;
 }
 
@@ -1649,6 +1650,12 @@
             tagType = @"button";
         }
         
+        if ([ele isMemberOfClass:[Container class]])
+        {
+            tagContent = @"";
+            tagType = CONTAINER_TAG;
+        }
+        
         if (([ele isMemberOfClass:[DropDown class]]))
         {
             tagContent = @"";
@@ -2215,21 +2222,42 @@
             
             
             
-            if ( ([elem isEqualToDictionary:elementToCheck] == NO) & ([[elem objectForKey:@"tag"] isEqualToString:@"div"] || [[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG] ) & ([[elementToCheck objectForKey:@"tag"] isEqualToString:@"paragraph"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"image"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DYNAMIC_IMAGE_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:BUTTON_TAG]) & (CGRectContainsRect(rect1, rect2)) )
-            /* Not myself, but is a rectangle, and has a:
+            if ( ([elem isEqualToDictionary:elementToCheck] == NO) & ([[elem objectForKey:@"tag"] isEqualToString:@"div"] || [[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG] ) || [[elem objectForKey:@"tag"] isEqualToString:CONTAINER_TAG] & ([[elementToCheck objectForKey:@"tag"] isEqualToString:@"paragraph"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"image"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DYNAMIC_IMAGE_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_BOX_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:BUTTON_TAG]) & (CGRectContainsRect(rect1, rect2)) )
+            /* Not myself, but is a rectangle or dyRow, and has a:
              paragraph,
              image,
              dynamic image,
              dropDown menu,
-             textfield, or
+             textfield,
+             textBox, or
              button
              ontop of it, which is completely contained within the the rectangle shape then...
              */
             {
                 NSLog(@"We have overlapping TEXT AND DIVS !!!!");
-                [elementToCheck setObject:[elem objectForKey:@"id"] forKey:@"parentID"];
+                // check if this element has a dictionary under PARENT_ID, if so then add a key, if not then create the dictionary
+                
+                if ( [elementToCheck objectForKey:PARENT_ID] != nil)
+                {
+                    // the parentID dictionary already exists inside of this element
+                    // ASSUMPTION: AN ELEMENT CAN ONLY OVERLAP A BOX, DYROW, OR CONTAINER ONCE
+                    [[elementToCheck objectForKey:PARENT_ID] setObject:[elem objectForKey:@"id"] forKey:[elem objectForKey:@"tag"]];
+                }
+                else
+                {
+                    // the parentID dictionary for this element does not currently exist
+                    NSMutableDictionary *parentIDDictionary = [NSDictionary dictionaryWithObject:[elem objectForKey:@"id"] forKey:[elem objectForKey:@"tag"]];
+                    [elementToCheck setObject:parentIDDictionary forKey:@"parentID"];
+                }
+
+                //[elementToCheck setObject:[elem objectForKey:@"id"] forKey:@"parentID"];
                 [elementsToGoInGroupingBox addObject:elementToCheck];
                 [elem setObject:[NSNumber numberWithBool:YES] forKey:@"convertToGroupingbox"];
+                
+                if ([elem isMemberOfClass:[Container class]])
+                {
+                    [elem removeObjectForKey:@"convertToGroupingbox"];
+                }
                 
                 if ([[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG])
                 {
@@ -2472,7 +2500,7 @@
             
             
             
-            if (gb1 != nil && gb1==gb2 && [dc objectForKey:@"parentID"] != nil) //it's inside a standard groupingbox and the shapeAboveMe is in the same Grouping box as I am.
+            if (gb1 != nil && gb1==gb2 && [dc valueForKeyPath:@"parentID.div"] != nil) //it's inside a standard groupingbox and the shapeAboveMe is in the same Grouping box as I am.
             {
                 
                 testingRect = NSMakeRect([[dc objectForKey:xcoordinate]floatValue],
@@ -2847,7 +2875,7 @@
     // Calclulate its bottom margin if it's the last item in the sorted Array
     for (NSMutableDictionary *each in [sortedArray reverseObjectEnumerator])
     {
-        if ([each objectForKey:@"parentID"] == nil)
+        if ([each valueForKeyPath:@"parentID.div"] == nil)
         {
             NSNumber *marginBottom = [NSNumber numberWithInt:(int)self.bounds.size.height - [[each objectForKey:bottomYcoordinate]intValue]];
             NSLog(@"marginBottom is : %@ for object with id: %@", marginBottom, [each objectForKey:@"id"]);
@@ -2992,6 +3020,7 @@
         else
         {
             CGFloat highestPoint;
+             # pragma mark -  ADD CONTAINER CODE HERE.
             if (self.documentContainer.size.height == 0) // when an instance is initialiSed, all its ivar are cleared to bits of zero
             {
                 //highestPoint = self.frame.size.height;
@@ -3176,12 +3205,12 @@
                 CGFloat parent;
                 
                 //if the element has a container then it's context is the container, else it's the stage
-                if ([dc objectForKey:PARENT_ID])
+                if ([dc valueForKeyPath:[NSString stringWithFormat:@"%@.%@", PARENT_ID, DIV_TAG]])
                 {
                     //get the parent object
                     
                     for (NSDictionary *checking in sortedArray) {
-                        if ([[checking valueForKey:@"id"] isEqualToString:[dc objectForKey:PARENT_ID]]) {
+                        if ([[checking valueForKey:@"id"] isEqualToString:[dc valueForKeyPath:[NSString stringWithFormat:@"%@.%@", PARENT_ID, DIV_TAG]]]) {
                             parent = [[checking objectForKey:@"width"]floatValue];
                         }
                     }
@@ -3195,6 +3224,7 @@
                 }
                 else
                 {
+                    #pragma mark - ADD CONTAINER CODE HERE
                     parent = self.frame.size.width;
                 }
                 CGFloat context = parent;
@@ -3210,12 +3240,12 @@
                 CGFloat parent;
                 
                 //if the element has a container then it's context is the container, else it's the stage
-                if ([dc objectForKey:PARENT_ID])
+                if ([dc valueForKeyPath:[NSString stringWithFormat:@"%@.%@", PARENT_ID, DIV_TAG]])
                 {
                     //get the parent object
                     
                     for (NSDictionary *checking in sortedArray) {
-                        if ([[checking valueForKey:@"id"] isEqualToString:[dc objectForKey:PARENT_ID]]) {
+                        if ([[checking valueForKey:@"id"] isEqualToString:[dc valueForKeyPath:[NSString stringWithFormat:@"%@.%@", PARENT_ID, DIV_TAG]]]) {
                             parent = [[checking objectForKey:@"width"]floatValue];
                         }
                     }
@@ -3228,6 +3258,7 @@
                 }
                 else
                 {
+                    #pragma mark - ADD CONTAINER CODE HERE
                     parent = self.frame.size.width;
                 }
                 if (parent) // if I found a parent object
@@ -3948,7 +3979,7 @@
         
         
         // RECTANGLE or ROW CODE
-        if ( ([block valueForKey:@"tag"] == @"div") || ([block valueForKey:@"tag"] == DYNAMIC_ROW_TAG) )
+        if ( ([[block valueForKey:@"tag"] isEqualToString: @"div"]) || ([[block valueForKey:@"tag"] isEqualToString: DYNAMIC_ROW_TAG ]) )
         {
             NSArray *arrayH = [NSArray array];
             if ([block objectForKey:@"convertToGroupingbox"] == nil)

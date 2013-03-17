@@ -28,6 +28,7 @@
 #define WIDTH_AS_A_PERCENTAGE                   @"widthAsPercentage"
 
 #define TEXT_INPUT_FIELD_TAG                    @"textInputField"
+#define TEXT_BOX_TAG                            @"TextBox"
 #define DIV_TAG                                 @"div" //Box Class
 #define BUTTON_TAG                              @"button"
 #define CIRCLE_TAG                              @""
@@ -37,7 +38,7 @@
 #define DYNAMIC_IMAGE_TAG                       @"dynamicImage"
 #define DYNAMIC_ROW_TAG                         @"dynamicRow"
 #define DROP_DOWN_MENU_TAG                      @"dropDownMenu"
-
+#define CONTAINER_TAG                           @"container"
 
 
 
