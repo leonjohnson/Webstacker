@@ -106,7 +106,6 @@ typedef NSInteger		ShapeCutCopyType;
     IBOutlet NSButton *groupItems;
     IBOutlet NSButton *documentSettingsButton;
     IBOutlet NSPopover *documentSettingsPopover;
-    //IBOutlet NSPopover *textPopover;
     
     IBOutlet NSPanel *panel;
 
@@ -207,18 +206,15 @@ typedef NSInteger		ShapeCutCopyType;
 
 -(void)updateCustomFontMenu:(NSDictionary*)attributes;
 
--(CGSize)sizeAsPercentageOfHighestContainingElement: (Element*)selElement;
-
 //VALIDATION OF ELEMENTS EDITED
 -(BOOL)isElementIDUnique: (NSMutableString *)string;
 
 
-//NSColor
--(NSString *)hsla:(NSColor *)color;
+
 
 //Drawing methods
 -(IBAction)displayDocumentSettingsView:(id)sender;
--(void)updateStageViewBackgroundColor: (NSDictionary *)dict;
+
 -(void) postNotificationForImageToResize;
 -(void) postNotificationForImageToHold;
 
@@ -234,19 +230,14 @@ typedef NSInteger		ShapeCutCopyType;
 -(IBAction)clearPopover:(id)sender;
 -(void)closeSettingsPopover;
 
-
-/*
- @fuction:		ResortLayer
- @params:		nothing
- @return:		void
- @purpose:		This function calls LayerPanel's SetLayerList to resort shape list to layer panel.
- */
+//Sort layer panel
 - (void)ResortLayer;
 - (void)ResortShapes:(NSIndexSet *)from to:(NSInteger)to;
 
 
 //Moving and positioning of Elements
 -(BOOL)updateOverlappingVariable;
+
 /*
  @function:		DeselectAllShaps
  @params:		nothing
@@ -282,7 +273,6 @@ typedef NSInteger		ShapeCutCopyType;
  @purpose:		move all selected Element in selElementArray
  */
 - (void)MoveSelectedElements:(NSSize)offset HitTest:(NSInteger)hitTest;
--(CGSize)updateElementWithPercentagesAndAttributesPanelWithElementAttributes:(Element*)selElement;
 
 /*
  @function:		IsContainShape
@@ -347,9 +337,6 @@ typedef NSInteger		ShapeCutCopyType;
 
 
 
--(GroupingBox*)whichGroupingBoxIsElementIn:(NSDictionary*)elementBeingTested;
-
-
 
 - (NSData *)SaveProjectToFile:(NSString*)filename;
 
@@ -364,8 +351,6 @@ typedef NSInteger		ShapeCutCopyType;
  */
 - (BOOL)IsSelectedShape;
 
-
-
 - (void)DeleteAllElements;
 
 - (void)DeleteSelElements;
@@ -379,21 +364,12 @@ typedef NSInteger		ShapeCutCopyType;
 - (void)PasteSelElements;
 
 
-/*
- @function:		ShowGridLine
- @params:		bShow:			visible/hide flag. if bShow is YES, grid line wil show. otherwise, hide it.
- @return:		void
- @purpose:		This function called when the user click the show grid line menu item.
- The purpose is to visible/hide grid line.
- */
-//- (void)ShowGridLine:(BOOL)bShow;
-
 
 /*
  @function:		CreateClipBoardRecursive
  @params:		buffer:				shape buffer
- srcShape:			original parent shape
- dstShape:			target parent shape
+ srcShape:		original parent shape
+ dstShape:		target parent shape
  @return:		void
  @purpose:		The purpose is to create shape into buffer recursively from selShapeArray again.
  */
@@ -430,48 +406,45 @@ typedef NSInteger		ShapeCutCopyType;
  @purpose:		This function create container shape.
  */
 - (void)createContainerElement:(CGFloat)width;
-
-/*
- @function:		drawShapeShadow
- @params:		angle:		shadow angle
- dist:		shadow distance
- r, g, b, alpha: color property of shadow
- direct:		shadow direction, if it's YES, outset. otherwise inset.
- index:		index of shadow in shadow list
- @return:		void
- @purpose:		This function draws the shadow of shape with params.
- */
-- (void)drawShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d Index:(NSInteger)index;
-
-
-/*
- @function:		addShapeShadow
- @params:		angle:		shadow angle
- dist:		shadow distance
- r, g, b, alpha: color property of shadow
- direct:		shadow direction, if it's YES, outset. otherwise inset.
- @return:		void
- @purpose:		This function add the new shadow to current shape
- */
-- (void)addShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d;
-
-
-/*
- @function:		removeShapeShadow
- @params:		index:		index of shadow in shadow list
- @return:		void
- @purpose:		This function remove the shape shadow from the shadow list
- */
-- (void)removeShapeShadow:(NSInteger)index;
-
-
 - (void)showFontTab;
 - (void)hideFontTab;
-
 - (void)selectFontofCurrentTextBox:(NSString *)fontName;
 
+@end
+
+
+
+@interface StageView (flexibileWidth)
+-(CGSize)sizeAsPercentageOfHighestContainingElement: (Element*)selElement;
+-(CGSize)sizeOfHighestContainingElement: (Element*)selElement;
+-(CGSize)updateElementWithPercentagesAndAttributesPanelWithElementAttributes:(Element*)selElement;
+@end
+
+
+@interface StageView (colorsShadowsGradients)
+-(void)updateStageViewBackgroundColor: (NSDictionary *)dict;
+-(NSString *)hsla:(NSColor *)color;
+- (void)drawShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d Index:(NSInteger)index;
+- (void)addShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d;
+- (void)removeShapeShadow:(NSInteger)index;
+@end
+
+
+
+
+
+
+
+
+
+
+
+
+<<<<<<< HEAD
 -(CGSize)sizeOfHighestContainingElement: (Element*)selElement;
 
 @end
 
 
+=======
+>>>>>>> master

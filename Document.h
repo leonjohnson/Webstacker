@@ -26,7 +26,6 @@
 	NSData								*dataFromeFile;
 	NSInteger							scale;
     Singleton *sg;
-    IBOutlet NSPanel *builderScreen;
     DarkTitleViewButtons *darkButtons;
     
     DocumentBar				*titleView;
@@ -57,7 +56,6 @@
 				dataFromFile isn't nil, stage view created by dataFromFile.
  */
 - (void)initWithData;
--(void)showBuilderScreen;
 
 /*
  @function:		createAdvancedShape

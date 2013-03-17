@@ -198,13 +198,6 @@
 }
 
 
--(IBAction)showBuilderScreen:(id)sender
-{
-    NSLog(@"got : %@", [sender title]);
-    Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-    [curDoc showBuilderScreen];
-}
-
 -(IBAction)takeLayoutType:(id)sender
 {
     NSLog(@"got : %@", [sender title]);
