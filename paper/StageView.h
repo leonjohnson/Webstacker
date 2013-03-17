@@ -434,17 +434,3 @@ typedef NSInteger		ShapeCutCopyType;
 
 
 
-
-
-
-
-
-
-<<<<<<< HEAD
--(CGSize)sizeOfHighestContainingElement: (Element*)selElement;
-
-@end
-
-
-=======
->>>>>>> master

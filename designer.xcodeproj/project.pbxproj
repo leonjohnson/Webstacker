@@ -74,6 +74,8 @@
 		F73C3EF716089B050081C459 /* NSColor+NSColorHexadecimalValue.m in Sources */ = {isa = PBXBuildFile; fileRef = F73C3EF616089B050081C459 /* NSColor+NSColorHexadecimalValue.m */; };
 		F73C3F1E1617A35F0081C459 /* DocumentSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73C3F1D1617A35F0081C459 /* DocumentSettingsViewController.m */; };
 		F73C3F221618861F0081C459 /* DocumentSettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F73C3F211618861F0081C459 /* DocumentSettingsView.m */; };
+		F74A171F16F627840057BF06 /* bootstrap.css in Resources */ = {isa = PBXBuildFile; fileRef = F74A171E16F627840057BF06 /* bootstrap.css */; };
+		F7631AF116F6177B00C8A011 /* StageView+conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = F7631AF016F6177B00C8A011 /* StageView+conversion.m */; };
 		F79D93F816024E3300AE661E /* TextInputField.m in Sources */ = {isa = PBXBuildFile; fileRef = F79D93F716024E3300AE661E /* TextInputField.m */; };
 		F7B311851687A7930047BC57 /* DropDown.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B311841687A7930047BC57 /* DropDown.m */; };
 		F7B311881687B2C40047BC57 /* element_2_dropdown.png in Resources */ = {isa = PBXBuildFile; fileRef = F7B311871687B2C30047BC57 /* element_2_dropdown.png */; };
@@ -86,6 +88,7 @@
 		F7DB3EE61640945C00D98CA5 /* element_4_textbox.png in Resources */ = {isa = PBXBuildFile; fileRef = F7DB3EE31640945C00D98CA5 /* element_4_textbox.png */; };
 		F7DB3EE71640945C00D98CA5 /* element_5_textfield.png in Resources */ = {isa = PBXBuildFile; fileRef = F7DB3EE41640945C00D98CA5 /* element_5_textfield.png */; };
 		F7E44B6E169B07D4006EFC9B /* element_6_ Placholder image.png in Resources */ = {isa = PBXBuildFile; fileRef = F7E44B6D169B07D4006EFC9B /* element_6_ Placholder image.png */; };
+		F7E9E46A16F616A80023CB48 /* Element+ActionsAndDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E9E46916F616A80023CB48 /* Element+ActionsAndDataSources.m */; };
 		F7EBA999168C931E007B8585 /* DarkTitleViewButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = F7EBA998168C931E007B8585 /* DarkTitleViewButtons.m */; };
 /* End PBXBuildFile section */
 
@@ -212,6 +215,8 @@
 		F73C3F1F161884F30081C459 /* ChangeDocumentSettingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeDocumentSettingDelegate.h; sourceTree = "<group>"; };
 		F73C3F201618861E0081C459 /* DocumentSettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentSettingsView.h; sourceTree = "<group>"; };
 		F73C3F211618861F0081C459 /* DocumentSettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentSettingsView.m; sourceTree = "<group>"; };
+		F74A171E16F627840057BF06 /* bootstrap.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = bootstrap.css; sourceTree = "<group>"; };
+		F7631AF016F6177B00C8A011 /* StageView+conversion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StageView+conversion.m"; sourceTree = "<group>"; };
 		F79D93F616024E3300AE661E /* TextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextInputField.h; sourceTree = "<group>"; };
 		F79D93F716024E3300AE661E /* TextInputField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextInputField.m; sourceTree = "<group>"; };
 		F7B311831687A7930047BC57 /* DropDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropDown.h; sourceTree = "<group>"; };
@@ -231,6 +236,7 @@
 		F7DB3EE31640945C00D98CA5 /* element_4_textbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = element_4_textbox.png; sourceTree = "<group>"; };
 		F7DB3EE41640945C00D98CA5 /* element_5_textfield.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = element_5_textfield.png; sourceTree = "<group>"; };
 		F7E44B6D169B07D4006EFC9B /* element_6_ Placholder image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "element_6_ Placholder image.png"; sourceTree = "<group>"; };
+		F7E9E46916F616A80023CB48 /* Element+ActionsAndDataSources.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Element+ActionsAndDataSources.m"; sourceTree = "<group>"; };
 		F7EBA997168C931E007B8585 /* DarkTitleViewButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DarkTitleViewButtons.h; sourceTree = "<group>"; };
 		F7EBA998168C931E007B8585 /* DarkTitleViewButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DarkTitleViewButtons.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -388,6 +394,7 @@
 		5877F032155588CF005FF829 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F74A172016F6278B0057BF06 /* css */,
 				5877F068155589E1005FF829 /* buttons */,
 				5877F069155589E8005FF829 /* shapes */,
 			);
@@ -411,6 +418,7 @@
 			children = (
 				5877F054155589D0005FF829 /* Element.h */,
 				5877F055155589D0005FF829 /* Element.m */,
+				F7E9E46916F616A80023CB48 /* Element+ActionsAndDataSources.m */,
 				5877F0BB1556A6EC005FF829 /* ElementAttributes.m */,
 				582B4CA5158BC246006E1AFF /* GroupingBox.h */,
 				582B4CA6158BC246006E1AFF /* GroupingBox.m */,
@@ -450,6 +458,7 @@
 				5877F04E155589C5005FF829 /* StageView.m */,
 				F71E3D9C16F5EEC00081B0E4 /* StageView+flexibileWidth.m */,
 				F71E3D9F16F5F31D0081B0E4 /* StageView+colorsShadowsGradients.m */,
+				F7631AF016F6177B00C8A011 /* StageView+conversion.m */,
 				AD62501315DEBB590004325A /* SBCenteringClipView.h */,
 				AD62501415DEBB590004325A /* SBCenteringClipView.m */,
 				582B9F18156C041200E0256E /* StageTextViewDelegate.h */,
@@ -582,6 +591,14 @@
 			name = Popovers;
 			sourceTree = "<group>";
 		};
+		F74A172016F6278B0057BF06 /* css */ = {
+			isa = PBXGroup;
+			children = (
+				F74A171E16F627840057BF06 /* bootstrap.css */,
+			);
+			name = css;
+			sourceTree = "<group>";
+		};
 		F7B3116C1684B59C0047BC57 /* DocumentWindow */ = {
 			isa = PBXGroup;
 			children = (
@@ -707,6 +724,7 @@
 				3F1CEAF116D55BED009246C2 /* DataSourceWindowController.xib in Resources */,
 				3FEF2DEF16D930EC005A05B9 /* NewContainerWindowController.xib in Resources */,
 				3FFDB1F316E1361C00E54DBC /* element_8_Container.png in Resources */,
+				F74A171F16F627840057BF06 /* bootstrap.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -717,6 +735,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7631AF116F6177B00C8A011 /* StageView+conversion.m in Sources */,
+				F7E9E46A16F616A80023CB48 /* Element+ActionsAndDataSources.m in Sources */,
 				F7026F13167CB26C00606211 /* INAppStoreWindow.m in Sources */,
 				F7DB1C64162CCB3E00CD72D4 /* Document.m in Sources */,
 				F7DB1C62162CC73900CD72D4 /* AlignmentPanel.m in Sources */,

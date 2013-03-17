@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Cosmo Software. All rights reserved.
 //
 
-// feature1 branch
+// feature1
 
 #ifndef DrawShape_Common_h
 #define DrawShape_Common_h

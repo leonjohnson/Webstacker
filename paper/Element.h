@@ -384,11 +384,6 @@ typedef NSInteger LayoutTag;
 @end
 
 
-
-@end
-
-
-<<<<<<< HEAD
 @interface Element (ActionsAndDataSources)
 
 -(NSString *)actionCodeString;
@@ -396,8 +391,3 @@ typedef NSInteger LayoutTag;
 @end
 
 
-
-
-
-=======
->>>>>>> master

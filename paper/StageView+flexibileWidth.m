@@ -3,6 +3,8 @@
 
 @implementation StageView (flexibileWidth)
 
+
+
 -(CGSize)sizeAsPercentageOfHighestContainingElement: (Element*)selElement
 {
     // The business
@@ -153,4 +155,9 @@
                                            Height:elementsSize.height];
     return elementsSize;
 }
+
+
 @end
+
+
+

@@ -13,6 +13,8 @@
 #import "DropDown.h"
 #import "DynamicRow.h"
 #import "Triangle.h"
+#import "NSColor+NSColorHexadecimalValue.h"
+#import "NSColor+colorToHex.h"
 
 
 @interface StageView (conversion)
@@ -2761,6 +2763,7 @@
         {
             //This is for solo objects with nothing to the left of it that isn't number one object on the page
             marginLeft = [[dc valueForKey:@"xcoordinate"] intValue];
+                # pragma mark -  ADD CONTAINER CODE HERE.
             [dc setValue:[NSNumber numberWithInt:marginLeft] forKey:@"marginLeft"];
         }
         
@@ -2844,7 +2847,8 @@
     // Calclulate its bottom margin if it's the last item in the sorted Array
     for (NSMutableDictionary *each in [sortedArray reverseObjectEnumerator])
     {
-        if ([each objectForKey:@"parentID"] == nil) {
+        if ([each objectForKey:@"parentID"] == nil)
+        {
             NSNumber *marginBottom = [NSNumber numberWithInt:(int)self.bounds.size.height - [[each objectForKey:bottomYcoordinate]intValue]];
             NSLog(@"marginBottom is : %@ for object with id: %@", marginBottom, [each objectForKey:@"id"]);
             [each setObject:marginBottom forKey:@"marginBottom"];
