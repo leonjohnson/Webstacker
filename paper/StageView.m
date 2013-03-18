@@ -3237,4 +3237,19 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
 }
 
 
+- (void)InitAttributeBySelected
+{
+	if ([selElementArray count] == 0) {
+		[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0];
+
+	} else {
+		[attributeDelegate SetAttributeOfShapeToPanel:((Element *)[selElementArray lastObject]).rtFrame.origin.x
+												 yPos:((Element *)[selElementArray lastObject]).rtFrame.origin.y
+												Width:((Element *)[selElementArray lastObject]).rtFrame.size.width
+											   Height:((Element *)[selElementArray lastObject]).rtFrame.size.height];
+
+	}
+}
+
+
 @end

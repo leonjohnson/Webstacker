@@ -14,6 +14,7 @@
 <NSTableViewDataSource, NSTableViewDelegate, SetLayerOrderDelegate>
 {
 	IBOutlet NSTableView						*_tableViewLayer;
+	IBOutlet NSTextField						*_labelLayerCount;
 }
 
 /*
@@ -21,6 +22,8 @@
  @purpose:			This function called when the user click the visible check box of layer table.
  */
 - (IBAction)OnVisible:(id)sender;
+
+- (IBAction)OnMovement:(id)sender;
 
 - (void)doubleClickOnTable:(id)sender;
 

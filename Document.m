@@ -199,6 +199,9 @@
 	[stageView ResortLayer];
 	AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 	appDelegate.galleryPanel.delegate = stageView;
+	
+	// change attribute panel value to current stage view
+	[stageView InitAttributeBySelected];
 }
 
 -(NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize

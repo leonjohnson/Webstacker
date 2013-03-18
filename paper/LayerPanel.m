@@ -200,6 +200,26 @@
 		[checkVisible setTag:[curDoc.stageView.elementArray count] - row - 1];
 		
 		return checkVisible;
+	} else if ([[tableColumn identifier] isEqualToString:@"Movement"]) {
+		
+		if (shape.uType == SHAPE_CONTAINER) {
+			return nil;
+		}
+		
+		NSButton *checkMove = [tableView makeViewWithIdentifier:[NSString stringWithFormat:@"TableViewMovementCell%ld", row] owner:self];
+		if (checkMove == nil) {
+			checkMove = [[[NSButton alloc] init] autorelease];
+			checkMove.identifier = [NSString stringWithFormat:@"TableViewMovementCell%ld", row];
+		}
+		
+		[checkMove setButtonType:NSSwitchButton];
+		[checkMove setTitle:@"Movement"];
+		[checkMove setState:(shape.canMove == YES)? NSOffState: NSOnState];
+		
+		[checkMove setAction:@selector(OnMovement:)];
+		[checkMove setTag:[curDoc.stageView.elementArray count] - row - 1];
+		
+		return checkMove;
 	}
 	
 	return nil;
@@ -224,12 +244,30 @@
 	}
 }
 
+- (IBAction)OnMovement:(id)sender
+{
+	NSInteger tag = [sender tag];
+	
+	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+	Element *shape = [curDoc.stageView.elementArray objectAtIndex:tag];
+	
+	if ([sender state] == NSOnState) {
+		shape.canMove = NO;
+	} else {
+		shape.canMove = YES;
+	}
+}
+
 
 #pragma mark - set layer order delegate implementation
 
 - (void)SetLayerList
 {
     [_tableViewLayer reloadData];
+	
+	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+	NSInteger count = [curDoc.stageView.elementArray count];
+	[_labelLayerCount setStringValue:[NSString stringWithFormat:@"%ld", count]];
 }
 
 

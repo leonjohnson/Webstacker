@@ -210,6 +210,8 @@ typedef NSInteger LayoutTag;
 @property (nonatomic) BOOL							isPtInElement;
 @property (assign) NSMutableArray					*arrayShadows;
 
+@property (nonatomic) BOOL							canMove;
+
 - (void)dealloc;
 
 /*

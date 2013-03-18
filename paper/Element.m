@@ -41,6 +41,8 @@
 @synthesize actionStringEntered, dataSourceStringEntered;
 @synthesize arrayShadows;
 
+@synthesize canMove;
+
 
 
 
@@ -81,7 +83,6 @@
                    [NSNumber numberWithInt:0], @"body",
                    nil];
         layoutType = PIXEL_BASED_LAYOUT;
-        
     }
     
     //[self setWantsLayer:YES];
@@ -167,6 +168,7 @@
 	}
 	shape.isSelected = FALSE;
 	shape.arrayShadows = nil;
+	shape.canMove = NO;
 	
 	return shape;
 }
@@ -374,6 +376,10 @@
  */
 - (void)MoveElement:(NSSize)offset
 {
+	if (!canMove) {
+		return;
+	}
+	
 	rtFrame = NSOffsetRect( rtFrame, offset.width, offset.height );
 	[self setFrame:CGRectMake(rtFrame.origin.x - 2, rtFrame.origin.y - 2, rtFrame.size.width + 4, rtFrame.size.height + 4)];
 }
@@ -388,6 +394,10 @@
  */
 - (void)OnMouseMove:(NSSize)offset HitTest:(NSInteger)hitTest
 {
+	if (!canMove) {
+		return;
+	}
+	
 	Singleton *sg = [[Singleton alloc]init];
     
     switch (hitTest & SHT_HANDLESIZING)
@@ -485,9 +495,8 @@
 #pragma mark - mouse touch and move event implementation & cursor set implementation
 
 - (void)mouseDown:(NSEvent *)theEvent
-{	
-    
-    /*
+{
+	/*
      Singleton *sg = [[Singleton alloc]init];
      if ([insideOperationElement isInsideElement:self] == NO) 
      {
@@ -517,7 +526,11 @@
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
-{	
+{
+	if (!canMove) {
+		return;
+	}
+	
 	if ([insideOperationElement isInsideElement:self] == NO) {
 		isTouched = NO;
 		[[self superview] mouseDragged:theEvent];

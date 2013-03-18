@@ -409,6 +409,9 @@ typedef NSInteger		ShapeCutCopyType;
 - (void)hideFontTab;
 - (void)selectFontofCurrentTextBox:(NSString *)fontName;
 
+
+- (void)InitAttributeBySelected;
+
 @end
 
 
@@ -427,15 +430,6 @@ typedef NSInteger		ShapeCutCopyType;
 - (void)addShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d;
 - (void)removeShapeShadow:(NSInteger)index;
 @end
-
-
-
-
-
-
-
-
-
 
 
 
