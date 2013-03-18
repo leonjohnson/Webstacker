@@ -39,9 +39,12 @@
 #define DYNAMIC_ROW_TAG                         @"dynamicRow"
 #define DROP_DOWN_MENU_TAG                      @"dropDownMenu"
 #define CONTAINER_TAG                           @"container"
+#define FIRST_IN_ROW_AND_CONTAINER              @"firstInRowAndContainer"
+#define LAST_IN_ROW_AND_CONTAINER               @"lastInRowAndContainer"
+#define FIRST                                   @"first"
+#define LAST                                    @"last"
 
-
-
+#define CONTAINER_ID                            @"containerID"
 #define ELEMENT_ID                              @"elementID"
 #define RT_FRAME                                @"rtframe"
 

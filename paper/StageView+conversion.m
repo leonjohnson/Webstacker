@@ -1442,17 +1442,17 @@
 }
 
 
--(NSArray*)elementsInside: (NSDictionary *)elementBeingTested usingElements: (NSArray*) sortedArrayOnStage
+-(NSArray*)elementsInside: (NSMutableDictionary *)elementBeingTested usingElements: (NSArray*) sortedArrayOnStage
 {
     //This method returns an array containing: elements that are within its bounds or nil.
     
-    NSRect dyRowRect = NSRectFromString([elementBeingTested objectForKey:RT_FRAME]);
+    NSRect containingRect = NSRectFromString([elementBeingTested objectForKey:RT_FRAME]);
     NSMutableArray *cleanInsideMe = [NSMutableArray array];
     
     for (Element *ele in sortedArrayOnStage)
     {
         NSRect elementRect = NSRectFromString([ele valueForKey:RT_FRAME]);
-        if (CGRectContainsRect(dyRowRect, elementRect))
+        if (CGRectContainsRect(containingRect, elementRect))
         {
             [cleanInsideMe addObject:ele];
         }
@@ -1465,7 +1465,7 @@
 
 
 
--(NSString*)generateClassFromDynamicRow: (NSDictionary*)dyRowDict withElementsOnStage: (NSArray*)sortedArrayOnStage
+-(NSString*)generateClassFromDynamicRow: (NSMutableDictionary*)dyRowDict withElementsOnStage: (NSArray*)sortedArrayOnStage
 {
     NSString *stringContainingClass = [NSString string];
     NSArray *elementsInsideMe = [self elementsInside:dyRowDict usingElements:sortedArrayOnStage];
@@ -1593,6 +1593,8 @@
     return hexValue;
     
 }
+
+
 
 
 #pragma mark - Generate Code
@@ -1919,7 +1921,7 @@
                                         [NSNumber numberWithFloat:ele.rtFrame.origin.y], @"ycoordinate",
                                         [NSNumber numberWithFloat:ele.rtFrame.origin.y + ceilf(ele.rtFrame.size.height)], bottomYcoordinate,
                                         [NSNumber numberWithFloat:ele.rtFrame.origin.x + ceilf(ele.rtFrame.size.width)], @"rightXcoordinate",
-                                        NSStringFromRect(ele.rtFrame), @"rtFrame",
+                                        NSStringFromRect(ele.rtFrame), RT_FRAME,
                                         [NSNumber numberWithInt:ceilf(ele.rtFrame.size.width)], @"width",
                                         [NSNumber numberWithInt:ceilf(ele.rtFrame.size.height)], @"height",
                                         layoutObject, @"layoutType",
@@ -2872,9 +2874,10 @@
     
     
     
-    // Calclulate its bottom margin if it's the last item in the sorted Array
+    NSMutableArray *firstAndLastRowsInContainer = [NSMutableArray array];
     for (NSMutableDictionary *each in [sortedArray reverseObjectEnumerator])
     {
+        // Calclulate its bottom margin if it's the last item in the sorted Array
         if ([each valueForKeyPath:@"parentID.div"] == nil)
         {
             NSNumber *marginBottom = [NSNumber numberWithInt:(int)self.bounds.size.height - [[each objectForKey:bottomYcoordinate]intValue]];
@@ -2882,8 +2885,51 @@
             [each setObject:marginBottom forKey:@"marginBottom"];
             break;
         }
+        
+        // Calculate the contents of Container - ASSUMPTION: ROWS ARE CLEAN INSIDE A CONTAINER (IF ONE EXISTS)
+        if ([[each objectForKey:@"tag"] isEqualToString:CONTAINER_TAG])
+        {
+            NSArray *elementsInsideMe = [self elementsInside:each usingElements:sortedArray];
+            NSMutableArray *idArray = [NSMutableArray array];
+            for (NSString *elementID in elementsInsideMe)
+            {
+                [idArray addObject:elementID];
+            }
+
+            NSMutableOrderedSet *rowsInThisContainer = [NSMutableOrderedSet new];
+            
+            
+                [self.rows enumerateObjectsUsingBlock:^(id row, NSUInteger index, BOOL *stop)
+                {
+                    for (NSDictionary *ele in row)
+                    {
+                        if ([idArray containsObject:[ele objectForKey:@"id"]])
+                        {
+                            //if this row contains an elementID from idArray then add this row to my list of contents
+                            [rowsInThisContainer addObject:index];
+                            NSLog(@"Matching element found at index: %li", (unsigned long)index);
+                            //*stop = YES;
+                        }
+                    }
+                } ];
+            NSNumber *min = [rowsInThisContainer valueForKeyPath:@"min.self"];
+            NSNumber *max = [rowsInThisContainer valueForKeyPath:@"max.self"];
+            [firstAndLastRowsInContainer addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+                                                         [each objectForKey:@"id"], CONTAINER_ID,
+                                                         min, FIRST,
+                                                         max, LAST,
+                                                         nil]];
+                
+        }
+        
+            
+        
+        
     }
-    // Done add a marginBottom
+    
+    
+    
+    
     
     
     
@@ -3351,12 +3397,29 @@
     NSMutableArray *endRows = [NSMutableArray array];
     
     NSLog(@"Self rows contains: %@", self.rows);
-    for (NSArray *x in self.rows)
-    {
+    
+    [self.rows enumerateObjectsUsingBlock:^(NSArray *row, NSUInteger indexCounter, BOOL *stop){
+        
         //So we know which element IDs are the first and last in each row.
-        [startRows addObject:[[x objectAtIndex:0] valueForKey:@"id"]]; //object 0 is a dictionary containing the values for various attribtes for this element.
-        [endRows addObject:[[x lastObject] valueForKey:@"id"]];
-    }
+        [startRows addObject:[[row objectAtIndex:0] valueForKey:@"id"]]; //object 0 is a dictionary containing the values for various attribtes for this element.
+        [endRows addObject:[[row lastObject] valueForKey:@"id"]];
+        
+        
+        for (NSDictionary *eachContainer in firstAndLastRowsInContainer)
+        {
+            if ([[eachContainer objectForKey:FIRST] isEqualTo:[NSNumber numberWithInteger:indexCounter]])
+            {
+                [[row objectAtIndex:0] setObject:[eachContainer objectForKey:CONTAINER_ID] forKey:FIRST_IN_ROW_AND_CONTAINER];
+            }
+            
+            if ([[eachContainer objectForKey:LAST] isEqualTo:[NSNumber numberWithInteger:indexCounter]])
+            {
+                [[row lastObject] setObject:[eachContainer objectForKey:CONTAINER_ID] forKey:LAST_IN_ROW_AND_CONTAINER];
+            }
+        }
+        
+    } ];
+    
     
     
     NSLog(@"At step : 2");
@@ -3546,10 +3609,18 @@
         if ([startRows containsObject:blockid])
         {
             startRowCode = [NSMutableString stringWithString:@"\n      <div class=\"row\">"];
+            if ([block objectForKey:FIRST_IN_ROW_AND_CONTAINER]) {
+                NSString *containerStartCode = @"\n      <div class=\"container\">";
+                startRowCode = [NSMutableString stringWithString:[containerStartCode stringByAppendingString:startRowCode]];
+            }
         }
         if ([endRows containsObject:blockid])
         {
             endRowCode = [NSMutableString stringWithString:@"\n</div><!-- Closes the row -->"];
+            if ([block objectForKey:LAST_IN_ROW_AND_CONTAINER]) {
+                NSString *containerEndCode = @"\n</div><!-- Closes the container -->";
+                endRowCode = [NSMutableString stringWithString:[containerEndCode stringByAppendingString:endRowCode]];
+            }
         }
         
         //  If
@@ -4246,7 +4317,7 @@
         
         
         // TEXT INPUT FIELD CODE
-        if ([block valueForKey:@"tag"] == @"textInputField")
+        if ([[block valueForKey:@"tag"] isEqual: @"textInputField"])
         {
             NSArray *arrayH = [NSArray arrayWithObjects:
                                @"<input type=\"text\" id=\"",
