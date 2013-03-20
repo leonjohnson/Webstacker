@@ -2079,12 +2079,10 @@ static NSImage *bottomImage;
         
         case SHAPE_DYNAMIC_ROW:
             defaultSizeOfElement = NSMakeSize(600, 200);
-            NSLog(@"ROW PLACEHOLDER SIZE SET!\n \n");
             break;
 			
 		case SHAPE_CONTAINER:
 			defaultSizeOfElement = NSMakeSize(300, 300);
-            NSLog(@"ROW PLACEHOLDER SIZE SET!\n \n");
             break;
             
         default:
@@ -2228,9 +2226,11 @@ static NSImage *bottomImage;
 		return;
 	}
 	
+    /*
 	if (((Element *)[selElementArray lastObject]).uType == SHAPE_CONTAINER) {
 		return;
 	}
+     */
     
     NSLog(@"MOVING or changing size");
     
@@ -2482,9 +2482,11 @@ static NSImage *bottomImage;
 
 - (void)DeleteSelElements
 {
-	if ([self IsSelectedShape] == NO || ((Element *)[selElementArray lastObject]).uType == SHAPE_CONTAINER) {
+	/*
+    if ([self IsSelectedShape] == NO || ((Element *)[selElementArray lastObject]).uType == SHAPE_CONTAINER) {
 		return;
 	}
+     */
 	
 	while ([selElementArray count]) {
 		Element* element = [selElementArray objectAtIndex:0];

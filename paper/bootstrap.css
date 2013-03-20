@@ -117,7 +117,8 @@ a:hover {
   text-decoration: underline;
 }
 .row {
-  margin-left: -20px;
+  
+  /*margin-left: -20px;*/
   *zoom: 1;
 }
 .row:before, .row:after {
@@ -2704,7 +2705,7 @@ a.thumbnail:hover {
 }
 @media (min-width: 768px) and (max-width: 980px) {
   .row {
-    margin-left: -20px;
+    /*margin-left: -20px;*/
     *zoom: 1;
   }
   .row:before, .row:after {

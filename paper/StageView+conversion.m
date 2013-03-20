@@ -64,7 +64,7 @@
     
     for (NSDictionary *compare in objectsToLoopThrough)
     {
-        if ([compare isEqualToDictionary:element] == NO)    //  If not me
+        if ([compare isEqualToDictionary:element] == NO && [compare objectForKey:@"tag"] != [Container class])    //  If not me
         {
             if ([elementsChecked containsObject:compare] == NO) //  if this object hasn't been checked
             {
@@ -154,7 +154,7 @@
     
     for (NSDictionary *compare in leftToRightTopToBottom)
     {
-        if ([compare isEqualToDictionary:element] == NO)    //  If not me
+        if ([compare isEqualToDictionary:element] == NO && [compare objectForKey:@"tag"] != [Container class])    //  If not me
         {
             if ([elementsChecked containsObject:compare] == NO) //  if this object hasn't been checked
             {
@@ -193,7 +193,7 @@
     return toMyRight;
 }
 
-
+// TODO: Check this method as it's not even called anymore.
 -(float)marginToElementAboveMe:(NSDictionary *)element
 {
     
@@ -211,7 +211,7 @@
         NSLog(@"Running.");
         if ([compare isEqualToDictionary:element] == NO)    //  If not me
         {
-            if ([elementsChecked containsObject:compare] == NO) //  if this object hasn't been checked
+            if ([elementsChecked containsObject:compare] == NO && [compare objectForKey:@"tag"] != [Container class]) //  if this object hasn't been checked
             {
                 NSUInteger compareX = [[compare valueForKey:@"xcoordinate"] unsignedIntegerValue];
                 NSUInteger compareY = [[compare valueForKey:@"ycoordinate"] unsignedIntegerValue];
@@ -365,7 +365,7 @@
 
 -(NSUInteger)elementRow: (NSDictionary *)element
 {
-    NSUInteger rowImIn;
+    NSUInteger rowImIn = nil;
     for (NSArray *r in self.rows)
     {
         if ([r containsObject:element])
@@ -497,7 +497,7 @@
 
 
 
--(int)isThereAGroupBoxInPath:(NSRect)masterRect: (NSString *)marginType :(NSRect)comparatorRect // Question for later - unnecessary code?
+-(int)isThereAGroupBoxInPath:(NSRect)masterRect marginType:(NSString *)marginType comparatorRect:(NSRect)comparatorRect // Question for later - unnecessary code?
 {
     
     int margin = 0;
@@ -829,6 +829,8 @@
 
 
 
+
+
 -(BOOL)isClosestObjectToMyLeftAnElement: (NSDictionary *)elementBeingTested
 {
     //This method is used to determine whether or not
@@ -876,7 +878,7 @@
     NSUInteger elementBeingTestedW = [[elementBeingTested valueForKey:@"width"] unsignedIntegerValue];
     NSUInteger elementBeingTestedX = [[elementBeingTested valueForKey:@"xcoordinate"] unsignedIntegerValue];
     NSRange elementBeingTestedRange = NSMakeRange(elementBeingTestedX, elementBeingTestedW);
-    NSUInteger rowImIn;
+    NSUInteger rowImIn = nil;
     NSLog(@"start 1");
     for (NSArray *r in self.rows)
     {
@@ -886,6 +888,11 @@
         }
     }
     NSLog(@"start 2: ROW I'M IN: %lu and row count is: %lu", rowImIn, self.rows.count);
+    if (!rowImIn)
+    {
+        NSLog(@"NearestElementDirectlyAboveMeInMyRow RETURNED NIL");
+        return nil;
+    }
     
     NSMutableArray *itemsInMyRow = [NSMutableArray array];
     itemsInMyRow = [self.rows objectAtIndex:rowImIn];
@@ -979,7 +986,7 @@
     NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:ycoordinate ascending:NO];
     NSArray *verticalSortDescriptor = [NSArray arrayWithObject: vertically];
     
-    NSUInteger rowImIn;
+    NSUInteger rowImIn = nil;
     for (NSArray *r in self.rows)
     {
         if ([r containsObject:elementBeingTested])
@@ -988,6 +995,10 @@
         }
     }
     
+    if (!rowImIn) {
+        NSLog(@"highestYcoordinateInMyRow RETURNING NIL");
+        return nil;
+    }
     NSMutableArray *itemsInMyRow = [NSMutableArray array];
     NSArray *sortedItemsInRow = [NSArray array];
     itemsInMyRow = [self.rows objectAtIndex:rowImIn];
@@ -1046,17 +1057,21 @@
         
         for (NSDictionary *testObject in initalSorting)
         {
-            NSUInteger testX = [[testObject valueForKey:@"xcoordinate"] unsignedIntegerValue];
-            NSUInteger testY = [[testObject valueForKey:ycoordinate] unsignedIntegerValue];
-            NSUInteger testH = [[testObject valueForKey:@"height"] unsignedIntegerValue];
-            NSRange testObjectRange = NSMakeRange(testY, testH);
-            NSRange comparison = NSIntersectionRange(eleRange, testObjectRange);
-            
-            if ((testX < xco) & (comparison.length!=0) )
+            if (![[testObject objectForKey:@"tag"] isEqual:CONTAINER_TAG])
             {
-                [inMyRightRange addObject:testObject];
-                NSLog(@"Dict with height : %lu has object in left range with height : %lu", vSide, testH);
+                NSUInteger testX = [[testObject valueForKey:@"xcoordinate"] unsignedIntegerValue];
+                NSUInteger testY = [[testObject valueForKey:ycoordinate] unsignedIntegerValue];
+                NSUInteger testH = [[testObject valueForKey:@"height"] unsignedIntegerValue];
+                NSRange testObjectRange = NSMakeRange(testY, testH);
+                NSRange comparison = NSIntersectionRange(eleRange, testObjectRange);
+                
+                if ((testX < xco) & (comparison.length!=0) )
+                {
+                    [inMyRightRange addObject:testObject];
+                    NSLog(@"Dict with height : %lu has object in left range with height : %lu", vSide, testH);
+                }
             }
+            
             
         }
         if ([inMyRightRange count] == 0)
@@ -1442,24 +1457,7 @@
 }
 
 
--(NSArray*)elementsInside: (NSMutableDictionary *)elementBeingTested usingElements: (NSArray*) sortedArrayOnStage
-{
-    //This method returns an array containing: elements that are within its bounds or nil.
-    
-    NSRect containingRect = NSRectFromString([elementBeingTested objectForKey:RT_FRAME]);
-    NSMutableArray *cleanInsideMe = [NSMutableArray array];
-    
-    for (Element *ele in sortedArrayOnStage)
-    {
-        NSRect elementRect = NSRectFromString([ele valueForKey:RT_FRAME]);
-        if (CGRectContainsRect(containingRect, elementRect))
-        {
-            [cleanInsideMe addObject:ele];
-        }
-    }
-    
-    return cleanInsideMe;
-}
+
 
 
 
@@ -1594,6 +1592,76 @@
     
 }
 
+-(NSArray*)elementsInside: (NSMutableDictionary *)elementBeingTested usingElements: (NSArray*) sortedArrayOnStage
+{
+    //This method returns an array containing: elements that are within its bounds or nil.
+    
+    NSRect containingRect = NSRectFromString([elementBeingTested objectForKey:RT_FRAME]);
+    NSMutableArray *cleanInsideMe = [NSMutableArray array];
+    
+    for (NSDictionary *ele in sortedArrayOnStage)
+    {
+        NSRect elementRect = NSRectFromString([ele valueForKey:RT_FRAME]);
+        if (CGRectContainsRect(containingRect, elementRect))
+        {
+            [cleanInsideMe addObject:ele];
+        }
+    }
+    
+    return cleanInsideMe;
+}
+
+
+-(NSDictionary*)containerContaining:(NSDictionary *)elementBeingTested usingElements:(NSArray*) sortedArrayOnStage
+{
+    //This method returns an array containing: elements that are within its bounds or nil.
+    NSDictionary *matchingContainer = nil;
+    NSMutableArray *arrayOfContainers = [NSMutableArray new];
+    NSRect elementRect = NSRectFromString([elementBeingTested valueForKey:RT_FRAME]);
+    
+    //Get a list of all containers
+    for (NSDictionary *ele in sortedArrayOnStage)
+    {
+        if ([[ele objectForKey:@"tag"] isEqualTo:CONTAINER_TAG])
+        {
+            [arrayOfContainers addObject:ele];
+        }
+    }
+    
+    for (NSDictionary *container in arrayOfContainers)
+    {
+        NSRect containerRect = NSRectFromString([container valueForKey:RT_FRAME]);
+        
+        if (CGRectContainsRect(containerRect, elementRect))
+        {
+            matchingContainer = container;
+        }
+        
+    }
+    
+    if (matchingContainer != nil)
+        NSLog(@"Container found. Nice");
+    else
+        NSLog(@"CONTAINER NOT FOUND.");
+    
+    
+    return matchingContainer;
+    
+}
+
+-(NSMutableString*)containerThatContainsRow:(NSUInteger *)rowOrder usingElements:(NSArray*) sortedArrayOnStage
+{
+    NSMutableString *containerID = nil;
+    
+    // get the markup id of the Container this row sits within, and then place that id where .container currently is in the code below. If Nil then replace it with 'body'.
+    NSArray *elementsInsideRow = [self.rows objectAtIndex:rowOrder];
+    NSDictionary *firstElementWilldo = [elementsInsideRow objectAtIndex:0];
+    NSDictionary *containerContaingMyRow = [self containerContaining:firstElementWilldo usingElements:sortedArrayOnStage];
+    if (containerContaingMyRow != nil)
+        containerID = [NSMutableString stringWithString:[containerContaingMyRow objectForKey:@"markupid"]];
+    
+    return containerID;
+}
 
 
 
@@ -2009,6 +2077,16 @@
     
     
     // GET SOLOS
+    NSMutableArray *initialSortingWithoutContainer = [NSMutableArray arrayWithArray:initalSorting];
+    NSMutableArray *removeTheseContainerObjects = [NSMutableArray new];
+    for (NSDictionary *element in initalSorting) {
+        if ([[element objectForKey:@"tag"] isEqualTo:CONTAINER_TAG])
+        {
+            [removeTheseContainerObjects addObject:element];
+        }
+    }
+    [initialSortingWithoutContainer removeObjectsInArray:removeTheseContainerObjects];
+    
     solos = [self arrayOfSoloItems:[initalSorting sortedArrayUsingDescriptors:verticalSortDescriptor2]];
     
     NSLog(@"Solo has : %lu items", [solos count]); //THESE ARE OBJECTS WITH NOTHING TO THE LEFT OF THEM. CORRECT. - 03/11/2012
@@ -2016,114 +2094,123 @@
     self.rows = [NSMutableArray array];
     for (NSDictionary *g in solos)
     {
-        
-        // Get the highest object which doesn't have anything to its left that's already been counted.
-        NSRect gRect = NSMakeRect(
-                                  [[g objectForKey:xcoordinate]floatValue],
-                                  [[g objectForKey:ycoordinate]floatValue],
-                                  [[g objectForKey:@"width"]floatValue],
-                                  [[g objectForKey:@"height"]floatValue]
-                                  );
-        NSMutableArray *toMyRight =  [NSMutableArray arrayWithArray:[self elementsToMyRight:g]];
-        NSArray *solidToMyRight = [NSArray arrayWithArray:toMyRight];
-        NSMutableArray *elementsNotCountedYet = [NSMutableArray arrayWithArray: toMyRight];
-        
-        NSLog(@"TO MY RIGHT CONTAINS: %lu objects.", [toMyRight count]);
-        toMyRight = [NSMutableArray arrayWithArray:[toMyRight sortedArrayUsingDescriptors:verticalSortDescriptor]]; // ordered by by height
-        NSMutableArray *alreadyCounted = [NSMutableArray arrayWithArray:leftToRightTopToBottom];
-        [alreadyCounted removeObjectsInArray:toMyRight];// ???
-        [sortedArray addObject:g]; //   Add myself
-        while ([elementsNotCountedYet count] != 0)
+        if (![[g objectForKey:@"tag"] isEqual:CONTAINER_TAG])
         {
-            NSDictionary *next = [self highestElementWithEmptyLeft:toMyRight];//THIS EVENTUALLY WILL HAVE TO CHANGE TO BE HIGHESTELE IN GROUP.*
-            NSLog(@"calling next on : %@", [next objectForKey:@"id"]);
-            NSDictionary *previous = [sortedArray lastObject];
+            // Get the highest object which doesn't have anything to its left that's already been counted.
+            NSRect gRect = NSMakeRect(
+                                      [[g objectForKey:xcoordinate]floatValue],
+                                      [[g objectForKey:ycoordinate]floatValue],
+                                      [[g objectForKey:@"width"]floatValue],
+                                      [[g objectForKey:@"height"]floatValue]
+                                      );
+            NSMutableArray *toMyRight =  [NSMutableArray arrayWithArray:[self elementsToMyRight:g]];
+            NSArray *solidToMyRight = [NSArray arrayWithArray:toMyRight];
+            NSMutableArray *elementsNotCountedYet = [NSMutableArray arrayWithArray: toMyRight];
             
+            NSLog(@"TO MY RIGHT CONTAINS: %lu objects.", [toMyRight count]);
+            toMyRight = [NSMutableArray arrayWithArray:[toMyRight sortedArrayUsingDescriptors:verticalSortDescriptor]]; // ordered by by height
+            NSMutableArray *alreadyCounted = [NSMutableArray arrayWithArray:leftToRightTopToBottom];
+            [alreadyCounted removeObjectsInArray:toMyRight];// ???
+            [sortedArray addObject:g]; //   Add myself
             
-            //  get all elements in the right range of the previous element and select the one with the smallest x value.
-            //  Bug fixed: So that it nows reads better, left to right, rather than just next object with nothing to its left
-            /*
-             if ([elementsNotCountedYet count] != [solidToMyRight count]) // So it's not the first loop
-             {
-             NSArray *previousElementsToMyRight = [self elementsToMyRightInGroupingBox:previous];
-             if ([previousElementsToMyRight count]!=0)
-             {
-             if ([sortedArray containsObject:[previousElementsToMyRight objectAtIndex:0]] == NO)
-             {
-             NSLog(@"Trouble is being called");
-             next = [previousElementsToMyRight objectAtIndex:0];
-             }
-             
-             }
-             }
-             */
-            if ([sortedArray containsObject:next] == NO) // As if might not hit the big if statement above and so next object may already exist in the SortedArray dataset.
+            while ([elementsNotCountedYet count] != 0)
             {
-                [sortedArray addObject:next];
-                NSLog(@"Just added : %@", [next objectForKey:@"id"]);
-            }
-            [toMyRight removeObject:next];
-            elementsNotCountedYet = toMyRight;
-        }
-        NSLog(@"SORTED ARRAY AT 0 : %@", sortedArray);
-        NSMutableArray *filteredSortedArray = [NSMutableArray arrayWithArray: sortedArray]; // WHICH WE'LL NOW FILTER TO ONLY INCLUDE THOSE TO MY RIGHT
-        // **&*() AT THIS POINT,  CONVERT THE DIVS IN FILTEREDSORTEDARRAY WITH OVERLAPS TO GROUPINGBOXES ***&*() //
-        for (NSDictionary *dict in sortedArray)
-        {
-            if ([solidToMyRight containsObject:dict] == NO)
-            {
-                [filteredSortedArray removeObject:dict];
-            }
-        }
-        if ([solidToMyRight count] > 0) //  Check there is something in the array
-        {
-            GroupingBox *gb = [[GroupingBox alloc]init];
-            gb.insideTheBox = [NSMutableArray array];
-            NSMutableArray *itemsToRemove = [NSMutableArray array];
-            NSMutableArray *twiceFiltered = [NSMutableArray arrayWithArray:filteredSortedArray];
-            for (NSDictionary *dict in filteredSortedArray)
-            {
-                NSRect dictRect = NSMakeRect(
-                                             [[dict objectForKey:xcoordinate]floatValue],
-                                             [[dict objectForKey:ycoordinate]floatValue],
-                                             [[dict objectForKey:@"width"]floatValue],
-                                             [[dict objectForKey:@"height"]floatValue]
-                                             );
-                if ( (CGRectContainsRect(gRect, dictRect) == YES) )
+                NSDictionary *next = [self highestElementWithEmptyLeft:toMyRight];//THIS EVENTUALLY WILL HAVE TO CHANGE TO BE HIGHESTELE IN GROUP.*
+                NSLog(@"calling next on : %@", [next objectForKey:@"id"]);
+                NSDictionary *previous = [sortedArray lastObject];
+                
+                
+                //  get all elements in the right range of the previous element and select the one with the smallest x value.
+                //  Bug fixed: So that it nows reads better, left to right, rather than just next object with nothing to its left
+                /*
+                 if ([elementsNotCountedYet count] != [solidToMyRight count]) // So it's not the first loop
+                 {
+                 NSArray *previousElementsToMyRight = [self elementsToMyRightInGroupingBox:previous];
+                 if ([previousElementsToMyRight count]!=0)
+                 {
+                 if ([sortedArray containsObject:[previousElementsToMyRight objectAtIndex:0]] == NO)
+                 {
+                 NSLog(@"Trouble is being called");
+                 next = [previousElementsToMyRight objectAtIndex:0];
+                 }
+                 
+                 }
+                 }
+                 */
+                if ([sortedArray containsObject:next] == NO) // As if might not hit the big if statement above and so next object may already exist in the SortedArray dataset.
                 {
-                    [itemsToRemove addObject:dict];
-                    NSLog(@"I should be removing : %@", dict);
+                    [sortedArray addObject:next];
+                    NSLog(@"Just added : %@", [next objectForKey:@"id"]);
+                }
+                [toMyRight removeObject:next];
+                elementsNotCountedYet = toMyRight;
+            }
+            NSLog(@"SORTED ARRAY AT 0 : %@", sortedArray);
+            NSMutableArray *filteredSortedArray = [NSMutableArray arrayWithArray: sortedArray]; // WHICH WE'LL NOW FILTER TO ONLY INCLUDE THOSE TO MY RIGHT
+            // **&*() AT THIS POINT,  CONVERT THE DIVS IN FILTEREDSORTEDARRAY WITH OVERLAPS TO GROUPINGBOXES ***&*() //
+            for (NSDictionary *dict in sortedArray)
+            {
+                if ([solidToMyRight containsObject:dict] == NO)
+                {
+                    [filteredSortedArray removeObject:dict];
+                }
+            }
+            if ([solidToMyRight count] > 0) //  Check there is something in the array
+            {
+                GroupingBox *gb = [[GroupingBox alloc]init];
+                gb.insideTheBox = [NSMutableArray array];
+                NSMutableArray *itemsToRemove = [NSMutableArray array];
+                NSMutableArray *twiceFiltered = [NSMutableArray arrayWithArray:filteredSortedArray];
+                for (NSDictionary *dict in filteredSortedArray)
+                {
+                    NSRect dictRect = NSMakeRect(
+                                                 [[dict objectForKey:xcoordinate]floatValue],
+                                                 [[dict objectForKey:ycoordinate]floatValue],
+                                                 [[dict objectForKey:@"width"]floatValue],
+                                                 [[dict objectForKey:@"height"]floatValue]
+                                                 );
+                    if ( (CGRectContainsRect(gRect, dictRect) == YES) )
+                    {
+                        [itemsToRemove addObject:dict];
+                        NSLog(@"I should be removing : %@", dict);
+                    }
+                    
+                }
+                [twiceFiltered removeObjectsInArray:itemsToRemove];
+                if ([twiceFiltered count] > 0)
+                {
+                    NSLog(@"About to add a gb!");
+                    for (NSMutableDictionary *eleme in twiceFiltered)
+                    {
+                        [eleme setObject:@"yes" forKey:IN_GROUPING_BOX];
+                    }
+                    [[gb insideTheBox] addObjectsFromArray:twiceFiltered];
+                    [groupingBoxes addObject:gb];
                 }
                 
-            }
-            [twiceFiltered removeObjectsInArray:itemsToRemove];
-            if ([twiceFiltered count] > 0)
-            {
-                NSLog(@"About to add a gb!");
-                for (NSMutableDictionary *eleme in twiceFiltered)
-                {
-                    [eleme setObject:@"yes" forKey:IN_GROUPING_BOX];
-                }
-                [[gb insideTheBox] addObjectsFromArray:twiceFiltered];
-                [groupingBoxes addObject:gb];
+                /*
+                 [twiceFiltered removeObjectsInArray:itemsToRemove];
+                 if (twiceFiltered.count > 0)
+                 {
+                 [[gb insideTheBox] addObjectsFromArray:twiceFiltered];
+                 [groupingBoxes addObject:gb];
+                 NSLog(@"INSIDE GroupingBoxes Count is : %lu", gb.insideTheBox.count);
+                 NSLog(@"contents are : %@", twiceFiltered);
+                 }
+                 */
+                
             }
             
-            /*
-             [twiceFiltered removeObjectsInArray:itemsToRemove];
-             if (twiceFiltered.count > 0)
-             {
-             [[gb insideTheBox] addObjectsFromArray:twiceFiltered];
-             [groupingBoxes addObject:gb];
-             NSLog(@"INSIDE GroupingBoxes Count is : %lu", gb.insideTheBox.count);
-             NSLog(@"contents are : %@", twiceFiltered);
-             }
-             */
-            
+            NSMutableArray *eachRow = [NSMutableArray arrayWithObject:g];
+            [eachRow addObjectsFromArray:filteredSortedArray];
+            [self.rows addObject:eachRow];
+        }
+        else
+        {
+            [sortedArray addObject:g];
         }
         
-        NSMutableArray *eachRow = [NSMutableArray arrayWithObject:g];
-        [eachRow addObjectsFromArray:filteredSortedArray];
-        [self.rows addObject:eachRow];
+        
     } // END OF SOLO LOOP
     
     /// SUMMARY OF WHAT HAPPENED :
@@ -2214,17 +2301,22 @@
                                       [[elementToCheck objectForKey:@"height"]floatValue]);
             
             NSLog(@"Rect 1 (tag = %@) : %@", [elem objectForKey:@"tag"], NSStringFromRect(rect1));
-            NSLog(@"Rect 2 : %@", NSStringFromRect(rect2));
-            
-            NSLog(@"DY TAG : %i",  [[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG] );
-            NSLog(@"DY TAG : %i",  ([[elementToCheck objectForKey:@"tag"] isEqualToString:@"paragraph"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"image"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DYNAMIC_IMAGE_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:BUTTON_TAG]) );
-            NSLog(@"Containing? : %i", (CGRectContainsRect(rect1, rect2)));
-            NSLog(@"Elem isEqualToDictionary : %i", [elem isEqualToDictionary:elementToCheck] == NO);
+            NSLog(@"Rect 2 (tag = %@) : %@", [elementToCheck objectForKey:@"tag"], NSStringFromRect(rect2));
             
             
             
+            BOOL condition1 = [elem isEqualToDictionary:elementToCheck] == NO;
             
-            if ( ([elem isEqualToDictionary:elementToCheck] == NO) & ([[elem objectForKey:@"tag"] isEqualToString:@"div"] || [[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG] ) || [[elem objectForKey:@"tag"] isEqualToString:CONTAINER_TAG] & ([[elementToCheck objectForKey:@"tag"] isEqualToString:@"paragraph"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"image"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DYNAMIC_IMAGE_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_BOX_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:BUTTON_TAG]) & (CGRectContainsRect(rect1, rect2)) )
+            BOOL condition2 = ([[elem objectForKey:@"tag"] isEqualToString:@"div"]) || ([[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG])  || ([[elem objectForKey:@"tag"] isEqualToString:CONTAINER_TAG]);
+            
+            BOOL condition3 = [[elementToCheck objectForKey:@"tag"] isEqualToString:@"paragraph"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"image"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DYNAMIC_IMAGE_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_BOX_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:BUTTON_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"div"];
+            
+            BOOL condition4 = CGRectContainsRect(rect1, rect2);
+            
+            NSLog(@"Conditions: %d, %d, %d, %d", condition1, condition2, condition3, condition4);
+            
+            
+            if ( condition1 && condition2 && condition3 && condition4 )
             /* Not myself, but is a rectangle or dyRow, and has a:
              paragraph,
              image,
@@ -2237,28 +2329,38 @@
              */
             {
                 NSLog(@"We have overlapping TEXT AND DIVS !!!!");
+                NSLog(@"%@ contains: %@", [elem objectForKey:@"id"], [elementToCheck objectForKey:@"id"]);
                 // check if this element has a dictionary under PARENT_ID, if so then add a key, if not then create the dictionary
                 
                 if ( [elementToCheck objectForKey:PARENT_ID] != nil)
                 {
                     // the parentID dictionary already exists inside of this element
                     // ASSUMPTION: AN ELEMENT CAN ONLY OVERLAP A BOX, DYROW, OR CONTAINER ONCE
+                    NSLog(@"Crashed 1");
+                    NSLog(@"Object: %@", [elem objectForKey:@"id"]);
+                    NSLog(@"Key: %@", [elem objectForKey:@"tag"]);
                     [[elementToCheck objectForKey:PARENT_ID] setObject:[elem objectForKey:@"id"] forKey:[elem objectForKey:@"tag"]];
+                    NSLog(@"Crashed 2");
                 }
                 else
                 {
                     // the parentID dictionary for this element does not currently exist
-                    NSMutableDictionary *parentIDDictionary = [NSDictionary dictionaryWithObject:[elem objectForKey:@"id"] forKey:[elem objectForKey:@"tag"]];
+                    NSMutableDictionary *parentIDDictionary = [NSMutableDictionary dictionaryWithObject:[elem objectForKey:@"id"] forKey:[elem objectForKey:@"tag"]];
+                    NSLog(@"Crashed 3");
                     [elementToCheck setObject:parentIDDictionary forKey:@"parentID"];
+                    NSLog(@"Crashed 4");
                 }
 
                 //[elementToCheck setObject:[elem objectForKey:@"id"] forKey:@"parentID"];
                 [elementsToGoInGroupingBox addObject:elementToCheck];
                 [elem setObject:[NSNumber numberWithBool:YES] forKey:@"convertToGroupingbox"];
+                NSLog(@"Crashed 5");
                 
-                if ([elem isMemberOfClass:[Container class]])
+                if ([[elem objectForKey:@"tag"] isEqual:CONTAINER_TAG])
                 {
+                    NSLog(@"NO CONVERSION!");
                     [elem removeObjectForKey:@"convertToGroupingbox"];
+                    [elementsToGoInGroupingBox removeObject:elementToCheck]; // CONTAINER ELEMENTS SHOULD NOT BE PUT INTO A GROUPING BOX.
                 }
                 
                 if ([[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG])
@@ -2421,7 +2523,7 @@
         
         for (NSMutableDictionary *item in sortedArray)
         {
-            if ( [[item valueForKey:bottomYcoordinate] intValue]  < [[dc valueForKey:bottomYcoordinate] intValue] ) //   if it's Y coordinate is above me (and in my northern range, see below)
+            if ( [[item valueForKey:bottomYcoordinate] intValue]  < [[dc valueForKey:bottomYcoordinate] intValue] && ![[item objectForKey:@"tag"] isEqual:CONTAINER_TAG]) //   if it's Y coordinate is above me (and in my northern range, see below)
             {
                 
                 //  Check if its in my Northern Range
@@ -2440,7 +2542,7 @@
                 }
             }
             
-            if ( [[item valueForKey:bottomYcoordinate] intValue] <  [[dc valueForKey:bottomYcoordinate] intValue] ) //if it's Y coordinate is below mine
+            if ( [[item valueForKey:bottomYcoordinate] intValue] <  [[dc valueForKey:bottomYcoordinate] intValue] && ![[item objectForKey:@"tag"] isEqual:CONTAINER_TAG]) //if it's Y coordinate is below mine
             {
                 
                 NSUInteger compareToXCoordinate = [[item valueForKey:@"xcoordinate"] unsignedIntegerValue];
@@ -2612,7 +2714,7 @@
         righties = [NSMutableArray array];
         for (NSMutableDictionary *objectToTheRight in sortedArray) //  Was LeftToRightTopToBottom
         {
-            if ([objectToTheRight isEqualToDictionary:dc] == NO) // If it's not me
+            if ([objectToTheRight isEqualToDictionary:dc] == NO && [objectToTheRight objectForKey:@"tag"] != [Container class]) // If it's not me
             {
                 
                 //  If the object is t the right of me
@@ -2663,7 +2765,7 @@
         for (NSMutableDictionary *objectToTheLeft in sortedArray) //check this... //  Was LeftToRightTopToBottom
         {
             
-            if ([objectToTheLeft isEqualToDictionary:dc] == NO)
+            if ([objectToTheLeft isEqualToDictionary:dc] == NO && [objectToTheLeft objectForKey:@"tag"] != [Container class])
             {
                 
                 if ([[objectToTheLeft valueForKey:@"xcoordinate"] intValue] < [[dc valueForKey:@"xcoordinate"] intValue] ) //   It's to my left
@@ -2731,7 +2833,7 @@
                                                 [[closestElement valueForKey:@"width"]floatValue],
                                                 [[closestElement valueForKey:@"height"]floatValue]);
                 
-                int marginRight2 = [self isThereAGroupBoxInPath:dcRect :@"y" :closestRect];
+                int marginRight2 = [self isThereAGroupBoxInPath:dcRect marginType:@"y" comparatorRect:closestRect];
                 
                 if (marginRight2)
                 {
@@ -2791,9 +2893,21 @@
         
         if ( (objectToMyLeft == NO) & ([solos containsObject:dc] == YES) )
         {
-            //This is for solo objects with nothing to the left of it that isn't number one object on the page
-            marginLeft = [[dc valueForKey:@"xcoordinate"] intValue];
-                # pragma mark -  ADD CONTAINER CODE HERE.
+            # pragma mark -  CONTAINER CODE ADDED.
+            NSDictionary *container = [self containerContaining:dc usingElements:sortedArray];
+            if (container == nil)
+            {
+                //This is for solo objects with nothing to the left of it that isn't number one object on the page
+                marginLeft = [[dc valueForKey:@"xcoordinate"] intValue];
+                NSLog(@"MARGIN LEFT SET ???");
+            }
+                
+            else
+            {
+                marginLeft = [[container objectForKey:xcoordinate]intValue];
+            }
+                
+            
             [dc setValue:[NSNumber numberWithInt:marginLeft] forKey:@"marginLeft"];
         }
         
@@ -2882,20 +2996,23 @@
         {
             NSNumber *marginBottom = [NSNumber numberWithInt:(int)self.bounds.size.height - [[each objectForKey:bottomYcoordinate]intValue]];
             NSLog(@"marginBottom is : %@ for object with id: %@", marginBottom, [each objectForKey:@"id"]);
-            [each setObject:marginBottom forKey:@"marginBottom"];
-            break;
+            //[each setObject:marginBottom forKey:@"marginBottom"];
+            //break;
         }
         
         // Calculate the contents of Container - ASSUMPTION: ROWS ARE CLEAN INSIDE A CONTAINER (IF ONE EXISTS)
         if ([[each objectForKey:@"tag"] isEqualToString:CONTAINER_TAG])
         {
+            NSLog(@"inside firstAndLastRowsInContainer");
             NSArray *elementsInsideMe = [self elementsInside:each usingElements:sortedArray];
+            NSLog(@"elementsInsideMe : %@", elementsInsideMe);
             NSMutableArray *idArray = [NSMutableArray array];
-            for (NSString *elementID in elementsInsideMe)
+            for (NSDictionary *element in elementsInsideMe)
             {
-                [idArray addObject:elementID];
+                [idArray addObject:[element objectForKey:@"id"]];
             }
-
+            
+            NSLog(@"idArray : %@", idArray);
             NSMutableOrderedSet *rowsInThisContainer = [NSMutableOrderedSet new];
             
             
@@ -2906,19 +3023,21 @@
                         if ([idArray containsObject:[ele objectForKey:@"id"]])
                         {
                             //if this row contains an elementID from idArray then add this row to my list of contents
-                            [rowsInThisContainer addObject:index];
+                            [rowsInThisContainer addObject:[NSNumber numberWithInteger:index]];
                             NSLog(@"Matching element found at index: %li", (unsigned long)index);
                             //*stop = YES;
                         }
                     }
                 } ];
-            NSNumber *min = [rowsInThisContainer valueForKeyPath:@"min.self"];
-            NSNumber *max = [rowsInThisContainer valueForKeyPath:@"max.self"];
+            NSNumber *min = [rowsInThisContainer valueForKeyPath:@"@min.intValue"];
+            NSNumber *max = [rowsInThisContainer valueForKeyPath:@"@max.intValue"];
             [firstAndLastRowsInContainer addObject: [NSDictionary dictionaryWithObjectsAndKeys:
                                                          [each objectForKey:@"id"], CONTAINER_ID,
                                                          min, FIRST,
                                                          max, LAST,
                                                          nil]];
+            NSLog(@"rowsInThisContainer = %@", rowsInThisContainer);
+            NSLog(@"PRINTING firstAndLastRowsInContainer : %@", firstAndLastRowsInContainer);
                 
         }
         
@@ -3046,12 +3165,13 @@
     
     /***    CALCLUATE MARGINTOPS FOR ROWS    ***/
     NSLog(@"SELF.ROWS = %@", self.rows);
-    for (NSArray *items in self.rows)
+    for (NSArray *row in self.rows)
     {
         NSLog(@"In the loop.");
         // get the highest item (top left) inside that row
-        NSDictionary *highestElementInRow = [self highestElementInMyRow:[items objectAtIndex:0]];
+        NSDictionary *highestElementInRow = [self highestElementInMyRow:[row objectAtIndex:0]];
         NSUInteger rowNumber = [self elementRow:highestElementInRow];
+        // Alternatively: NSUInteger rowNumber = [self.rows indexOfObject:row];
         NSLog(@"RowNumber is : %lu", rowNumber);
         
         // calculate the distance to the lowest item in the row above, or to the top of the page if this is row 0
@@ -3065,22 +3185,29 @@
         }
         else
         {
-            CGFloat highestPoint;
-             # pragma mark -  ADD CONTAINER CODE HERE.
-            if (self.documentContainer.size.height == 0) // when an instance is initialiSed, all its ivar are cleared to bits of zero
+             # pragma mark -  CONTAINER CODE IS!! NEEDED.
+            // THIS IS THE FIRST ROW IN THE ARRAY
+            // CHECK IF THIS ROW IS IN A CONTAINER
+            NSDictionary *rowsContainer = [self containerContaining:highestElementInRow usingElements:sortedArray];
+            if ( rowsContainer != nil)
             {
-                //highestPoint = self.frame.size.height;
-                highestPoint = 0;
+                NSLog(@"LOGGING the first row");
+                calculatedMarginTop = [rowsContainer objectForKey:ycoordinate];
+                // IF FIRST ENTRY THEN MEASURE AGAINST THE CONTAINERS Y COORDINATE
             }
             else
             {
-                //highestPoint = self.documentContainer.size.height;
-                highestPoint = 0;
+                // if it's not in a container then the rows marginTop should be measured against the top of the document.
+                calculatedMarginTop = [[highestElementInRow valueForKey:ycoordinate]intValue];
             }
-            NSLog(@"Highest point is : %f", highestPoint);
+            
+                
+            
             //calculatedMarginTop = highestPoint - [[highestElementInRow valueForKey:ycoordinate]intValue];
             calculatedMarginTop = [[highestElementInRow valueForKey:ycoordinate]intValue];
             NSLog(@"CALCULATED MARGINTOP IS (2) : %d", calculatedMarginTop);
+            
+            // todo: Get the distance from the top of this row to the top of its container (if it has one), that is the margin
             
         }
         
@@ -3270,8 +3397,16 @@
                 }
                 else
                 {
-                    #pragma mark - ADD CONTAINER CODE HERE
-                    parent = self.frame.size.width;
+                    #pragma mark - CONTAINER CODE ADDED.
+                    
+                    NSDictionary *container = [self containerContaining:dc usingElements:sortedArray];
+                    if (container == nil)
+                        parent = self.frame.size.width;
+                    else
+                        parent = [[container objectForKey:@"width"] floatValue];
+                    
+                    NSLog(@"Parent width is: %f", parent);
+
                 }
                 CGFloat context = parent;
                 // (target/context)*100;
@@ -3304,9 +3439,20 @@
                 }
                 else
                 {
-                    #pragma mark - ADD CONTAINER CODE HERE
-                    parent = self.frame.size.width;
+                    #pragma mark - CONTAINER CODE ADDED.
+                    
+                    NSDictionary *container = [self containerContaining:dc usingElements:sortedArray];
+                    if (container == nil)
+                        parent = self.frame.size.width;
+                    else
+                        parent = [[container objectForKey:@"width"] floatValue];
+                    
+                    NSLog(@"Parent width 2 is: %f", parent);
+                    
                 }
+                
+                
+                
                 if (parent) // if I found a parent object
                 {
                     CGFloat context = parent;
@@ -3418,6 +3564,8 @@
             }
         }
         
+        NSLog(@"PRINTING EACH MODIFIED ROW: %@", row);
+        
     } ];
     
     
@@ -3495,7 +3643,7 @@
         {
             blockidAsString = [prefix stringByAppendingFormat:@"%@", [block valueForKey:@"id"]];
         }
-        
+        [block setObject:blockidAsString forKey:@"markupid"];
         
         if ([firstObjectsInGroups containsObject:blockid])
         {
@@ -3610,7 +3758,7 @@
         {
             startRowCode = [NSMutableString stringWithString:@"\n      <div class=\"row\">"];
             if ([block objectForKey:FIRST_IN_ROW_AND_CONTAINER]) {
-                NSString *containerStartCode = @"\n      <div class=\"container\">";
+                NSString *containerStartCode = [NSString stringWithFormat:@"\n      <div class=\"container\" id=\"%@\">", previousElementId];
                 startRowCode = [NSMutableString stringWithString:[containerStartCode stringByAppendingString:startRowCode]];
             }
         }
@@ -4049,8 +4197,8 @@
         
         
         
-        // RECTANGLE or ROW CODE
-        if ( ([[block valueForKey:@"tag"] isEqualToString: @"div"]) || ([[block valueForKey:@"tag"] isEqualToString: DYNAMIC_ROW_TAG ]) )
+        // RECTANGLE or ROW CODE or CONTAINER
+        if ( ([[block valueForKey:@"tag"] isEqualToString: @"div"]) || ([[block valueForKey:@"tag"] isEqualToString: DYNAMIC_ROW_TAG ])  || ([[block valueForKey:@"tag"] isEqualToString: CONTAINER_TAG ]) )
         {
             NSArray *arrayH = [NSArray array];
             if ([block objectForKey:@"convertToGroupingbox"] == nil)
@@ -4398,7 +4546,7 @@
         
         
         // BUTTON
-        if ([block valueForKey:@"tag"] == @"button")
+        if ([[block valueForKey:@"tag"] isEqual: @"button"])
         {
             
             //if "marginTop" in block:
@@ -4625,7 +4773,15 @@
     for (NSNumber *n in self.rowMargins)
     {
         loopCount = [self.rowMargins indexOfObject:n]+1;
-        rowCodeForNthChild = [NSMutableString stringWithFormat:@".container .row:nth-child(%lu) {\n  margin-top: %@px;\n\n}", loopCount, n];
+        // get the id of the Container this row sits within, and then place that id where .container currently is in the code below. If Nil then replace it with 'body'.
+        NSMutableString *containerID = [self containerThatContainsRow:loopCount-1 usingElements:sortedArray];
+        if (containerID != nil)
+            [containerID insertString:@"#" atIndex:0]; //ASSUMPTION: This is an id not a class
+        else
+            containerID = [NSMutableString stringWithString:@"body"];
+        
+                
+        rowCodeForNthChild = [NSMutableString stringWithFormat:@"%@ .row:nth-child(%lu) {\n  margin-top: %@px;\n\n}", containerID, loopCount, n];
         css = [NSMutableString stringWithString:[css stringByAppendingString:rowCodeForNthChild]];
     }
     
@@ -4645,9 +4801,9 @@
     //[start stringByAppendingString:backgroundColourAsString];
     //[start stringByAppendingString:@""];
     
-    middle = [NSMutableString stringWithString: @"\n</style></head>\n  <body>\n    <div class=\"container\">"];
+    middle = [NSMutableString stringWithString: @"\n</style></head>\n  <body>\n    "];
     
-    end = [NSMutableString stringWithString:@"\n</div><!-- /container -->\n</body>\n</html>"];
+    end = [NSMutableString stringWithString:@"\n</body>\n</html>"];
     
     doc = [NSMutableString stringWithString:
            [[[[start stringByAppendingString:css] stringByAppendingString:middle] stringByAppendingString:html] stringByAppendingString:end]];

@@ -61,7 +61,8 @@
 #define BUILDER_TRIGGERS_TAB                    @"triggers"
 #define BUILDER_COMMANDS_TAB                    @"commands"
 
-
+//#define XCOORDINATE                             @"xcoordinate"
+//#define YCOORDINATE                             @"ycoordinate"
 
 
 

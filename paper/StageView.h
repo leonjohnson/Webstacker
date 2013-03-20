@@ -113,7 +113,7 @@ typedef NSInteger		ShapeCutCopyType;
     NSMutableArray *groupingBoxes;
     
     NSMutableArray *rows;
-    NSMutableArray *rowMargins;
+    NSMutableArray *rowMargins; // The margin for the nth row. So the first margin in this array is for row(1) and so on
     
     NSMutableArray *leftToRightTopToBottom;
 	
