@@ -42,7 +42,7 @@
 @synthesize arrayShadows;
 
 @synthesize canMove;
-
+@synthesize URLString;
 
 
 
@@ -50,6 +50,9 @@
 - (void)dealloc
 {
 	free( handleArray );
+	if (URLString) {
+		[URLString release];
+	}
 	
 	[super dealloc];
 }
@@ -169,6 +172,7 @@
 	shape.isSelected = FALSE;
 	shape.arrayShadows = nil;
 	shape.canMove = NO;
+	shape.URLString = [[NSString alloc] initWithString:@""];
 	
 	return shape;
 }
@@ -269,6 +273,16 @@
 	
 	[self setNeedsDisplay:YES];
 }
+
+
+/*- (void)setURLString:(NSString *)string
+{
+	if (self.URLString != nil) {
+		[self.URLString release];
+	}
+	
+	self.URLString = [[NSString alloc] initWithString:string];
+}*/
 
 
 #pragma mark - shape operation implementation

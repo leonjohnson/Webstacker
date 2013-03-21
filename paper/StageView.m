@@ -1174,7 +1174,7 @@ static NSImage *bottomImage;
 	[selElementArray removeAllObjects];
 	
 	// set 0 to the attribute panel when the shape is not selected
-	[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0];
+	[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0 URL:@""];
 
     // Empty the text in the StageTextView
     [[self.textboxView textStorage] setAttributedString:[[NSAttributedString alloc] initWithString:@""]];
@@ -1506,7 +1506,8 @@ static NSImage *bottomImage;
 		[attributeDelegate SetAttributeOfShapeToPanel:shape.rtFrame.origin.x
 												 yPos:shape.rtFrame.origin.y
 												Width:shape.rtFrame.size.width
-											   Height:shape.rtFrame.size.height];
+											   Height:shape.rtFrame.size.height
+												  URL:shape.URLString];
 	}
 	
 	// set shadow property to shadow panel
@@ -1553,7 +1554,11 @@ static NSImage *bottomImage;
 			break;
 			
 		default:
-			[self addCursorRect:[self frame] cursor:[NSCursor arrowCursor]];
+			if ((nHitTest & SHT_HANDURLMASK) == SHT_HAVEURL) {
+				[self addCursorRect:[self frame] cursor:[NSCursor pointingHandCursor]];
+			} else {
+				[self addCursorRect:[self frame] cursor:[NSCursor arrowCursor]];
+			}
 			break;
 	}
 }
@@ -1567,6 +1572,8 @@ static NSImage *bottomImage;
 	
 	// hightlight the shape which be overed by mouse
 	BOOL isOvered = NO;
+	nHitTest = 0;
+	
 	//for (Element *shape in elementArray) {
 	for (NSInteger index = [elementArray count] - 1; index >= 0; index -- ) {
 		Element *shape = [elementArray objectAtIndex:index];
@@ -1584,22 +1591,30 @@ static NSImage *bottomImage;
 		if (!isOvered && [shape IsPointInElement:ptShape] != SHT_NONE) {
 			shape.isPtInElement = YES;
 			isOvered = YES;
+			
+			if (shape.URLString && [shape.URLString length] > 0) {
+				nHitTest = SHT_HAVEURL;
+			}
 		}
 	}
-	[self setNeedsDisplay:YES];
 	
 	// selected nothing shape, don't change mouse cursor
-	if ([selElementArray count] != 1) {
-		return;
+	NSInteger beforeHitTest = nHitTest;
+	
+	if ([selElementArray count] >= 1) {
+		for (Element *selShape in selElementArray) {
+			
+			nHitTest = beforeHitTest | [selShape HitTest:point];
+			
+			[[self window] invalidateCursorRectsForView:self];
+			return;
+		}
 	}
 	
-	for (Element *selShape in selElementArray) {
-		
-		nHitTest = [selShape HitTest:point];
-		
-		[[self window] invalidateCursorRectsForView:self];
-		return;
-	}
+	nHitTest = beforeHitTest;
+	
+	[[self window] invalidateCursorRectsForView:self];
+	[self setNeedsDisplay:YES];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent
@@ -1975,7 +1990,7 @@ static NSImage *bottomImage;
 	
 	// if the user selects multiple shapes, attributes pannel shows zero.
 	if ([selElementArray count] > 1) {
-		[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0];
+		[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0 URL:@""];
 	}
 	
 	isDragingShape = NO;
@@ -2126,7 +2141,8 @@ static NSImage *bottomImage;
 	[attributeDelegate SetAttributeOfShapeToPanel:pt.x - defaultSizeOfElement.width / 2
                                              yPos:pt.y - defaultSizeOfElement.height / 2
 											Width:defaultSizeOfElement.width
-                                           Height:defaultSizeOfElement.height];
+                                           Height:defaultSizeOfElement.height
+											  URL:shape.URLString];
 
     // Re-sort the layers panel
     [layerDelegate SetLayerList];
@@ -2162,6 +2178,27 @@ static NSImage *bottomImage;
 }
 
 #pragma mark - Change shape attribute delegate implementation
+
+- (void)ChangeURLStringOFElement:(NSString *)url
+{
+	if ([self IsSelectedShape] == NO) {
+		return;
+	}
+	
+	if ([selElementArray count] > 1) {
+		return;
+	}
+	
+	if (((Element *)[selElementArray lastObject]).uType == SHAPE_CONTAINER) {
+		return;
+	}
+	
+	if ( ((Element *)[selElementArray lastObject]).URLString != nil ) {
+		[((Element *)[selElementArray lastObject]).URLString release];
+	}
+	
+	[((Element *)[selElementArray lastObject]) setURLString:url];
+}
 
 /*
  @function:		ChangeAttribueOfShape
@@ -2680,7 +2717,8 @@ static NSImage *bottomImage;
     
 	// set the attribute to AttriutePanel
 	[attributeDelegate SetAttributeOfShapeToPanel:element.rtFrame.origin.x yPos:element.rtFrame.origin.y
-											Width:element.rtFrame.size.width Height:element.rtFrame.size.height];
+											Width:element.rtFrame.size.width Height:element.rtFrame.size.height
+											  URL:element.URLString];
     
     //re-sort the layers panel
     [layerDelegate SetLayerList];
@@ -2849,7 +2887,7 @@ static NSImage *bottomImage;
 	[self setNeedsDisplay:YES];
 	
 	// set the attribute to AttriutePanel
-	[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0];
+	[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0 URL:@""];
 	//[shadowDelegate setShadowProperty:0 Distance:0 colorR:0 colorG:0 colorB:0 Opacity:0 Blur:0 Direct:YES];
 	
 	return YES;
@@ -3240,13 +3278,14 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
 - (void)InitAttributeBySelected
 {
 	if ([selElementArray count] == 0) {
-		[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0];
+		[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0 URL:@""];
 
 	} else {
 		[attributeDelegate SetAttributeOfShapeToPanel:((Element *)[selElementArray lastObject]).rtFrame.origin.x
 												 yPos:((Element *)[selElementArray lastObject]).rtFrame.origin.y
 												Width:((Element *)[selElementArray lastObject]).rtFrame.size.width
-											   Height:((Element *)[selElementArray lastObject]).rtFrame.size.height];
+											   Height:((Element *)[selElementArray lastObject]).rtFrame.size.height
+												  URL:((Element *)[selElementArray lastObject]).URLString];
 
 	}
 }

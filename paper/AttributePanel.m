@@ -233,9 +233,10 @@
 				by mouse drag and drop.
 				This function set the position and size of the shape to stepper.
  */
-- (void)SetAttributeOfShapeToPanel:(CGFloat)x yPos:(CGFloat)y Width:(CGFloat)w Height:(CGFloat)h
+- (void)SetAttributeOfShapeToPanel:(CGFloat)x yPos:(CGFloat)y Width:(CGFloat)w Height:(CGFloat)h URL:(NSString*)url
 {
 	[self SetStepperValue:x yPos:y Width:w Height:h];
+	[urlTextField setStringValue:url];
 }
 
 
@@ -576,6 +577,17 @@
 - (IBAction)OnContextualTab:(id)sender
 {
 	[_tabView selectTabViewItemAtIndex:3];
+}
+
+
+#pragma mark - NSTextField delegate implementation
+
+- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor
+{
+	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+	[curDoc.stageView ChangeURLStringOFElement:urlTextField.stringValue];
+	
+	return YES;
 }
 
 

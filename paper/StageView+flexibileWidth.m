@@ -150,7 +150,8 @@
     [attributeDelegate SetAttributeOfShapeToPanel:((Element *)[selElementArray lastObject]).rtFrame.origin.x
                                              yPos:((Element *)[selElementArray lastObject]).rtFrame.origin.y
                                             Width:elementsSize.width
-                                           Height:elementsSize.height];
+                                           Height:elementsSize.height
+											  URL:((Element *)[selElementArray lastObject]).URLString];
     return elementsSize;
 }
 @end

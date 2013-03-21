@@ -28,7 +28,7 @@
 				by mouse drag and drop.
 				This function set the position and size of the shape to stepper.
  */
-- (void)SetAttributeOfShapeToPanel:(CGFloat)x yPos:(CGFloat)y Width:(CGFloat)w Height:(CGFloat)h;
+- (void)SetAttributeOfShapeToPanel:(CGFloat)x yPos:(CGFloat)y Width:(CGFloat)w Height:(CGFloat)h URL:(NSString*)url;
 
 
 /*

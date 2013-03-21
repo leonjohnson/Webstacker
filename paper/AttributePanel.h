@@ -14,6 +14,7 @@
 NSTabViewDelegate,
 NSTableViewDataSource,
 NSTableViewDelegate,
+NSTextFieldDelegate,
 SetAttributeDelegate
 >
 {
@@ -32,6 +33,8 @@ SetAttributeDelegate
 	
 	IBOutlet NSStepper				*hStepper;
 	IBOutlet NSTextField			*hTextField;
+	
+	IBOutlet NSTextField			*urlTextField;
     
     //Layout type - px or %
     IBOutlet NSPopUpButton *layoutTypeDisplay;

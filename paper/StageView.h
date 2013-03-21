@@ -412,6 +412,8 @@ typedef NSInteger		ShapeCutCopyType;
 
 - (void)InitAttributeBySelected;
 
+- (void)ChangeURLStringOFElement:(NSString *)url;
+
 @end
 
 

@@ -41,17 +41,20 @@ typedef NSInteger LayoutTag;
 
 // handle type (shape hitTest type)
 
-#define SHT_HANDLESTYLE			0xFF000	// hit test style mask. If the bit AND operation of hit test value and SHT_HANDLESTYLE is SHT_NONE,
+#define SHT_HANDLESTYLE			0x0FF000	// hit test style mask. If the bit AND operation of hit test value and SHT_HANDLESTYLE is SHT_NONE,
 // shape is not to move. Otherwise moving.
 
-#define SHT_HANDLESIZING		0x00FFF // hit test resizeing mask.
+#define SHT_HANDLESIZING		0x000FFF // hit test resizeing mask.
 // If the bit AND operation of the hit test value and SHT_HANDLESIZING is following resizing flag,
 // shape is resizing.
 
+#define SHT_HANDURLMASK			0xFFF000
+
 // shape moving flage
-#define SHT_NONE				0x00000 // Shape's normal state.
-#define SHT_MOVING				0x01000 // Shape's moving state.
-#define SHT_PTINELEMENT			0x10000 // Point is beside in shape.
+#define SHT_NONE				0x000000 // Shape's normal state.
+#define SHT_MOVING				0x001000 // Shape's moving state.
+#define SHT_PTINELEMENT			0x010000 // Point is beside in shape.
+#define SHT_HAVEURL				0x100000 // Shape have URL string.
 
 
 // shape resizing flag
@@ -211,6 +214,7 @@ typedef NSInteger LayoutTag;
 @property (assign) NSMutableArray					*arrayShadows;
 
 @property (nonatomic) BOOL							canMove;
+@property (assign, nonatomic) NSString							*URLString;
 
 - (void)dealloc;
 
@@ -328,6 +332,8 @@ typedef NSInteger LayoutTag;
  @purpose:		This function remove the shape shadow from the shadow list
  */
 - (void)removeShapeShadow:(NSInteger)index;
+
+//- (void)setURLString:(NSString *)string;
 
 @end
 
