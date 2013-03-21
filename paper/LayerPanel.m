@@ -183,7 +183,7 @@
 	} else if ([[tableColumn identifier] isEqualToString:@"Visibility"]) {
 		
 		if (shape.uType == SHAPE_CONTAINER) {
-			return nil;
+			//return nil;
 		}
 		
 		NSButton *checkVisible = [tableView makeViewWithIdentifier:[NSString stringWithFormat:@"TableViewVisibleCell%ld", row] owner:self];

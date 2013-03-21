@@ -888,7 +888,7 @@
         }
     }
     NSLog(@"start 2: ROW I'M IN: %lu and row count is: %lu", rowImIn, self.rows.count);
-    if (!rowImIn)
+    if ([NSNumber numberWithInteger:rowImIn] == nil)
     {
         NSLog(@"NearestElementDirectlyAboveMeInMyRow RETURNED NIL");
         return nil;
@@ -981,10 +981,15 @@
 
 
 
--(int)highestYcoordinateInMyRow: (NSDictionary *)elementBeingTested //which now means the smallest when view isFlipped.
+-(NSNumber*)highestYcoordinateInMyRow: (NSDictionary *)elementBeingTested //which now means the smallest when view isFlipped.
 {
     NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:ycoordinate ascending:NO];
     NSArray *verticalSortDescriptor = [NSArray arrayWithObject: vertically];
+    if ([[elementBeingTested objectForKey:@"tag"] isEqual:CONTAINER_TAG])
+    {
+        NSLog(@"RETURNING AS THIS IS A CONTAINER TAG");
+        return nil;
+    }
     
     NSUInteger rowImIn = nil;
     for (NSArray *r in self.rows)
@@ -995,8 +1000,8 @@
         }
     }
     
-    if (!rowImIn) {
-        NSLog(@"highestYcoordinateInMyRow RETURNING NIL");
+    if ([NSNumber numberWithInteger:rowImIn] == nil) {
+        NSLog(@"highestYcoordinateInMyRow method RETURNING NIL");
         return nil;
     }
     NSMutableArray *itemsInMyRow = [NSMutableArray array];
@@ -1008,8 +1013,8 @@
     sortedItemsInRow = [itemsInMyRow sortedArrayUsingDescriptors:verticalSortDescriptor];
     
     NSDictionary *highestElement = [sortedItemsInRow lastObject];
-    int rowMarginTop = [[highestElement valueForKey:@"ycoordinate"]intValue];
-    NSLog(@"  **** Returning fom highestYcoordinateInMyRow : %i", rowMarginTop);
+    NSNumber *rowMarginTop = [highestElement valueForKey:@"ycoordinate"];
+    NSLog(@"  **** Returning fom highestYcoordinateInMyRow : %@", rowMarginTop);
     return rowMarginTop;
 }
 
@@ -1183,7 +1188,7 @@
         NSMutableDictionary *highest = [[AG sortedArrayUsingDescriptors:verticalSortDescriptor] lastObject];
         
         // PLACE ELSEWHERE IN SCRIPT - WRONG METHOD.
-        int boxMarginTop = [[box valueForKey:ycoordinate]intValue] - [self highestYcoordinateInMyRow:highest]; //was [self marginToElementAboveMe:highest];
+        int boxMarginTop = [[box valueForKey:ycoordinate]intValue] - [[self highestYcoordinateInMyRow:highest] intValue]; //was [self marginToElementAboveMe:highest];
         NSLog(@"TEST3 TEST3 : %i and %i", boxMarginTop, [[box valueForKey:ycoordinate]intValue] );
         [box setMarginTop:boxMarginTop];
         NSLog(@"pla2");
@@ -1379,7 +1384,7 @@
     if (directlyAboveMeInThisRow == nil)
     {
         // if there is nothing above me in this row
-        offset = [[g valueForKey:ycoordinate]intValue] - [self highestYcoordinateInMyRow:firstObjectinGroupBox];
+        offset = [[g valueForKey:ycoordinate]intValue] - [[self highestYcoordinateInMyRow:firstObjectinGroupBox] intValue];
         NSLog(@"if statement : %i", offset);
     }
     else
@@ -1616,6 +1621,10 @@
 {
     //This method returns an array containing: elements that are within its bounds or nil.
     NSDictionary *matchingContainer = nil;
+    if ([[elementBeingTested objectForKey:@"tag"] isEqual:CONTAINER_TAG])
+    {
+        return matchingContainer;
+    }
     NSMutableArray *arrayOfContainers = [NSMutableArray new];
     NSRect elementRect = NSRectFromString([elementBeingTested valueForKey:RT_FRAME]);
     
@@ -1661,6 +1670,53 @@
         containerID = [NSMutableString stringWithString:[containerContaingMyRow objectForKey:@"markupid"]];
     
     return containerID;
+}
+
+
+
+-(NSNumber*)distanceFromContainerToElementDirectlyAboveIt:(NSDictionary*)container usingElements:(NSArray*) sortedArrayOnStage
+{
+    NSMutableArray *inMyRange = [NSMutableArray array];
+    NSUInteger containerW = [[container valueForKey:@"width"] unsignedIntegerValue];
+    NSUInteger containerX = [[container valueForKey:@"xcoordinate"] unsignedIntegerValue];
+    NSUInteger containerY = [[container valueForKey:@"ycoordinate"] unsignedIntegerValue];
+    NSRange containerXRange = NSMakeRange(containerX, containerW);
+    for (NSDictionary *element in sortedArrayOnStage)
+    {
+        if ([element isEqualToDictionary:container] == NO)    //  If not me
+        {
+            NSUInteger compareY = [[element valueForKey:bottomYcoordinate] unsignedIntegerValue];
+            NSUInteger compareW = [[element valueForKey:@"width"] unsignedIntegerValue];
+            NSUInteger compareX = [[element valueForKey:@"xcoordinate"] unsignedIntegerValue];
+            NSRange compareWidthRange = NSMakeRange(compareX, compareW); //X location and the length
+            
+            NSRange comparison = NSIntersectionRange(containerXRange, compareWidthRange);
+            
+            if ((compareY < containerY) & (comparison.length!=0)) //    We have a match
+            {
+                NSLog(@"start 4");
+                [inMyRange addObject:element]; //   Add the comparison object so it now has an order.
+            }
+            else
+                NSLog(@"start 5");
+        }
+    }
+    NSNumber *distance = nil;
+    if ([inMyRange count] > 0)
+    {
+        NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:@"ycoordinate" ascending:YES];
+        NSSortDescriptor *horizontally = [[NSSortDescriptor alloc] initWithKey:@"xcoordinate" ascending:YES];
+        
+        NSArray *sortDescriptorA = [NSArray arrayWithObjects: vertically, horizontally, nil];
+        NSArray *aboveMe = [inMyRange sortedArrayUsingDescriptors:sortDescriptorA];
+        distance = [[aboveMe objectAtIndex:0] objectForKey:bottomYcoordinate];
+    }
+    else
+    {
+        distance = [container objectForKey:ycoordinate];
+    }
+    
+    return distance;
 }
 
 
@@ -2591,7 +2647,7 @@
         
         // **** @@ CONSIDER DELETING THE BELEOW AS I BELIVE IT'S ALL OVERRIDEN OR IGNORED //
         
-        if ( ([elementsAboveMe count] > 0) & ([verticallyAboveMeSortedArray count] > 0) )
+        if ( ([elementsAboveMe count] > 0) && ([verticallyAboveMeSortedArray count] > 0) )
         {
             //    If there are multiple objects above me, get the one lowest on the y coordinate axis (closest to me), as vertically is 'desc' not 'asc'.
             
@@ -2664,8 +2720,9 @@
             NSUInteger myRowId = [self elementRow:dc];
             if (rowOfElementAboveMe != myRowId)
             {
-                
-                marginTop =[[dc objectForKey:ycoordinate]intValue] - [self highestYcoordinateInMyRow:[[self.rows objectAtIndex:myRowId] objectAtIndex:0]];
+                int a = [[dc objectForKey:ycoordinate]intValue];
+                int b = [[self highestYcoordinateInMyRow:[[self.rows objectAtIndex:myRowId] objectAtIndex:0] ]intValue];
+                marginTop = a - b;
                 NSLog(@"Object I'm using to measure against: %@", [[[self.rows objectAtIndex:myRowId] objectAtIndex:0] objectForKey:@"id"]);
                 NSLog(@"Returning: %i", marginTop);
                 NSLog(@"Distance to my margin: %i with id: %@", marginTop, [dc objectForKey:@"id"]);
@@ -2677,15 +2734,24 @@
         else    //  There's nothing above me
         {
             //  **      Set the margin of the element, which may be readjusted LATER DOWN THE METHOD if it's inside a groupingBox    **
-            int highestYPoint = [self highestYcoordinateInMyRow:dc]; //test if it's 0, which means only there's only one object in this row.
-            if (highestYPoint == [[dc objectForKey:ycoordinate]intValue])
+            if ([[dc objectForKey:@"tag"] isEqual:CONTAINER_TAG])
             {
-                //if it's the highest object in the row then set it to 0.
-                highestYPoint = 0;
+                marginTop = [[self distanceFromContainerToElementDirectlyAboveIt:dc usingElements:sortedArray] intValue];
+                NSLog(@"In special case: %d", marginTop);
             }
-            float myHighestYPoint = [[dc valueForKey:@"ycoordinate"]floatValue];
-            NSLog(@"Else state myhighestpoint: %f", myHighestYPoint);
-            marginTop =  myHighestYPoint - highestYPoint;
+            else
+            {
+                NSNumber *highestYPoint = [self highestYcoordinateInMyRow:dc]; // this is the rows y coordinate
+                if (highestYPoint == [dc objectForKey:ycoordinate])
+                {
+                    //if it's the highest object in the row then set it to 0.
+                    highestYPoint = [NSNumber numberWithInt:0];
+                }
+                NSNumber *myHighestYPoint = [dc valueForKey:@"ycoordinate"];
+                NSLog(@"HEIGHT IS %@ - %@", myHighestYPoint, highestYPoint);
+                marginTop =  [myHighestYPoint intValue] - [highestYPoint intValue];
+            }
+           
             
             
             
@@ -2765,7 +2831,7 @@
         for (NSMutableDictionary *objectToTheLeft in sortedArray) //check this... //  Was LeftToRightTopToBottom
         {
             
-            if ([objectToTheLeft isEqualToDictionary:dc] == NO && [objectToTheLeft objectForKey:@"tag"] != [Container class])
+            if ([objectToTheLeft isEqualToDictionary:dc] == NO && ![[objectToTheLeft objectForKey:@"tag"] isEqual: CONTAINER_TAG])
             {
                 
                 if ([[objectToTheLeft valueForKey:@"xcoordinate"] intValue] < [[dc valueForKey:@"xcoordinate"] intValue] ) //   It's to my left
@@ -2894,8 +2960,11 @@
         if ( (objectToMyLeft == NO) & ([solos containsObject:dc] == YES) )
         {
             # pragma mark -  CONTAINER CODE ADDED.
-            NSDictionary *container = [self containerContaining:dc usingElements:sortedArray];
-            if (container == nil)
+            
+            NSLog(@"IN THIS");
+            NSDictionary *myContainer = [self containerContaining:dc usingElements:sortedArray];
+            NSLog(@"dc = %@ and myContainer = %@", [dc objectForKey:xcoordinate], [myContainer objectForKey:xcoordinate]);
+            if (myContainer == nil)
             {
                 //This is for solo objects with nothing to the left of it that isn't number one object on the page
                 marginLeft = [[dc valueForKey:@"xcoordinate"] intValue];
@@ -2904,7 +2973,7 @@
                 
             else
             {
-                marginLeft = [[container objectForKey:xcoordinate]intValue];
+                marginLeft = [[dc objectForKey:xcoordinate]intValue] - [[myContainer objectForKey:xcoordinate]intValue];
             }
                 
             
@@ -3192,7 +3261,8 @@
             if ( rowsContainer != nil)
             {
                 NSLog(@"LOGGING the first row");
-                calculatedMarginTop = [rowsContainer objectForKey:ycoordinate];
+                NSLog(@"CONTAINER DICTIONARY IS : %@", rowsContainer);
+                calculatedMarginTop = [[rowsContainer objectForKey:ycoordinate] intValue];
                 // IF FIRST ENTRY THEN MEASURE AGAINST THE CONTAINERS Y COORDINATE
             }
             else
@@ -3201,10 +3271,10 @@
                 calculatedMarginTop = [[highestElementInRow valueForKey:ycoordinate]intValue];
             }
             
-                
+            
             
             //calculatedMarginTop = highestPoint - [[highestElementInRow valueForKey:ycoordinate]intValue];
-            calculatedMarginTop = [[highestElementInRow valueForKey:ycoordinate]intValue];
+            //calculatedMarginTop = [[highestElementInRow valueForKey:ycoordinate]intValue];
             NSLog(@"CALCULATED MARGINTOP IS (2) : %d", calculatedMarginTop);
             
             // todo: Get the distance from the top of this row to the top of its container (if it has one), that is the margin
@@ -3245,7 +3315,12 @@
         NSLog(@"dISTANCE TO NEAREST ELEMENT : %@", distanceToNearestElementAboveMeInThisRow);
         
         // Get the distance to the highest item in my row
-        int highestItemsYco = [self highestYcoordinateInMyRow:dc];
+        NSNumber *hiy = [self highestYcoordinateInMyRow:dc];
+        if (hiy == nil) {
+            hiy = [NSNumber numberWithInt:0];
+        }
+        NSLog(@"HIY is %@", hiy);
+        int highestItemsYco = [[self highestYcoordinateInMyRow:dc] intValue];
         NSLog(@"highestItemsYco : %d", highestItemsYco);
         
         
@@ -3254,7 +3329,7 @@
         
         if ((insideGroupingBoxFlag == NO) & (distanceToNearestElementAboveMeInThisRow == nil) ) //this is not in a groupingbox nor does it have anything in its y range in this row.
         {
-            int marginTopTop = [[dc valueForKey:@"ycoordinate"] intValue] - [self highestYcoordinateInMyRow:dc];
+            int marginTopTop = [[dc valueForKey:@"ycoordinate"] intValue] - highestItemsYco;
             [dc setValue:[NSNumber numberWithInt:marginTopTop] forKey:@"marginTop"];
             NSLog(@"I JUST SET MARGINTOP TO: %i", marginTopTop);
         }
@@ -3263,7 +3338,7 @@
         ///////////////
         // if the highest point in my row is equal to my height then I'm the tallest in the row and thus no margnTop is needed
         
-        if ([[dc objectForKey:ycoordinate]intValue] == highestItemsYco)
+        if ([dc objectForKey:ycoordinate] == hiy)
         {
             NSLog(@"So the highest element in the GroupingBox is the highest element in the row. 0. \n");
             [dc setObject:[NSNumber numberWithInt:0] forKey:@"marginTop"];
@@ -3346,7 +3421,7 @@
         // if the highest point in my row is equal to my height then I'm the tallest in the row and thus no margnTop is needed
         int gYco = [[g valueForKey:@"ycoordinate"] intValue];
         NSLog(@"gYco is %i", gYco);
-        if (gYco == [self highestYcoordinateInMyRow:highestElement] )
+        if (gYco == [[self highestYcoordinateInMyRow:highestElement] intValue] )
         {
             NSLog(@"So the highest element in the GroupingBox is the highest element in the row");
             [[[g insideTheBox] objectAtIndex:0] removeObjectForKey:@"GroupBoxMarginTop"];
@@ -3757,17 +3832,14 @@
         if ([startRows containsObject:blockid])
         {
             startRowCode = [NSMutableString stringWithString:@"\n      <div class=\"row\">"];
-            if ([block objectForKey:FIRST_IN_ROW_AND_CONTAINER]) {
-                NSString *containerStartCode = [NSString stringWithFormat:@"\n      <div class=\"container\" id=\"%@\">", previousElementId];
-                startRowCode = [NSMutableString stringWithString:[containerStartCode stringByAppendingString:startRowCode]];
-            }
+            
         }
         if ([endRows containsObject:blockid])
         {
             endRowCode = [NSMutableString stringWithString:@"\n</div><!-- Closes the row -->"];
             if ([block objectForKey:LAST_IN_ROW_AND_CONTAINER]) {
                 NSString *containerEndCode = @"\n</div><!-- Closes the container -->";
-                endRowCode = [NSMutableString stringWithString:[containerEndCode stringByAppendingString:endRowCode]];
+                endRowCode = [NSMutableString stringWithString:[endRowCode stringByAppendingString:containerEndCode]];
             }
         }
         
@@ -4203,13 +4275,28 @@
             NSArray *arrayH = [NSArray array];
             if ([block objectForKey:@"convertToGroupingbox"] == nil)
             {
-                arrayH = [NSArray arrayWithObjects:
-                          @"<div id=\"",
-                          blockidAsString,
-                          @"\">",
-                          [block valueForKey:@"content"],
-                          @"</div>",
-                          nil];
+                if ([[block objectForKey:@"tag"] isEqual:CONTAINER_TAG])
+                {
+                    arrayH = [NSArray arrayWithObjects:
+                              @"<div class=\"container\" id=\"",
+                              blockidAsString,
+                              @"\">",
+                              [block valueForKey:@"content"],
+                              
+                              nil];
+                    //NSString *containerStartCode = [NSString stringWithFormat:@"\n      <div class=\"container\" id=\"%@\">", previousElementId];
+                    //startRowCode = [NSMutableString stringWithString:[containerStartCode stringByAppendingString:startRowCode]];
+                }
+                else
+                {
+                    arrayH = [NSArray arrayWithObjects:
+                              @"<div id=\"",
+                              blockidAsString,
+                              @"\">",
+                              [block valueForKey:@"content"],
+                              @"</div>",
+                              nil];
+                }
             }
             
             code = [NSMutableString stringWithString:[arrayH componentsJoinedByString:@""]];
@@ -4735,6 +4822,7 @@
         if (endRowCode != nil)
         {
             code = [NSMutableString stringWithString:[code stringByAppendingString:endRowCode]];
+            
         }
         
         NSDictionary *codeDictionary = [NSDictionary dictionaryWithObject:code forKey:[NSNumber numberWithInt:CblockCount]];
