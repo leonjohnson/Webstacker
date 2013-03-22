@@ -2899,7 +2899,8 @@
                                                 [[closestElement valueForKey:@"width"]floatValue],
                                                 [[closestElement valueForKey:@"height"]floatValue]);
                 
-                int marginRight2 = [self isThereAGroupBoxInPath:dcRect marginType:@"y" comparatorRect:closestRect];
+                //int marginRight2 = [self isThereAGroupBoxInPath:dcRect marginType:@"y" comparatorRect:closestRect];
+                int marginRight2 = nil;
                 
                 if (marginRight2)
                 {
@@ -3404,8 +3405,8 @@
         g.insideTheBox = [NSMutableArray arrayWithArray:[[g insideTheBox] sortedArrayUsingDescriptors:orderIDSortDescriptor]];
         
         [[g insideTheBox] insertObject: [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                         [NSNumber numberWithFloat:g.marginTop], @"GroupBoxMarginTop",
-                                         [NSNumber numberWithFloat:g.marginRight], @"GroupBoxMarginRight",
+                                         [NSNumber numberWithInt:g.marginTop], @"GroupBoxMarginTop",
+                                         [NSNumber numberWithInt:g.marginRight], @"GroupBoxMarginRight",
                                          [NSString stringWithString:[[[g insideTheBox] objectAtIndex:0] valueForKey:@"id"]], @"firstObject",
                                          [NSString stringWithString:[[[g insideTheBox] lastObject] valueForKey:@"id"]], @"lastObject",
                                          [NSNumber numberWithFloat:(g.rtFrame.size.width)], @"width",
@@ -3418,14 +3419,14 @@
         
         
         // TODO: Not vital, but check this bit is correct.
-        // if the highest point in my row is equal to my height then I'm the tallest in the row and thus no margnTop is needed
+        // if the highest point in my row is equal to my height then I'm the tallest in the row and thus no margnTop is needed, so set it to zero
         int gYco = [[g valueForKey:@"ycoordinate"] intValue];
         NSLog(@"gYco is %i", gYco);
         if (gYco == [[self highestYcoordinateInMyRow:highestElement] intValue] )
         {
             NSLog(@"So the highest element in the GroupingBox is the highest element in the row");
-            [[[g insideTheBox] objectAtIndex:0] removeObjectForKey:@"GroupBoxMarginTop"];
-            NSLog(@"Removed GroupBoxMarginTop as it was the highest in the row.");
+            [[[g insideTheBox] objectAtIndex:0] setObject:[NSNumber numberWithInt:0] forKey:@"GroupBoxMarginTop"];
+            NSLog(@"Set GroupBoxMarginTop to zero as it's the highest in the row.");
             
         }
         
@@ -3727,9 +3728,11 @@
             NSMutableDictionary *groupingBoxInQuestion = [NSMutableDictionary dictionary];
             for (NSArray *each in groupings)
             {
+                NSLog(@"EACH CONTAINS : %@", each);
                 if ([[[each objectAtIndex:0]valueForKey:@"firstObject"] isEqualToString:blockid] )
                 {
                     groupBoxMarginTop = [[each objectAtIndex:0] valueForKey:@"GroupBoxMarginTop"];
+                    NSLog(@"SHAMON ! %@", groupBoxMarginTop);
                     groupBoxMarginRight = [[each objectAtIndex:0] valueForKey:@"GroupBoxMarginRight"];
                     if ([[each objectAtIndex:0] valueForKey:MARGIN_RIGHT_AS_A_PERCENTAGE])
                     {
@@ -3775,7 +3778,7 @@
             keyPathMarginTop = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@.GroupBoxMarginTop", blockid]];
             keyPathMarginRight = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@.GroupBoxMarginRight", blockid]];
             keyPathWidth = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@.Width", blockid]];
-            NSLog(@"At step : 5");
+            NSLog(@"At step : 5 gbiq = %@", groupingBoxInQuestion);
             
             if ([groupingBoxInQuestion objectForKey:@"idPreviouslyKnownAs"])
             {
@@ -3783,6 +3786,7 @@
             }
             else
             {
+                NSLog(@"GROUPINGBOX IN HERE!! : %@ and %@ !", groupBoxMarginTop, groupBoxMarginRight);
                 groupBoxBits = [NSMutableArray arrayWithObjects:
                                 @"#",
                                 groupBoxID,
