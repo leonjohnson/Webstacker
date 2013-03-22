@@ -1786,6 +1786,7 @@
         {
             tagContent = @"";
             tagType = DROP_DOWN_MENU_TAG;
+            NSLog(@"OUPUT FROM DATASOURCE IS : %@", [ele dataSourceNameContainingKey:@"mealName"]);
         }
         
         
@@ -4995,76 +4996,9 @@
     // get the actions
 }
 
--(NSData *)dataSourceUsingHardcodedLocalValues:(NSString*)dataString
-// purpose is to create the JSON data needed to act as a dataSource
-// created from hardcoded values locally in the dataSource creator
 
-{
-    // get the master dataSource object
-    NSData *dataSourceAsJSON = [NSData data];
-    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-    NSMutableArray *masterData = [appDelegate masterDataSource];
-    for (NSDictionary *key in masterData)
-    {
-        //check if this array contains a dataSet that contains the string/key passed to this function
-        
-        /*
-         
-         Package this into a dictionary for easy conversion into json string:
-         
-         { mealName: "Standard (sandwich)", price: 0 },
-         { mealName: "Premium (lobster)", price: 34.95 },
-         { mealName: "Ultimate (whole zebra)", price: 290 }
-         
-         */
-        
-        NSArray *dataSet = [masterData objectForKey:key];
-        if ([[dataSet objectAtIndex:0] objectForKey:dataString]) // No need to do a loop as the data columns all repeats. First is fine.
-        {
-            // this is my dataSet so lets convert it to JSON for knockout.js!
-            if ([NSJSONSerialization isValidJSONObject:dataSet])
-            {
-                NSError *errorObject;
-                dataSourceAsJSON = [NSJSONSerialization dataWithJSONObject:dataSet
-                                                                   options:NSJSONWritingPrettyPrinted
-                                                                     error:&errorObject];
-            };
-        }
-        
-    }
-    
-    return dataSourceAsJSON;
-    
-}
 
-// ASSUMPTION: THAT EVERY DATASOURCE HEADER ENTERED IS UNIQUE PER DOCUMENT.
--(NSString*)dataSourceNameContainingKey: (NSString *)dataSourceKey
-{
-    NSString *stringToReturn = [NSString string];
-    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-    NSMutableArray *masterData = [appDelegate masterDataSource];
-    for (NSDictionary *key in masterData)
-    {
-        // each key represents a dataSource.
-        // each dataSource is made up of arrays
-        NSArray *headerTitles = [[key objectForKey:@"DataSource"] objectAtIndex:0]; // This is the header information.
-        for (NSString *header in headerTitles)
-        {
-            if ([header isEqualToString:dataSourceKey]) {
-                NSLog(@"Gotcha!");
-                stringToReturn = [key objectForKey:@"Name"]; // This is a string that was entered by the user into the Name field of the DataSource window.
-            }
-        }
-        
-        /*
-         For each key
-         Give me the first object in the array : returns dictionary
-         Cycle through that dictionary looking for my keystring passed in
-         If found, return key as a string.
-         */
-    }
-    return stringToReturn;
-}
+
 
 
 
@@ -5159,7 +5093,7 @@
 
 -(IBAction)groupElements:(id)sender
 {
-    if (groupItems.title == @"Group items")
+    if ([groupItems.title isEqual: @"Group items"])
     {
         NSLog(@"Entering groupElements with: %d", numberOfGroupings);
         for (Element *ele in selElementArray)

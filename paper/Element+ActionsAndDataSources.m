@@ -38,6 +38,8 @@
     // Remove row
     if (([self.actionStringEntered caseInsensitiveCompare:@"Remove row"] == NSOrderedSame))
     {
+        NSLog(@"IN REMOVE ROW");
+        NSLog(@"ACTION STRING IS : %@", self.actionStringEntered);
         actionsStringToReturn = @"data-bind=\"click: $root.removeRow\"";
         return actionsStringToReturn;
     }
@@ -207,13 +209,12 @@
     // get the master dataSource object
     NSData *dataSourceAsJSON = [NSData data];
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-    NSMutableArray *masterData = [appDelegate masterDataSource];
-    for (NSDictionary *key in masterData)
+    for (NSDictionary *dict in appDelegate.arrayDataSource)
     {
-        //check if this array contains a dataSet that contains the string/key passed to this function
+        NSMutableArray *dataModels = [NSMutableArray new];
+        NSMutableArray *dataModel = [NSMutableArray new];
         
         /*
-         
          Package this into a dictionary for easy conversion into json string:
          
          { mealName: "Standard (sandwich)", price: 0 },
@@ -221,15 +222,38 @@
          { mealName: "Ultimate (whole zebra)", price: 290 }
          
          */
+        // each dataSource is made up of arrays
         
-        NSArray *dataSet = [masterData objectForKey:key];
-        if ([[dataSet objectAtIndex:0] objectForKey:dataString]) // No need to do a loop as the data columns all repeats. First is fine.
+        [appDelegate.arrayDataSource enumerateObjectsUsingBlock:^(id dict, NSUInteger index, BOOL *stop)
+        {
+            NSMutableDictionary *dataModelRow = [NSMutableDictionary new];
+            NSArray *dataSourceArray = [dict objectForKey:@"DataSource"];
+            NSArray *headerTitles = [dataSourceArray objectAtIndex:0]; // This is the header information.
+            for (NSArray *row in dataSourceArray)
+            {
+                if ([dataSourceArray indexOfObject:row] > 0) // not the first item
+                {
+                    for (NSString *title in headerTitles)
+                    {
+                        NSUInteger indexa = [headerTitles indexOfObject:title];
+                        [dataModelRow setObject:[row objectAtIndex:indexa] forKey:title];
+                    }
+                
+                }
+                [dataModel addObject:dataModelRow];
+            }
+            [dataModels addObject:dataModel];
+        } ];
+        
+        
+        
+        if ([[dataModel objectAtIndex:0] objectForKey:dataString]) // No need to do a loop as the data columns all repeats. First is fine.
         {
             // this is my dataSet so lets convert it to JSON for knockout.js!
-            if ([NSJSONSerialization isValidJSONObject:dataSet])
+            if ([NSJSONSerialization isValidJSONObject:dataModel])
             {
                 NSError *errorObject;
-                dataSourceAsJSON = [NSJSONSerialization dataWithJSONObject:dataSet
+                dataSourceAsJSON = [NSJSONSerialization dataWithJSONObject:dataModel
                                                                    options:NSJSONWritingPrettyPrinted
                                                                      error:&errorObject];
             };
@@ -242,16 +266,16 @@
 }
 
 // ASSUMPTION: THAT EVERY DATASOURCE HEADER ENTERED IS UNIQUE PER DOCUMENT.
--(NSDictionary*)dataSourceNameContainingKey: (NSString *)dataSourceKey
+-(NSDictionary*)dataSourceNameContainingKey: (NSString *)dataSourceKey // This is the name of a header to make it easy for the user rather than typing dataSourceName.HeaderTitle
 {
     NSDictionary *dictionaryToReturn = [NSDictionary dictionary];
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-    NSMutableArray *masterData = [appDelegate masterDataSource];
-    for (NSDictionary *dict in masterData)
+    for (NSDictionary *dict in appDelegate.arrayDataSource)
     {
-        // each key represents a dataSource.
         // each dataSource is made up of arrays
-        NSArray *headerTitles = [[dict objectForKey:@"DataSource"] objectAtIndex:0]; // This is the header information.
+        NSString *nameOfDataSource = [dict objectForKey:@"Name"];
+        NSArray *dataSourceArray = [dict objectForKey:@"DataSource"];
+        NSArray *headerTitles = [dataSourceArray objectAtIndex:0]; // This is the header information.
         for (NSString *header in headerTitles)
         {
             if ([header isEqualToString:dataSourceKey]) {
@@ -260,13 +284,21 @@
             }
         }
         
-        /*
-         For each key
-         Give me the first object in the array : returns dictionary
-         Cycle through that dictionary looking for my keystring passed in
-         If found, return key as a string.
-         */
+        // print all contents of array
+        NSString *strLog = [NSString stringWithFormat:@"\n"];
+        for (NSString *contents in dataSourceArray) {
+			strLog = [NSString stringWithFormat:@"%@\t%@", strLog, contents];
+		}
+		
+		strLog = [NSString stringWithFormat:@"%@\n", strLog];
+        NSLog( @"%@", strLog );
+
     }
+    
+    
+	
+	
+	
     return dictionaryToReturn;
 }
 

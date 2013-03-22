@@ -388,6 +388,7 @@ typedef NSInteger LayoutTag;
 
 -(NSString *)actionCodeString;
 -(NSString *)dataSourceCodeString;
+-(NSDictionary*)dataSourceNameContainingKey:(NSString *)dataSourceKey;
 @end
 
 
