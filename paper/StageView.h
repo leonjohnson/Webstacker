@@ -150,6 +150,10 @@ typedef NSInteger		ShapeCutCopyType;
     BOOL								isShowFontTab;
 	NSMutableArray						*fontFaceArray;
 	IBOutlet NSTableView				*fontTableView;
+	
+	// for base line of the selected element
+	CGPoint								_startBaseLinePoint;
+	CGPoint								_endBaseLinePoint;
 }
 @property (assign) NSPanel *panel;
 //Flags
@@ -405,6 +409,15 @@ typedef NSInteger		ShapeCutCopyType;
  @purpose:		This function create container shape.
  */
 - (void)createContainerElement:(CGFloat)width;
+
+/*
+ @function:		CalcBaseLineOfSelectedElement
+ @params:		nothing
+ @return:		void
+ @purpose:		calculator the base line of the selected element
+ */
+- (BOOL)CalcBaseLineOfSelectedElement;
+
 - (void)showFontTab;
 - (void)hideFontTab;
 - (void)selectFontofCurrentTextBox:(NSString *)fontName;
@@ -413,6 +426,7 @@ typedef NSInteger		ShapeCutCopyType;
 - (void)InitAttributeBySelected;
 
 - (void)ChangeURLStringOFElement:(NSString *)url;
+
 
 @end
 

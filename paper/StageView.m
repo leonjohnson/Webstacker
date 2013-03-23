@@ -323,12 +323,22 @@ static NSImage *bottomImage;
                                             textStyle, NSParagraphStyleAttributeName, nil];
         
         [textContent drawInRect: textRect withAttributes: textFontAttributes];
-        
-
     }
     
-    
-        
+	// draw base line when the element moved
+    if ([self CalcBaseLineOfSelectedElement] == YES) {
+		NSBezierPath *linePath = [NSBezierPath bezierPath];
+		[linePath setLineWidth:1.0];
+		
+		//CGFloat lengths[2] = {0, 2};
+		//[linePath setLineDash:lengths count:2 phase:0];
+		
+		[linePath moveToPoint:_startBaseLinePoint];
+		[linePath lineToPoint:_endBaseLinePoint];
+		
+		[[NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.9 alpha:1.0] set];
+		[linePath stroke];
+	}
 }
 
 
@@ -1483,6 +1493,91 @@ static NSImage *bottomImage;
 		}
 	}
 }
+
+
+/*
+ @function:		CalcBaseLineOfSelectedElement
+ @params:		nothing
+ @return:		void
+ @purpose:		calculator the base line of the selected element
+ */
+- (BOOL)CalcBaseLineOfSelectedElement
+{
+	if ([selElementArray count] != 1) {
+		return NO;
+	}
+	
+	Element *element = [selElementArray lastObject];
+	
+	for (Element *temp in elementArray) {
+		if (element == temp) {
+			continue;
+		}
+		
+		if ((int)NSMinX(element.rtFrame) == (int)NSMinX(temp.rtFrame)) {
+			_startBaseLinePoint.x = NSMinX(element.rtFrame);
+			_startBaseLinePoint.y = MIN(NSMinY(element.rtFrame), NSMinY(temp.rtFrame)) - 5;
+			
+			_endBaseLinePoint.x = NSMinX(element.rtFrame);
+			_endBaseLinePoint.y = MAX(NSMaxY(element.rtFrame), NSMaxY(temp.rtFrame)) + 5;
+			
+			return YES;
+		}
+		
+		if ((int)NSMaxX(element.rtFrame) == (int)NSMaxX(temp.rtFrame)) {
+			_startBaseLinePoint.x = NSMaxX(element.rtFrame);
+			_startBaseLinePoint.y = MIN(NSMinY(element.rtFrame), NSMinY(temp.rtFrame)) - 5;
+			
+			_endBaseLinePoint.x = NSMaxX(element.rtFrame);
+			_endBaseLinePoint.y = MAX(NSMaxY(element.rtFrame), NSMaxY(temp.rtFrame)) + 5;
+			
+			return YES;
+		}
+		
+		if ((int)NSMinY(element.rtFrame) == (int)NSMinY(temp.rtFrame)) {
+			_startBaseLinePoint.x = MIN(NSMinX(element.rtFrame), NSMinX(temp.rtFrame)) - 5;
+			_startBaseLinePoint.y = NSMinY(element.rtFrame);
+			
+			_endBaseLinePoint.x = MAX(NSMaxX(element.rtFrame), NSMaxX(temp.rtFrame)) + 5;
+			_endBaseLinePoint.y = NSMinY(element.rtFrame);
+			
+			return YES;
+		}
+		
+		if ((int)NSMaxY(element.rtFrame) == (int)NSMaxY(temp.rtFrame)) {
+			_startBaseLinePoint.x = MIN(NSMinX(element.rtFrame), NSMinX(temp.rtFrame)) - 5;
+			_startBaseLinePoint.y = NSMaxY(element.rtFrame);
+			
+			_endBaseLinePoint.x = MAX(NSMaxX(element.rtFrame), NSMaxX(temp.rtFrame)) + 5;
+			_endBaseLinePoint.y = NSMaxY(element.rtFrame);
+			
+			return YES;
+		}
+		
+		if ((int)(element.rtFrame.origin.x + element.rtFrame.size.width / 2) == (int)(temp.rtFrame.origin.x + temp.rtFrame.size.width / 2)) {
+			_startBaseLinePoint.x = element.rtFrame.origin.x + element.rtFrame.size.width / 2;
+			_startBaseLinePoint.y = MIN(NSMinY(element.rtFrame), NSMinY(temp.rtFrame)) - 5;
+			
+			_endBaseLinePoint.x = element.rtFrame.origin.x + element.rtFrame.size.width / 2;
+			_endBaseLinePoint.y = MAX(NSMaxY(element.rtFrame), NSMaxY(temp.rtFrame)) + 5;
+			
+			return YES;
+		}
+		
+		if ((int)(element.rtFrame.origin.y + element.rtFrame.size.height / 2) == (int)(temp.rtFrame.origin.y + temp.rtFrame.size.height / 2)) {
+			_startBaseLinePoint.x = MIN(NSMinX(element.rtFrame), NSMinX(temp.rtFrame)) - 5;
+			_startBaseLinePoint.y = element.rtFrame.origin.y + element.rtFrame.size.height / 2;
+			
+			_endBaseLinePoint.x = MAX(NSMaxX(element.rtFrame), NSMaxX(temp.rtFrame)) + 5;
+			_endBaseLinePoint.y = element.rtFrame.origin.y + element.rtFrame.size.height / 2;
+			
+			return YES;
+		}
+	}
+	
+	return NO;
+}
+
 
 
 /*
