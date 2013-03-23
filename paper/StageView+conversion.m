@@ -1726,6 +1726,7 @@
 {
     //JS code
     NSMutableString *jsCode = [NSMutableString string];
+    NSMutableString *jsCode2 = [NSMutableString string];
     
     self.rowMargins = [NSMutableArray array];
     NSMutableArray *whiteSpacesFound = [NSMutableArray array];
@@ -1786,7 +1787,8 @@
         {
             tagContent = @"";
             tagType = DROP_DOWN_MENU_TAG;
-            NSLog(@"OUPUT FROM DATASOURCE IS : %@", [ele dataSourceNameContainingKey:@"mealName"]);
+            //NSLog(@"OUPUT FROM DATASOURCE IS : %@", [ele dataSourceUsingHardcodedLocalValues]);
+            jsCode2 = [[ele dataSourceUsingHardcodedLocalValues] objectAtIndex:0];
         }
         
         
@@ -2040,7 +2042,7 @@
         
         
         
-        
+        NSLog(@"about to export");
         NSMutableDictionary * export = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithFloat:ele.rtFrame.origin.x], @"xcoordinate",
                                         [NSNumber numberWithFloat:ele.rtFrame.origin.y], @"ycoordinate",
@@ -2069,6 +2071,7 @@
                                         //[[ele valueForKeyPath:@"opacity"] valueForKey:@"body"], @"opacity",
                                         //Also get the NSColor as a hex value
                                         nil];
+        NSLog(@"export DONE");
         //if there are no text styles, e.g. not a text item, then lets remove this attribute to prevent ugly (empty) plist tags.
         if ([completeTextStyles count] == 0)
         {
@@ -2420,46 +2423,6 @@
                     [elementsToGoInGroupingBox removeObject:elementToCheck]; // CONTAINER ELEMENTS SHOULD NOT BE PUT INTO A GROUPING BOX.
                 }
                 
-                if ([[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG])
-                {
-                    if ([elementToCheck isMemberOfClass:[DropDown class]])
-                    {
-                        fString =[NSMutableString stringWithFormat:@"self.%@ = ko.observable(%@)", [elementToCheck objectForKey:@"elementID"], [elementToCheck objectForKey:@"elementID"]];
-                    }
-                    
-                    if ([[elementToCheck objectForKey:@"elementID"] isEqualToString:@"Surcharge"])
-                    {
-                        fString = [NSMutableString stringWithFormat:@"self.formattedPrice = ko.computed(function() {var price = self.meal().price; return price ? \"$\" + price.toFixed(2) : \"None\"; })  "];
-                    }
-                    
-                    else
-                    {
-                        fString = [NSMutableString stringWithFormat:@"self.%@ = %@", [elementToCheck objectForKey:@"elementID"], [elementToCheck objectForKey:@"elementID"]];
-                    }
-                    
-                    [parametersList addObject:[elementToCheck objectForKey:@"elementID"]];
-                    [parametersList addObject:@", "];
-                    
-                    
-                    [functionArray addObject:fString];
-                    [functionArray addObject:@";\n"];
-                    [functionArray addObject:@", "];
-                    /*
-                     // Class to represent a row in the seat reservations grid
-                     function Seat(name, initialMeal, passportNumber, numberOfBags) {
-                     var self = this;
-                     self.name = name;
-                     self.meal = ko.observable(initialMeal);
-                     self.passportNumber = passportNumber;
-                     self.numberOfBags = numberOfBags;
-                     
-                     self.formattedPrice = ko.computed(function() {
-                     var price = self.meal().price;
-                     return price ? "$" + price.toFixed(2) : "None";
-                     });
-                     }
-                     */
-                }
                 
             } // end of if tag to check if clean overlapping elements
             
@@ -4890,7 +4853,7 @@
     }
     
     NSString *imgMaxWidth = [NSString stringWithFormat:@"%d%%", 100];
-    start = [NSMutableString stringWithFormat: @"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<title>%@</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"\"><meta name=\"author\" content=\"\">\n<!-- Le styles --><link href=\"bootstrap.css\" rel=\"stylesheet\"><style type=\"text/css\">\nbody { \n  font-size: 0.75em;\n  background-color: %@;\n} \n.groupBox {\n  height: auto;\n  padding: none;\n} \nimg {\n  max-width: %@;\n}  \n", pageTitle, backgroundColourAsString, imgMaxWidth];
+    start = [NSMutableString stringWithFormat: @"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<title>%@</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"\"><meta name=\"author\" content=\"\">\n<!-- Le styles --><link href=\"bootstrap.css\" rel=\"stylesheet\"><style type=\"text/css\">\n <script>%@</script>\nbody { \n  font-size: 0.75em;\n  background-color: %@;\n} \n.groupBox {\n  height: auto;\n  padding: none;\n} \nimg {\n  max-width: %@;\n}  \n", pageTitle, jsCode2, backgroundColourAsString, imgMaxWidth];
     //[start stringByAppendingString:backgroundColourAsString];
     //[start stringByAppendingString:@""];
     
@@ -4918,6 +4881,7 @@
     /* Bootstrap amendments (to permanently make):
      .btn              textalign       now set to zero.
      .btn-large        padding         is set to 0.
+     .row              margin-left     now commented out.
      
      */
     

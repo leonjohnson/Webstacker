@@ -33,6 +33,7 @@
 
 -(NSString *)actionCodeString
 {    
+    NSLog(@"starting point");
     NSString *actionsStringToReturn = [NSMutableString string];
     
     // Remove row
@@ -49,6 +50,7 @@
     // Add row
     if (([self.actionStringEntered caseInsensitiveCompare:@"Add row"] == NSOrderedSame)) //what if the dyRow element has an id of myRow and not row?
     {
+        NSLog(@"grrh");
         // The default if 'add row' text found
         actionsStringToReturn = @"data-bind=\"click: addRow\"";
         
@@ -101,6 +103,7 @@
                
             }
         }
+        NSLog(@"Returning : %@", actionsStringToReturn);
         return actionsStringToReturn;
     }
     
@@ -124,6 +127,7 @@
 
 -(NSString *)dataSourceCodeString
 {
+    NSLog(@"being called ??");
     NSString *dataSourceCodeStringToReturn = [NSMutableString string];
     
     // The generic response
@@ -162,7 +166,7 @@
         //so firstly, I need to find the dataSource created that has '[block valueForKey:@"dataSource"]' as one of its keys.
         // Within each app, each key must be unique
 
-        NSString *dataSourceName = [[self dataSourceNameContainingKey:self.dataSourceStringEntered] objectForKey:@"Name"];
+        NSString *dataSourceName = [self dataSourceNameContainingKey:self.dataSourceStringEntered];
         dataSourceCodeStringToReturn = [NSString stringWithFormat: @"options:$root.%@, optionsText: \'%@\', value: %@",
                                         dataSourceName,
                                         self.dataSourceStringEntered,
@@ -201,18 +205,20 @@
 
 
 
--(NSData *)dataSourceUsingHardcodedLocalValues:(NSString*)dataString
+-(NSMutableArray *)dataSourceUsingHardcodedLocalValues
 // purpose is to create the JSON data needed to act as a dataSource
 // created from hardcoded values locally in the dataSource creator
 
 {
     // get the master dataSource object
-    NSData *dataSourceAsJSON = [NSData data];
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    NSMutableArray *dataModels = [NSMutableArray new];
+    __block NSString *dataSourceAsJSON = [NSString new];
+    
     for (NSDictionary *dict in appDelegate.arrayDataSource)
     {
-        NSMutableArray *dataModels = [NSMutableArray new];
-        NSMutableArray *dataModel = [NSMutableArray new];
+        
+        NSMutableString *dataModel = [NSMutableString new];
         
         /*
          Package this into a dictionary for easy conversion into json string:
@@ -224,82 +230,129 @@
          */
         // each dataSource is made up of arrays
         
-        [appDelegate.arrayDataSource enumerateObjectsUsingBlock:^(id dict, NSUInteger index, BOOL *stop)
+        [appDelegate.arrayDataSource enumerateObjectsUsingBlock:^(id dictionarys, NSUInteger index, BOOL *stop)
         {
-            NSMutableDictionary *dataModelRow = [NSMutableDictionary new];
-            NSArray *dataSourceArray = [dict objectForKey:@"DataSource"];
+            NSLog(@"dictionarys is : %@", dictionarys);
+            NSString *dataSourceName = [dictionarys objectForKey:@"Name"];
+            NSArray *dataSourceArray = [dictionarys objectForKey:@"DataSource"];
+            NSLog(@"ds = %@", dataSourceArray);
             NSArray *headerTitles = [dataSourceArray objectAtIndex:0]; // This is the header information.
+            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+            NSLocale *l_en = [[NSLocale alloc] initWithLocaleIdentifier: @"en_US"];
+            [f setLocale: l_en];
+            [f setAllowsFloats: YES];
+            
+            NSLog(@"here");
+            
             for (NSArray *row in dataSourceArray)
             {
                 if ([dataSourceArray indexOfObject:row] > 0) // not the first item
                 {
+                    NSMutableArray *dataModelRow = [NSMutableArray new];
+                    NSUInteger headerTitlesCount = [headerTitles count];
+                    NSLog(@"here3");
                     for (NSString *title in headerTitles)
                     {
+                        
+                        BOOL firstObject = NO;
+                        BOOL lastObject = NO;
+                        NSLog(@"here4");
                         NSUInteger indexa = [headerTitles indexOfObject:title];
-                        [dataModelRow setObject:[row objectAtIndex:indexa] forKey:title];
+                        if (headerTitlesCount == indexa+1)
+                        {
+                            // This is the last
+                            lastObject = YES;
+                        }
+                        if (indexa == 0)
+                        {
+                            // This is the first
+                            firstObject = YES;
+                        }
+                        
+                        NSLog(@"here5");
+                        NSString *stringToInsert = [row objectAtIndex:indexa];
+                        NSNumber *possibleNumber = [f numberFromString: stringToInsert];
+                        NSMutableString *subRow = [NSMutableString new];
+                        if (possibleNumber != nil)
+                        {
+                            subRow =  [NSMutableString stringWithString:[NSString stringWithFormat:@" %@: %@ ",title,possibleNumber]];
+                        }
+                        else
+                        {
+                           subRow =  [NSMutableString stringWithString:[NSString stringWithFormat:@" %@: \"%@\"",title,[row objectAtIndex:indexa]]];
+                        }
+                        
+                        if (firstObject) {
+                            [subRow insertString:@"{" atIndex:0];
+                        }
+                        if (lastObject) {
+                            NSLog(@"IN HEREEE");
+                            [subRow insertString:@"}" atIndex:[subRow length]-1];
+                            
+                        }
+                        NSLog(@"here6 : %@", subRow);
+                        [dataModelRow addObject:subRow];
                     }
-                
+                    NSString *dataModelRowString = [dataModelRow componentsJoinedByString:@","];
+                    NSLog(@"here7 : %@", dataModelRowString);
+                    [dataModel stringByAppendingString:dataModelRowString];
                 }
-                [dataModel addObject:dataModelRow];
+                
             }
-            [dataModels addObject:dataModel];
+            NSString *dataModelAsAString = [NSString stringWithFormat:@"self.%@ = [ \n %@ ];", dataSourceName, dataModel];
+            NSLog(@"here10 : %@", dataModelAsAString);
+            /* convert it to JSON for knockout
+            if ([NSJSONSerialization isValidJSONObject:dataModel])
+            {
+                NSError *errorObject;
+                NSData *data = [NSJSONSerialization dataWithJSONObject:dataModel
+                                                         options:0
+                                                           error:&errorObject];
+                dataSourceAsJSON = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+            };
+             
+            [dataModels addObject:dataSourceAsJSON];
+             */
+            [dataModels addObject:dataModelAsAString];
+            NSLog(@"12 : %@", dataModels);
+            
         } ];
         
         
         
-        if ([[dataModel objectAtIndex:0] objectForKey:dataString]) // No need to do a loop as the data columns all repeats. First is fine.
-        {
-            // this is my dataSet so lets convert it to JSON for knockout.js!
-            if ([NSJSONSerialization isValidJSONObject:dataModel])
-            {
-                NSError *errorObject;
-                dataSourceAsJSON = [NSJSONSerialization dataWithJSONObject:dataModel
-                                                                   options:NSJSONWritingPrettyPrinted
-                                                                     error:&errorObject];
-            };
-        }
-        
     }
     
-    return dataSourceAsJSON;
+    return dataModels;
     
 }
 
-// ASSUMPTION: THAT EVERY DATASOURCE HEADER ENTERED IS UNIQUE PER DOCUMENT.
--(NSDictionary*)dataSourceNameContainingKey: (NSString *)dataSourceKey // This is the name of a header to make it easy for the user rather than typing dataSourceName.HeaderTitle
+
+-(NSString*)dataSourceNameContainingKey: (NSString *)dataSourceKey
+    // ASSUMPTION: THAT EVERY DATASOURCE HEADER ENTERED IS UNIQUE PER DOCUMENT.
+    // Method parameter: dataSourceKeyThis is the name of a header to make it easy for the user rather than typing dataSourceName.HeaderTitle
 {
-    NSDictionary *dictionaryToReturn = [NSDictionary dictionary];
+    NSString *stringToReturn = [NSString new];
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     for (NSDictionary *dict in appDelegate.arrayDataSource)
     {
         // each dataSource is made up of arrays
-        NSString *nameOfDataSource = [dict objectForKey:@"Name"];
+        //NSString *nameOfDataSource = [dict objectForKey:@"Name"];
+        NSLog(@"here13");
         NSArray *dataSourceArray = [dict objectForKey:@"DataSource"];
+        NSLog(@"here14");
         NSArray *headerTitles = [dataSourceArray objectAtIndex:0]; // This is the header information.
+        NSLog(@"here15");
         for (NSString *header in headerTitles)
         {
             if ([header isEqualToString:dataSourceKey]) {
                 NSLog(@"Gotcha!");
-                return dict; // This is a string that was entered by the user into the Name field of the DataSource window.
+                return [dict objectForKey:@"Name"]; // This is a string that was entered by the user into the Name field of the DataSource window.
             }
         }
-        
-        // print all contents of array
-        NSString *strLog = [NSString stringWithFormat:@"\n"];
-        for (NSString *contents in dataSourceArray) {
-			strLog = [NSString stringWithFormat:@"%@\t%@", strLog, contents];
-		}
-		
-		strLog = [NSString stringWithFormat:@"%@\n", strLog];
-        NSLog( @"%@", strLog );
-
     }
-    
-    
 	
-	
-	
-    return dictionaryToReturn;
+	NSLog(@"here16");
+    return stringToReturn;
 }
 
 
@@ -314,7 +367,7 @@
     
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     NSDictionary *dataSourceWithThisKey = [self dataSourceNameContainingKey:attribute];
-    NSArray *arrayToSearchThrough = [dataSourceWithThisKey objectForKey:@"DataSource"];
+    NSMutableArray *arrayToSearchThrough = [dataSourceWithThisKey objectForKey:@"DataSource"];
     NSArray *headerTitles = [arrayToSearchThrough objectAtIndex:0]; //header info
     for (NSString *header in headerTitles)
     {
@@ -340,11 +393,10 @@
     }
      */
     
-    
+    return @"";
     
     
 }
-
 
 
 /*
@@ -356,6 +408,66 @@
 
 
 
+
+
+
+
+-(NSString*)classFromDynamicRow
+{
+    NSString *stringToReturn = nil;
+    if ([self isMemberOfClass:[DynamicRow class]])
+    {
+        // If you create a dataSource, you automatically get an observableArray, the ability to add a row, and delete a row. These are standard.
+        NSString *className = [NSString stringWithFormat:@"function ReservationsViewModel() {\n"];
+        NSString *selfStatement = @"    var self = this;\n    // Non-editable catalog data\n    ";
+        NSString *model = [NSString stringWithFormat:@"%@", [[self dataSourceUsingHardcodedLocalValues] objectAtIndex:0]];
+        NSString *observableArrayName = [NSString stringWithFormat:@"%@s", self.elementid]; // lowercase elementid with an s on the end so 'seats'
+        NSMutableString *observableArray = [NSString stringWithFormat:@"//Editable Data\n self.%@ = ko.observableArray([]);", observableArrayName];
+        NSString *addRow1 = @"// Operatsions\n self.addRow = function() {\n";
+        NSMutableString *addRow2 = [NSMutableString stringWithFormat:@"%@ self.%@.push(new %@());\n}"];
+        NSMutableString *deleteRow = [NSString stringWithFormat:@"//Editable Data\n self.%@ = ko.observableArray([]);", observableArrayName];
+        
+        if ([elementToCheck isMemberOfClass:[DropDown class]])
+        {
+            fString =[NSMutableString stringWithFormat:@"self.%@ = ko.observable(%@)", [elementToCheck objectForKey:@"elementID"], [elementToCheck objectForKey:@"elementID"]];
+        }
+        
+        if ([[elementToCheck objectForKey:@"elementID"] isEqualToString:@"Surcharge"])
+        {
+            fString = [NSMutableString stringWithFormat:@"self.formattedPrice = ko.computed(function() {var price = self.meal().price; return price ? \"$\" + price.toFixed(2) : \"None\"; })  "];
+        }
+        
+        else
+        {
+            fString = [NSMutableString stringWithFormat:@"self.%@ = %@", [elementToCheck objectForKey:@"elementID"], [elementToCheck objectForKey:@"elementID"]];
+        }
+        
+        [parametersList addObject:[elementToCheck objectForKey:@"elementID"]];
+        [parametersList addObject:@", "];
+        
+        
+        [functionArray addObject:fString];
+        [functionArray addObject:@";\n"];
+        [functionArray addObject:@", "];
+        /*
+         // Class to represent a row in the seat reservations grid
+         function Seat(name, initialMeal, passportNumber, numberOfBags) {
+         var self = this;
+         self.name = name;
+         self.meal = ko.observable(initialMeal);
+         self.passportNumber = passportNumber;
+         self.numberOfBags = numberOfBags;
+         
+         self.formattedPrice = ko.computed(function() {
+         var price = self.meal().price;
+         return price ? "$" + price.toFixed(2) : "None";
+         });
+         }
+         */
+    }
+    
+    return stringToReturn;
+}
 
 
 
