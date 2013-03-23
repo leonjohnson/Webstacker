@@ -412,7 +412,7 @@
 
 
 
--(NSString*)classFromDynamicRow
+-(NSString*)viewModelFromDynamicRow
 {
     NSString *stringToReturn = nil;
     if ([self isMemberOfClass:[DynamicRow class]])
@@ -425,7 +425,8 @@
         NSMutableString *observableArray = [NSString stringWithFormat:@"//Editable Data\n self.%@ = ko.observableArray([]);", observableArrayName];
         NSString *addRow1 = @"// Operatsions\n self.addRow = function() {\n";
         NSMutableString *addRow2 = [NSMutableString stringWithFormat:@"%@ self.%@.push(new %@());\n}"];
-        NSMutableString *deleteRow = [NSString stringWithFormat:@"//Editable Data\n self.%@ = ko.observableArray([]);", observableArrayName];
+        NSMutableString *deleteRow = [NSString stringWithFormat:@"self.removeRow = function(%@) { self.%@.remove(%@) }", self.elementid, observableArrayName, self.elementid];
+        
         
         if ([elementToCheck isMemberOfClass:[DropDown class]])
         {

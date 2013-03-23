@@ -1477,7 +1477,7 @@
     {
         [elementsInsideMeIDs addObject:ele.elementid];
     }
-    NSMutableString *openingString = [NSMutableString stringWithFormat:@"function %@(", [dyRowDict objectForKey:ELEMENT_ID]];
+    NSMutableString *openingString = [NSMutableString stringWithFormat:@"function %@(", [[dyRowDict objectForKey:ELEMENT_ID] capitalizedString]];
     NSMutableString *classArray = [NSMutableString string];
     
     for (Element *ele in elementsInsideMe)
@@ -1491,7 +1491,7 @@
         
         if (ele.dataSourceStringEntered == nil)
         {
-            if ( ([ele isMemberOfClass:[TextInputField class]] || [ele isMemberOfClass:[TextBox class]]) )
+            if ( [ele isMemberOfClass:[TextBox class]] )
             {
                 // the crap we don't want. These are text labels etc.
             }
@@ -1520,6 +1520,7 @@
     [openingString appendString:@") {\n"];
     [classArray appendString:@"}\n"];
     [openingString appendString:classArray];
+    [openingString appendString:@"\n\n\n"];
     
     // IF ANY ELEMENT USES DATASOURCE, THEN THE CONTROL THAT REPRESENTS THE DATASOURCE MUST BE KO.OBSERVABLE
     
