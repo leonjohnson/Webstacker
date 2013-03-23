@@ -166,7 +166,7 @@
         //so firstly, I need to find the dataSource created that has '[block valueForKey:@"dataSource"]' as one of its keys.
         // Within each app, each key must be unique
 
-        NSString *dataSourceName = [self dataSourceNameContainingKey:self.dataSourceStringEntered];
+        NSString *dataSourceName = [self dataSourceNameContainingKey];
         dataSourceCodeStringToReturn = [NSString stringWithFormat: @"options:$root.%@, optionsText: \'%@\', value: %@",
                                         dataSourceName,
                                         self.dataSourceStringEntered,
@@ -327,7 +327,7 @@
 }
 
 
--(NSString*)dataSourceNameContainingKey: (NSString *)dataSourceKey
+-(NSString*)dataSourceNameContainingKey
     // ASSUMPTION: THAT EVERY DATASOURCE HEADER ENTERED IS UNIQUE PER DOCUMENT.
     // Method parameter: dataSourceKeyThis is the name of a header to make it easy for the user rather than typing dataSourceName.HeaderTitle
 {
@@ -344,7 +344,7 @@
         NSLog(@"here15");
         for (NSString *header in headerTitles)
         {
-            if ([header isEqualToString:dataSourceKey]) {
+            if ([header isEqualToString:self.dataSourceStringEntered]) {
                 NSLog(@"Gotcha!");
                 return [dict objectForKey:@"Name"]; // This is a string that was entered by the user into the Name field of the DataSource window.
             }
@@ -366,7 +366,7 @@
      */
     
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-    NSDictionary *dataSourceWithThisKey = [self dataSourceNameContainingKey:attribute];
+    NSDictionary *dataSourceWithThisKey = [self dataSourceNameContainingKey];
     NSMutableArray *arrayToSearchThrough = [dataSourceWithThisKey objectForKey:@"DataSource"];
     NSArray *headerTitles = [arrayToSearchThrough objectAtIndex:0]; //header info
     for (NSString *header in headerTitles)
@@ -412,63 +412,6 @@
 
 
 
--(NSString*)viewModelFromDynamicRow
-{
-    NSString *stringToReturn = nil;
-    if ([self isMemberOfClass:[DynamicRow class]])
-    {
-        // If you create a dataSource, you automatically get an observableArray, the ability to add a row, and delete a row. These are standard.
-        NSString *className = [NSString stringWithFormat:@"function ReservationsViewModel() {\n"];
-        NSString *selfStatement = @"    var self = this;\n    // Non-editable catalog data\n    ";
-        NSString *model = [NSString stringWithFormat:@"%@", [[self dataSourceUsingHardcodedLocalValues] objectAtIndex:0]];
-        NSString *observableArrayName = [NSString stringWithFormat:@"%@s", self.elementid]; // lowercase elementid with an s on the end so 'seats'
-        NSMutableString *observableArray = [NSString stringWithFormat:@"//Editable Data\n self.%@ = ko.observableArray([]);", observableArrayName];
-        NSString *addRow1 = @"// Operatsions\n self.addRow = function() {\n";
-        NSMutableString *addRow2 = [NSMutableString stringWithFormat:@"%@ self.%@.push(new %@());\n}"];
-        NSMutableString *deleteRow = [NSString stringWithFormat:@"self.removeRow = function(%@) { self.%@.remove(%@) }", self.elementid, observableArrayName, self.elementid];
-        
-        
-        if ([elementToCheck isMemberOfClass:[DropDown class]])
-        {
-            fString =[NSMutableString stringWithFormat:@"self.%@ = ko.observable(%@)", [elementToCheck objectForKey:@"elementID"], [elementToCheck objectForKey:@"elementID"]];
-        }
-        
-        if ([[elementToCheck objectForKey:@"elementID"] isEqualToString:@"Surcharge"])
-        {
-            fString = [NSMutableString stringWithFormat:@"self.formattedPrice = ko.computed(function() {var price = self.meal().price; return price ? \"$\" + price.toFixed(2) : \"None\"; })  "];
-        }
-        
-        else
-        {
-            fString = [NSMutableString stringWithFormat:@"self.%@ = %@", [elementToCheck objectForKey:@"elementID"], [elementToCheck objectForKey:@"elementID"]];
-        }
-        
-        [parametersList addObject:[elementToCheck objectForKey:@"elementID"]];
-        [parametersList addObject:@", "];
-        
-        
-        [functionArray addObject:fString];
-        [functionArray addObject:@";\n"];
-        [functionArray addObject:@", "];
-        /*
-         // Class to represent a row in the seat reservations grid
-         function Seat(name, initialMeal, passportNumber, numberOfBags) {
-         var self = this;
-         self.name = name;
-         self.meal = ko.observable(initialMeal);
-         self.passportNumber = passportNumber;
-         self.numberOfBags = numberOfBags;
-         
-         self.formattedPrice = ko.computed(function() {
-         var price = self.meal().price;
-         return price ? "$" + price.toFixed(2) : "None";
-         });
-         }
-         */
-    }
-    
-    return stringToReturn;
-}
 
 
 

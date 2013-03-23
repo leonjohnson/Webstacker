@@ -1580,6 +1580,8 @@
 
 
 
+
+
 -(NSString*)actionStringForElement:(Element*)keyword
 {
     return nil;
@@ -2069,6 +2071,7 @@
                                         [self hsla:ele.colorAttributes], @"backgroundColor",
                                         ele.dataSourceCodeString, @"dataSourceCode",
                                         ele.actionCodeString, @"actionCode",
+                                        ele.dataSourceNameContainingKey, @"associatedModel",
                                         //[[ele valueForKeyPath:@"opacity"] valueForKey:@"body"], @"opacity",
                                         //Also get the NSColor as a hex value
                                         nil];

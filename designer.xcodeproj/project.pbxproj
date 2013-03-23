@@ -75,6 +75,7 @@
 		F73C3F1E1617A35F0081C459 /* DocumentSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73C3F1D1617A35F0081C459 /* DocumentSettingsViewController.m */; };
 		F73C3F221618861F0081C459 /* DocumentSettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F73C3F211618861F0081C459 /* DocumentSettingsView.m */; };
 		F74A171F16F627840057BF06 /* bootstrap.css in Resources */ = {isa = PBXBuildFile; fileRef = F74A171E16F627840057BF06 /* bootstrap.css */; };
+		F74A172616FE30EF0057BF06 /* StageView+knockout.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A172516FE30EF0057BF06 /* StageView+knockout.m */; };
 		F7631AF116F6177B00C8A011 /* StageView+conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = F7631AF016F6177B00C8A011 /* StageView+conversion.m */; };
 		F79D93F816024E3300AE661E /* TextInputField.m in Sources */ = {isa = PBXBuildFile; fileRef = F79D93F716024E3300AE661E /* TextInputField.m */; };
 		F7B311851687A7930047BC57 /* DropDown.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B311841687A7930047BC57 /* DropDown.m */; };
@@ -216,6 +217,7 @@
 		F73C3F201618861E0081C459 /* DocumentSettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentSettingsView.h; sourceTree = "<group>"; };
 		F73C3F211618861F0081C459 /* DocumentSettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentSettingsView.m; sourceTree = "<group>"; };
 		F74A171E16F627840057BF06 /* bootstrap.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = bootstrap.css; sourceTree = "<group>"; };
+		F74A172516FE30EF0057BF06 /* StageView+knockout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StageView+knockout.m"; sourceTree = "<group>"; };
 		F7631AF016F6177B00C8A011 /* StageView+conversion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StageView+conversion.m"; sourceTree = "<group>"; };
 		F79D93F616024E3300AE661E /* TextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextInputField.h; sourceTree = "<group>"; };
 		F79D93F716024E3300AE661E /* TextInputField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextInputField.m; sourceTree = "<group>"; };
@@ -459,6 +461,7 @@
 				F71E3D9C16F5EEC00081B0E4 /* StageView+flexibileWidth.m */,
 				F71E3D9F16F5F31D0081B0E4 /* StageView+colorsShadowsGradients.m */,
 				F7631AF016F6177B00C8A011 /* StageView+conversion.m */,
+				F74A172516FE30EF0057BF06 /* StageView+knockout.m */,
 				AD62501315DEBB590004325A /* SBCenteringClipView.h */,
 				AD62501415DEBB590004325A /* SBCenteringClipView.m */,
 				582B9F18156C041200E0256E /* StageTextViewDelegate.h */,
@@ -788,6 +791,7 @@
 				3FC1BC4816EA511400C350C9 /* CustomButton.m in Sources */,
 				F71E3D9D16F5EEC00081B0E4 /* StageView+flexibileWidth.m in Sources */,
 				F71E3DA016F5F31D0081B0E4 /* StageView+colorsShadowsGradients.m in Sources */,
+				F74A172616FE30EF0057BF06 /* StageView+knockout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -61,6 +61,8 @@
 #define BUILDER_TRIGGERS_TAB                    @"triggers"
 #define BUILDER_COMMANDS_TAB                    @"commands"
 
+#define ASSOCIATED_MODEL                        @"associatedModel"
+
 //#define XCOORDINATE                             @"xcoordinate"
 //#define YCOORDINATE                             @"ycoordinate"
 

@@ -430,6 +430,10 @@ typedef NSInteger		ShapeCutCopyType;
 @end
 
 
+@interface StageView (knockout)
+-(NSArray*)classStructureOf:(NSMutableDictionary*)dyRow amongstElements:(NSArray*)sortedArray;
+@end
+
 
 
 
