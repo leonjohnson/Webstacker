@@ -6,7 +6,7 @@
 #import "TextInputField.h"
 #import "TextBox.h"
 #import "StageView.h"
-#import "StageView+conversion.m"
+
 
 @implementation StageView (knockout)
 

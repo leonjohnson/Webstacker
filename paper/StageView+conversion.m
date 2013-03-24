@@ -1,7 +1,4 @@
 #import "StageView.h"
-#import "StageView+knockout.m"
-#import "StageView+flexibileWidth.m"
-#import "StageView+colorsShadowsGradients.m"
 #import "Common.h"
 #import "AppDelegate.h"
 #import "Document.h"

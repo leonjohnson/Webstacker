@@ -1324,7 +1324,7 @@
 							</array>
 						</object>
 					</object>
-					<object class="NSMenuItem" id="777019789">
+					<object class="NSMenuItem" id="819730971">
 						<reference key="NSMenu" ref="649796088"/>
 						<string key="NSTitle">Publish</string>
 						<string key="NSKeyEquiv"/>
@@ -1332,11 +1332,11 @@
 						<reference key="NSOnImage" ref="35465992"/>
 						<reference key="NSMixedImage" ref="502551668"/>
 						<string key="NSAction">submenuAction:</string>
-						<object class="NSMenu" key="NSSubmenu" id="855145348">
+						<object class="NSMenu" key="NSSubmenu" id="810784057">
 							<string key="NSTitle">Publish</string>
 							<array class="NSMutableArray" key="NSMenuItems">
-								<object class="NSMenuItem" id="883578200">
-									<reference key="NSMenu" ref="855145348"/>
+								<object class="NSMenuItem" id="817995026">
+									<reference key="NSMenu" ref="810784057"/>
 									<string key="NSTitle">Publish</string>
 									<string key="NSKeyEquiv">p</string>
 									<int key="NSKeyEquivModMask">262144</int>
@@ -2044,7 +2044,7 @@
 						<object class="NSSegmentedControl" id="981475075">
 							<reference key="NSNextResponder" ref="917545429"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{104, 221}, {104, 25}}</string>
+							<string key="NSFrame">{{104, 222}, {104, 24}}</string>
 							<reference key="NSSuperview" ref="917545429"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="354099935"/>
@@ -2074,14 +2074,14 @@
 									</object>
 								</array>
 								<int key="NSTrackingMode">1</int>
-								<int key="NSSegmentStyle">2</int>
+								<int key="NSSegmentStyle">1</int>
 							</object>
 							<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 						</object>
 						<object class="NSSegmentedControl" id="437385210">
 							<reference key="NSNextResponder" ref="917545429"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{106, 191}, {177, 25}}</string>
+							<string key="NSFrame">{{106, 192}, {177, 24}}</string>
 							<reference key="NSSuperview" ref="917545429"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="859849190"/>
@@ -2089,11 +2089,7 @@
 							<object class="NSSegmentedCell" key="NSCell" id="594873646">
 								<int key="NSCellFlags">67108864</int>
 								<int key="NSCellFlags2">0</int>
-								<object class="NSFont" key="NSSupport">
-									<string key="NSName">LucidaGrande</string>
-									<double key="NSSize">8</double>
-									<int key="NSfFlags">16</int>
-								</object>
+								<reference key="NSSupport" ref="847400918"/>
 								<reference key="NSControlView" ref="437385210"/>
 								<array class="NSMutableArray" key="NSSegmentImages">
 									<object class="NSSegmentItem">
@@ -2121,7 +2117,7 @@
 										<int key="NSSegmentItemImageScaling">0</int>
 									</object>
 								</array>
-								<int key="NSSegmentStyle">2</int>
+								<int key="NSSegmentStyle">1</int>
 							</object>
 							<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 						</object>
@@ -2496,7 +2492,7 @@
 				<string key="NSWindowClass">AttributePanel</string>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
-				<string key="NSWindowContentMaxSize">{281, 547}</string>
+				<string key="NSWindowContentMaxSize">{307, 547}</string>
 				<string key="NSWindowContentMinSize">{281, 547}</string>
 				<object class="NSView" key="NSWindowView" id="848436319">
 					<reference key="NSNextResponder"/>
@@ -3240,7 +3236,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 														<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 													</object>
 												</array>
-												<string key="NSFrame">{{-6, 11}, {277, 478}}</string>
+												<string key="NSFrame">{{0, 11}, {277, 478}}</string>
 												<reference key="NSSuperview" ref="27272616"/>
 												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="47238448"/>
@@ -4013,7 +4009,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{281, 566}</string>
-				<string key="NSMaxSize">{281, 566}</string>
+				<string key="NSMaxSize">{307, 566}</string>
 				<string key="NSFrameAutosaveName">AttributesPanel</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
@@ -5238,7 +5234,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<object class="IBActionConnection" key="connection">
 						<string key="label">generateCode:</string>
 						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="883578200"/>
+						<reference key="destination" ref="817995026"/>
 					</object>
 					<int key="connectionID">2154</int>
 				</object>
@@ -6182,7 +6178,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="906168963"/>
 							<reference ref="826213025"/>
 							<reference ref="133461027"/>
-							<reference ref="777019789"/>
+							<reference ref="819730971"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -8896,24 +8892,24 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2146</int>
-						<reference key="object" ref="777019789"/>
+						<reference key="object" ref="819730971"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="855145348"/>
+							<reference ref="810784057"/>
 						</array>
 						<reference key="parent" ref="649796088"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2147</int>
-						<reference key="object" ref="855145348"/>
+						<reference key="object" ref="810784057"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="883578200"/>
+							<reference ref="817995026"/>
 						</array>
-						<reference key="parent" ref="777019789"/>
+						<reference key="parent" ref="819730971"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2150</int>
-						<reference key="object" ref="883578200"/>
-						<reference key="parent" ref="855145348"/>
+						<reference key="object" ref="817995026"/>
+						<reference key="parent" ref="810784057"/>
 					</object>
 				</array>
 			</object>
@@ -10058,16 +10054,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string key="superclassName">NSView</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="InsertImageToStage:">id</string>
-						<string key="attributedStringToCSS:">id</string>
-						<string key="bringElementToFront:">id</string>
 						<string key="clearPopover:">id</string>
-						<string key="copy:">id</string>
-						<string key="delete:">id</string>
 						<string key="displayDocumentSettingsView:">id</string>
-						<string key="generateCode:">id</string>
-						<string key="groupElements:">id</string>
-						<string key="setAlignmentOfText:">id</string>
-						<string key="setFontSize:">id</string>
 						<string key="setFontTrait:">id</string>
 						<string key="setTypeFaceFamily:">id</string>
 						<string key="setTypeStyle:">id</string>
@@ -10079,44 +10067,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string key="name">InsertImageToStage:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="attributedStringToCSS:">
-							<string key="name">attributedStringToCSS:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="bringElementToFront:">
-							<string key="name">bringElementToFront:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBActionInfo" key="clearPopover:">
 							<string key="name">clearPopover:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="copy:">
-							<string key="name">copy:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="delete:">
-							<string key="name">delete:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBActionInfo" key="displayDocumentSettingsView:">
 							<string key="name">displayDocumentSettingsView:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="generateCode:">
-							<string key="name">generateCode:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="groupElements:">
-							<string key="name">groupElements:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="setAlignmentOfText:">
-							<string key="name">setAlignmentOfText:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="setFontSize:">
-							<string key="name">setFontSize:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="setFontTrait:">
