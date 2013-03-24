@@ -66,6 +66,8 @@
 
 #define OBSERVABLE_NAME_ARRAY                   @"observableArrayName"
 
+#define JS_ID                                    @"jsid"
+
 //#define XCOORDINATE                             @"xcoordinate"
 //#define YCOORDINATE                             @"ycoordinate"
 

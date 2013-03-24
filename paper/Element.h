@@ -381,12 +381,12 @@ typedef NSInteger LayoutTag;
 -(void)setlinkAttributes:(NSMutableDictionary *)link;
 -(void)setRtFrame:(NSRect)rtFrame;
 -(void)postNotificationToRedraw;
+- (NSImage *)imageWithSubviews;
 @end
 
 
 @interface Element (ActionsAndDataSources)
-
--(NSMutableArray *)dataSourceUsingHardcodedLocalValues;
+-(void)setVisibilityActionStringEntered:(NSString *)theVisibilityActionStringEntered;
 @end
 
 

@@ -81,6 +81,8 @@
 		F74A173A16FF953F0057BF06 /* ActionsDataSourceDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A172C16FF92390057BF06 /* ActionsDataSourceDelegate.m */; };
 		F74A173B16FF953F0057BF06 /* SelectedActionsDataSourceDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A172E16FF92390057BF06 /* SelectedActionsDataSourceDelegate.m */; };
 		F74A173D16FF958D0057BF06 /* Builder.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74A173C16FF958D0057BF06 /* Builder.xib */; };
+		F74A174016FF9ABF0057BF06 /* CustomTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A173F16FF9AAB0057BF06 /* CustomTableCellView.m */; };
+		F74A174116FFA2380057BF06 /* NSString+shortcuts.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A173516FF92790057BF06 /* NSString+shortcuts.m */; };
 		F7631AF116F6177B00C8A011 /* StageView+conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = F7631AF016F6177B00C8A011 /* StageView+conversion.m */; };
 		F79D93F816024E3300AE661E /* TextInputField.m in Sources */ = {isa = PBXBuildFile; fileRef = F79D93F716024E3300AE661E /* TextInputField.m */; };
 		F7B311851687A7930047BC57 /* DropDown.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B311841687A7930047BC57 /* DropDown.m */; };
@@ -238,6 +240,8 @@
 		F74A173616FF95050057BF06 /* TriggersDataSourceDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TriggersDataSourceDelegate.h; path = paper/TriggersDataSourceDelegate.h; sourceTree = "<group>"; };
 		F74A173716FF95050057BF06 /* TriggersDataSourceDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TriggersDataSourceDelegate.m; path = paper/TriggersDataSourceDelegate.m; sourceTree = "<group>"; };
 		F74A173C16FF958D0057BF06 /* Builder.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Builder.xib; sourceTree = "<group>"; };
+		F74A173E16FF9AAB0057BF06 /* CustomTableCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomTableCellView.h; sourceTree = "<group>"; };
+		F74A173F16FF9AAB0057BF06 /* CustomTableCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomTableCellView.m; sourceTree = "<group>"; };
 		F7631AF016F6177B00C8A011 /* StageView+conversion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StageView+conversion.m"; sourceTree = "<group>"; };
 		F79D93F616024E3300AE661E /* TextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextInputField.h; sourceTree = "<group>"; };
 		F79D93F716024E3300AE661E /* TextInputField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextInputField.m; sourceTree = "<group>"; };
@@ -631,6 +635,8 @@
 			isa = PBXGroup;
 			children = (
 				F74A172816FF922A0057BF06 /* DataSource and Delegate methods */,
+				F74A173E16FF9AAB0057BF06 /* CustomTableCellView.h */,
+				F74A173F16FF9AAB0057BF06 /* CustomTableCellView.m */,
 				F74A172F16FF92520057BF06 /* ChangeBuilderWindowElementsAttributes.h */,
 				F74A173016FF92520057BF06 /* ChangeSelectedActionsDataSource.h */,
 				F74A173116FF92520057BF06 /* BuilderWindowController.h */,
@@ -790,6 +796,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F74A174116FFA2380057BF06 /* NSString+shortcuts.m in Sources */,
+				F74A174016FF9ABF0057BF06 /* CustomTableCellView.m in Sources */,
 				F74A173A16FF953F0057BF06 /* ActionsDataSourceDelegate.m in Sources */,
 				F74A173B16FF953F0057BF06 /* SelectedActionsDataSourceDelegate.m in Sources */,
 				F74A173816FF95060057BF06 /* TriggersDataSourceDelegate.h in Sources */,

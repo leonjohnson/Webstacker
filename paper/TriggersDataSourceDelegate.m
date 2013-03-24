@@ -13,6 +13,7 @@
 
 @implementation TriggersDataSourceDelegate
 @synthesize delegate;
+@synthesize selectedTrigger;
 
 
 -(NSMutableArray *)triggers

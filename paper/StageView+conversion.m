@@ -1609,6 +1609,16 @@
 
 
 
+BOOL hasLeadingNumberInString(NSString* s)
+{
+    if (s==nil)
+        return NO;
+    if (s)
+        return [s length] && isnumber([s characterAtIndex:0]);
+    else
+        return NO;
+}
+
 #pragma mark - Generate Code
 -(IBAction)generateCode:(id)sender
 {
@@ -1957,6 +1967,7 @@
                                         [self actionCodeString:ele], @"actionCode",
                                         [self dataSourceNameContainingKey:ele], @"associatedModel",
                                         ele.dataSourceStringEntered, DATA_SOURCE_STRING_ENTERED,
+                                        [NSString stringWithFormat:@"element%@", ele.elementid],
                                         //[[ele valueForKeyPath:@"opacity"] valueForKey:@"body"], @"opacity",
                                         //Also get the NSColor as a hex value
                                         nil];
@@ -1994,6 +2005,15 @@
         if (ele.height_as_percentage)
         {
             [export setObject:[NSNumber numberWithFloat:ele.height_as_percentage] forKey:@"heightAsPercentage"];
+        }
+        
+        if (hasLeadingNumberInString(ele.elementid)) //if the id starts with a number
+        {
+            [export setObject:[NSString stringWithFormat:@"element%@", ele.elementid] forKey:JS_ID];
+        }
+        else
+        {
+            [export setObject:ele.elementid forKey:JS_ID];
         }
         
         [arrayOfElementDetails addObject:export];

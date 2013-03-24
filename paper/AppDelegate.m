@@ -20,6 +20,7 @@
 @implementation AppDelegate
 
 //@synthesize thewindow = _window;
+@synthesize stageView;
 @synthesize sg;
 @synthesize nu, pl;
 @synthesize sl, borderValue;

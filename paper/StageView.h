@@ -441,7 +441,7 @@ typedef NSInteger		ShapeCutCopyType;
 
 @interface StageView (conversion)
 -(NSArray*)elementsInside: (NSMutableDictionary *)elementBeingTested usingElements: (NSArray*) sortedArrayOnStage;
-
+BOOL hasLeadingNumberInString(NSString* s);
 @end
 
 

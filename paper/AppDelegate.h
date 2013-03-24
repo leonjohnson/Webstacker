@@ -94,6 +94,11 @@
     //Layout type - px or %
     //IBOutlet NSPopUpButton *layoutType;
     
+    //data fields
+    IBOutlet NSComboBox *actionField;
+    IBOutlet NSComboBox *dataSourceField;
+    IBOutlet NSTextField *visibilityField;
+    
 	BOOL isRestored;
 }
 @property(assign) IBOutlet NSComboBox *actionField;

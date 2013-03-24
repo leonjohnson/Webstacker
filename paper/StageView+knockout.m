@@ -28,7 +28,7 @@
         NSString *model = [NSString stringWithFormat:@"%@", [[self dataSourceUsingHardcodedLocalValues] objectAtIndex:0]];
         
         // Editable data
-        NSString *observableArrayName = [NSString stringWithFormat:@"%@s", [dyRow objectForKey:@"id"]]; // lowercase elementid with an s on the end so 'seats'
+        NSString *observableArrayName = [NSString stringWithFormat:@"%@s", [dyRow objectForKey:JS_ID]]; // lowercase elementid with an s on the end so 'seats'
         [dyRow setObject:observableArrayName forKey:OBSERVABLE_NAME_ARRAY];
         NSMutableString *observableArrayAsAString = [NSString stringWithFormat:@"\n//Editable Data\n self.%@ = ko.observableArray([]);", observableArrayName];
         
@@ -36,8 +36,8 @@
         NSMutableDictionary *rtFrameDictionary = [NSMutableDictionary dictionaryWithObject:[dyRow objectForKey:RT_FRAME] forKey:RT_FRAME];
         NSString *classStructureAsString = [self classStructureOf:rtFrameDictionary amongstElements:sortedArray];
         NSString *addRow1 = @"\n\n    // Operations\n self.addRow = function() {\n";
-        NSMutableString *addRow2 = [NSMutableString stringWithFormat:@"self.%@.push(new %@(%@));\n}", observableArrayName, [[dyRow objectForKey:@"id"] capitalizedString], classStructureAsString];
-        NSMutableString *deleteRow = [NSString stringWithFormat:@"\n    self.removeRow = function(%@) { self.%@.remove(%@) }\n    }\n\n", [dyRow objectForKey:@"id"], observableArrayName, [dyRow objectForKey:@"id"]];
+        NSMutableString *addRow2 = [NSMutableString stringWithFormat:@"self.%@.push(new %@(%@));\n}", observableArrayName, [[dyRow objectForKey:JS_ID] capitalizedString], classStructureAsString];
+        NSMutableString *deleteRow = [NSString stringWithFormat:@"\n    self.removeRow = function(%@) { self.%@.remove(%@) }\n    }\n\n", [dyRow objectForKey:JS_ID], observableArrayName, [dyRow objectForKey:JS_ID]];
         
         
         // Total function : Total numberic values of a given parameter in a class e.g. Total Surchage.
@@ -103,9 +103,9 @@
     NSMutableArray *elementsInsideMeIDs = [NSMutableArray array];
     for (NSDictionary *ele in elementsInsideMe)
     {
-        [elementsInsideMeIDs addObject:[ele objectForKey:@"id"]];
+        [elementsInsideMeIDs addObject:[ele objectForKey:JS_ID]];
     }
-    NSMutableString *openingString = [NSMutableString stringWithFormat:@"function %@(", [[dyRowDict objectForKey:@"id"] capitalizedString]];
+    NSMutableString *openingString = [NSMutableString stringWithFormat:@"function %@(", [[dyRowDict objectForKey:JS_ID] capitalizedString]];
     NSMutableString *classArray = [NSMutableString string];
     
     NSLog(@"Next loop");
@@ -127,10 +127,10 @@
             else
             {
                 // so it doesn't have a dataSource but it's not a plain old textField used for labelling.
-                [classArray appendString:[NSString stringWithFormat:@"self.%@ = %@;\n", [ele objectForKey:@"id"], [ele objectForKey:@"id"]]];
+                [classArray appendString:[NSString stringWithFormat:@"self.%@ = %@;\n", [ele objectForKey:JS_ID], [ele objectForKey:JS_ID]]];
                 
                 // and add the elements elementID to the function definition
-                [openingString appendString:[NSString stringWithFormat:@"%@,", [ele objectForKey:@"id"]]];
+                [openingString appendString:[NSString stringWithFormat:@"%@,", [ele objectForKey:JS_ID]]];
                 
             }
         }
@@ -205,7 +205,7 @@
     if ([[ele objectForKey:@"tag"] isEqualTo:DROP_DOWN_MENU_TAG])
     {
         NSLog(@"DROP DOWN WITH KO");
-        return [NSString stringWithFormat:@"self.%@ = ko.observable(%@);\n", [ele objectForKey:@"id"], [ele objectForKey:@"id"]];
+        return [NSString stringWithFormat:@"self.%@ = ko.observable(%@);\n", [ele objectForKey:JS_ID], [ele objectForKey:JS_ID]];
     }
     
     else if ( [[ele objectForKey:@"tag"] isEqualTo:TEXT_INPUT_FIELD_TAG] )
@@ -219,7 +219,7 @@
             if ([firstWord isEqualToString:anID])// FIRST WORD IS EQUAL TO A eleid OF AN ELEMENT IN THIS DY ROW e.g. 'meal2 price'
             {
                 //THEN TAKE THE SECOND WORD 'PRICE' AND CREATE THE STRING AS PER MONEY3.html
-                codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var %@ = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:@"id"], secondWord, firstWord, secondWord, secondWord, secondWord];
+                codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var %@ = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], secondWord, firstWord, secondWord, secondWord, secondWord];
                 return codeStringToReturn;
                 
                 /*
@@ -234,7 +234,7 @@
         }
         
         NSLog(@"Got to the bootom of dataSourceStringElement");
-        codeStringToReturn = [NSString stringWithFormat:@"self.%@ = %@;\n", [ele objectForKey:@"id"], [ele objectForKey:@"id"]];
+        codeStringToReturn = [NSString stringWithFormat:@"self.%@ = %@;\n", [ele objectForKey:JS_ID], [ele objectForKey:JS_ID]];
     }
     
     return codeStringToReturn;
