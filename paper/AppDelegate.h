@@ -96,6 +96,9 @@
     
 	BOOL isRestored;
 }
+@property(assign) IBOutlet NSComboBox *actionField;
+@property(assign) IBOutlet NSComboBox *dataSourceField;
+@property(assign) IBOutlet NSTextField *visibilityField;
 
 @property (assign) IBOutlet NSTextField *colorHexValue;
 @property (assign) IBOutlet NSTextField *labelWarningField;

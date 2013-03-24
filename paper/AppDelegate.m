@@ -43,6 +43,10 @@
 @synthesize galleryPanel;
 @synthesize dataSourcePanel;
 
+@synthesize dataSourceField;
+@synthesize actionField;
+@synthesize visibilityField;
+
 
 - (BOOL)windowShouldClose:(id)sender
 {
@@ -174,7 +178,10 @@
     //Bind the ID field
     [elementidField bind:@"value" toObject:self withKeyPath:@"sg.currentElement.elementid" options:nil];
     
-    
+    //Bind the data fields
+    [dataSourceField bind:@"value" toObject:self withKeyPath:@"sg.currentElement.dataSourceStringEntered" options:nil];
+    [actionField bind:@"value" toObject:self withKeyPath:@"sg.currentElement.actionStringEntered" options:nil];
+    [visibilityField bind:@"value" toObject:self withKeyPath:@"sg.currentElement.visibilityActionStringEntered" options:nil];
     
     
     
