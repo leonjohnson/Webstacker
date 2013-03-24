@@ -218,6 +218,19 @@
 		F73C3F211618861F0081C459 /* DocumentSettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentSettingsView.m; sourceTree = "<group>"; };
 		F74A171E16F627840057BF06 /* bootstrap.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = bootstrap.css; sourceTree = "<group>"; };
 		F74A172516FE30EF0057BF06 /* StageView+knockout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StageView+knockout.m"; sourceTree = "<group>"; };
+		F74A172916FF92390057BF06 /* TriggersDataSourceDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TriggersDataSourceDelegate.h; sourceTree = "<group>"; };
+		F74A172A16FF92390057BF06 /* TriggersDataSourceDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TriggersDataSourceDelegate.m; sourceTree = "<group>"; };
+		F74A172B16FF92390057BF06 /* ActionsDataSourceDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionsDataSourceDelegate.h; sourceTree = "<group>"; };
+		F74A172C16FF92390057BF06 /* ActionsDataSourceDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionsDataSourceDelegate.m; sourceTree = "<group>"; };
+		F74A172D16FF92390057BF06 /* SelectedActionsDataSourceDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectedActionsDataSourceDelegate.h; sourceTree = "<group>"; };
+		F74A172E16FF92390057BF06 /* SelectedActionsDataSourceDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectedActionsDataSourceDelegate.m; sourceTree = "<group>"; };
+		F74A172F16FF92520057BF06 /* ChangeBuilderWindowElementsAttributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeBuilderWindowElementsAttributes.h; sourceTree = "<group>"; };
+		F74A173016FF92520057BF06 /* ChangeSelectedActionsDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeSelectedActionsDataSource.h; sourceTree = "<group>"; };
+		F74A173116FF92520057BF06 /* BuilderWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuilderWindowController.h; sourceTree = "<group>"; };
+		F74A173216FF92520057BF06 /* BuilderWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BuilderWindowController.m; sourceTree = "<group>"; };
+		F74A173316FF92520057BF06 /* Builder.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Builder.xib; sourceTree = "<group>"; };
+		F74A173416FF92790057BF06 /* NSString+shortcuts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+shortcuts.h"; sourceTree = "<group>"; };
+		F74A173516FF92790057BF06 /* NSString+shortcuts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+shortcuts.m"; sourceTree = "<group>"; };
 		F7631AF016F6177B00C8A011 /* StageView+conversion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StageView+conversion.m"; sourceTree = "<group>"; };
 		F79D93F616024E3300AE661E /* TextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextInputField.h; sourceTree = "<group>"; };
 		F79D93F716024E3300AE661E /* TextInputField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextInputField.m; sourceTree = "<group>"; };
@@ -362,6 +375,7 @@
 		5877F01B155588AA005FF829 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				F74A172716FF91E90057BF06 /* BuilderWindow */,
 				F7B3116F1684B6BD0047BC57 /* AppDelegate */,
 				F7B3116E1684B60E0047BC57 /* NSWindow subclass */,
 				3F1CEAE516D55BC9009246C2 /* DataSourceWindow */,
@@ -547,6 +561,8 @@
 		58E9C91C157E30EB00CBA5E9 /* categories */ = {
 			isa = PBXGroup;
 			children = (
+				F74A173416FF92790057BF06 /* NSString+shortcuts.h */,
+				F74A173516FF92790057BF06 /* NSString+shortcuts.m */,
 				5877F10115604A35005FF829 /* NSBezierPath+MCAdditions.h */,
 				5877F10215604A3A005FF829 /* NSBezierPath+MCAdditions.m */,
 				58E9C91E157E312500CBA5E9 /* NSColor+colorToHex.h */,
@@ -600,6 +616,32 @@
 				F74A171E16F627840057BF06 /* bootstrap.css */,
 			);
 			name = css;
+			sourceTree = "<group>";
+		};
+		F74A172716FF91E90057BF06 /* BuilderWindow */ = {
+			isa = PBXGroup;
+			children = (
+				F74A172816FF922A0057BF06 /* DataSource and Delegate methods */,
+				F74A172F16FF92520057BF06 /* ChangeBuilderWindowElementsAttributes.h */,
+				F74A173016FF92520057BF06 /* ChangeSelectedActionsDataSource.h */,
+				F74A173116FF92520057BF06 /* BuilderWindowController.h */,
+				F74A173216FF92520057BF06 /* BuilderWindowController.m */,
+				F74A173316FF92520057BF06 /* Builder.xib */,
+			);
+			name = BuilderWindow;
+			sourceTree = "<group>";
+		};
+		F74A172816FF922A0057BF06 /* DataSource and Delegate methods */ = {
+			isa = PBXGroup;
+			children = (
+				F74A172916FF92390057BF06 /* TriggersDataSourceDelegate.h */,
+				F74A172A16FF92390057BF06 /* TriggersDataSourceDelegate.m */,
+				F74A172B16FF92390057BF06 /* ActionsDataSourceDelegate.h */,
+				F74A172C16FF92390057BF06 /* ActionsDataSourceDelegate.m */,
+				F74A172D16FF92390057BF06 /* SelectedActionsDataSourceDelegate.h */,
+				F74A172E16FF92390057BF06 /* SelectedActionsDataSourceDelegate.m */,
+			);
+			name = "DataSource and Delegate methods";
 			sourceTree = "<group>";
 		};
 		F7B3116C1684B59C0047BC57 /* DocumentWindow */ = {
