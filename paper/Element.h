@@ -386,9 +386,6 @@ typedef NSInteger LayoutTag;
 
 @interface Element (ActionsAndDataSources)
 
--(NSString *)actionCodeString;
--(NSString *)dataSourceCodeString;
--(NSString*)dataSourceNameContainingKey;
 -(NSMutableArray *)dataSourceUsingHardcodedLocalValues;
 @end
 

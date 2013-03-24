@@ -1,4 +1,7 @@
 #import "StageView.h"
+#import "StageView+knockout.m"
+#import "StageView+flexibileWidth.m"
+#import "StageView+colorsShadowsGradients.m"
 #import "Common.h"
 #import "AppDelegate.h"
 #import "Document.h"
@@ -18,9 +21,7 @@
 #import "NSColor+colorToHex.h"
 
 
-@interface StageView (conversion)
 
-@end
 
 @implementation StageView (conversion)
 
@@ -40,7 +41,7 @@
     // Takes an element and finds all other elements in the same groupingBox as it and orders it by xcoordinate.
     NSMutableArray *inMyRange = [NSMutableArray array];
     NSMutableArray *elementsChecked = [NSMutableArray array];
-    NSMutableArray *orderedElementsAboveMe = [NSMutableArray array];
+    //NSMutableArray *orderedElementsAboveMe = [NSMutableArray array];
     
     NSUInteger elementY = [[element valueForKey:@"ycoordinate"] unsignedIntegerValue];
     NSUInteger elementH = [[element valueForKey:@"height"] unsignedIntegerValue];
@@ -1465,123 +1466,6 @@
 
 
 
-
-
-
--(NSString*)generateClassFromDynamicRow: (NSMutableDictionary*)dyRowDict withElementsOnStage: (NSArray*)sortedArrayOnStage
-{
-    NSString *stringContainingClass = [NSString string];
-    NSArray *elementsInsideMe = [self elementsInside:dyRowDict usingElements:sortedArrayOnStage];
-    NSMutableArray *elementsInsideMeIDs = [NSMutableArray array];
-    for (Element *ele in elementsInsideMe)
-    {
-        [elementsInsideMeIDs addObject:ele.elementid];
-    }
-    NSMutableString *openingString = [NSMutableString stringWithFormat:@"function %@(", [[dyRowDict objectForKey:ELEMENT_ID] capitalizedString]];
-    NSMutableString *classArray = [NSMutableString string];
-    
-    for (Element *ele in elementsInsideMe)
-    {
-        // Firstly I need to check if this item has an action and/or a dataSource.
-        // If so, then send the ds keyword to dataSourceStringForKeyword
-        
-        // check if this element is a plain text field, if so then filter out.
-        // I only want elements that are capturing information or calculating a result.
-        
-        
-        if (ele.dataSourceStringEntered == nil)
-        {
-            if ( [ele isMemberOfClass:[TextBox class]] )
-            {
-                // the crap we don't want. These are text labels etc.
-            }
-            else
-            {
-                // so it doesn't have a dataSource but it's not a plain old textField used for labelling.
-                [classArray appendString:[NSString stringWithFormat:@"self.%@ = %@;\n", ele.elementid, ele.elementid]];
-                
-                // and add the elements elementID to the function definition
-                [openingString appendString:[NSString stringWithFormat:@"%@,", ele.elementid]];
-                
-            }
-        }
-        else //So this element has a dataSource
-        {
-            
-            NSString *dsString = [self dataSourceStringForElement:ele sittingAmongstElementIDs:elementsInsideMeIDs];
-            [classArray appendString:dsString];
-            
-            // if dataSource is based solely off of an element that is is this dyRow then no parameter is needed and string is self.meal2().price e.g.
-        }
-        
-    }
-    
-    [openingString substringToIndex:[openingString length]-1]; // clean up, we remove the comma left over at the end
-    [openingString appendString:@") {\n"];
-    [classArray appendString:@"}\n"];
-    [openingString appendString:classArray];
-    [openingString appendString:@"\n\n\n"];
-    
-    // IF ANY ELEMENT USES DATASOURCE, THEN THE CONTROL THAT REPRESENTS THE DATASOURCE MUST BE KO.OBSERVABLE
-    
-    
-    return stringContainingClass;
-}
-
-
--(NSString*)dataSourceStringForElement:(Element*)ele sittingAmongstElementIDs: (NSArray*)elementsIDs
-{
-    // TODO: Once up and running check the validation tab to ensure this method generates code that considers the validation rules entered by the user.
-    
-    // Should be returning something like: [NSString stringWithFormat:@"self.%@ = ko.observable(%@);\n", ele.elementid, ele.elementid]
-    
-    // All we know is that the element has a dataSource.
-    NSMutableString *codeStringToReturn = [NSMutableString string];
-    
-    if ([ele isMemberOfClass:[DropDown class]])
-    {
-        return [NSString stringWithFormat:@"self.%@ = ko.observable(%@);\n", ele.elementid, ele.elementid];
-    }
-    
-    else if ( [ele isMemberOfClass:[TextInputField class]] )
-    {
-        NSArray *wordsSeperatedBySpaces = [ele.dataSourceStringEntered componentsSeparatedByString:@" "];
-        NSString *firstWord = [wordsSeperatedBySpaces objectAtIndex:0];
-        NSString *secondWord = [wordsSeperatedBySpaces objectAtIndex:1];
-        
-        for (NSString *anID in elementsIDs)
-        {
-            if ([firstWord isEqualToString:anID])// FIRST WORD IS EQUAL TO A eleid OF AN ELEMENT IN THIS DY ROW e.g. 'meal2 price'
-            {
-                //THEN TAKE THE SECOND WORD 'PRICE' AND CREATE THE STRING AS PER MONEY3.html
-                codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var %@ = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", ele.elementid, secondWord, firstWord, secondWord, secondWord, secondWord];
-                return codeStringToReturn;
-                
-                /*
-                 
-                 self.formattedPrice = ko.computed(function() {
-                 var price = self.meal2().price;
-                 return price ? "$" + price.toFixed(2) : "None";
-                 });
-                 
-                 */
-                
-            }
-        }
-        
-        NSLog(@"Got to the bootom of dataSourceStringElement");
-        codeStringToReturn = [NSString stringWithFormat:@"self.%@ = %@;\n", ele.elementid, ele.elementid];
-    }
-    
-    return codeStringToReturn;
-}
-
-
-
-
-
-
-
 -(NSString*)actionStringForElement:(Element*)keyword
 {
     return nil;
@@ -1609,13 +1493,17 @@
     
     for (NSDictionary *ele in sortedArrayOnStage)
     {
-        NSRect elementRect = NSRectFromString([ele valueForKey:RT_FRAME]);
-        if (CGRectContainsRect(containingRect, elementRect))
+        if (![ele isEqualToDictionary:elementBeingTested])
         {
-            [cleanInsideMe addObject:ele];
+            NSRect elementRect = NSRectFromString([ele valueForKey:RT_FRAME]);
+            if (CGRectContainsRect(containingRect, elementRect))
+            {
+                [cleanInsideMe addObject:ele];
+            }
         }
+        
     }
-    
+    NSLog(@"Returning %@", cleanInsideMe);
     return cleanInsideMe;
 }
 
@@ -1791,7 +1679,6 @@
             tagContent = @"";
             tagType = DROP_DOWN_MENU_TAG;
             //NSLog(@"OUPUT FROM DATASOURCE IS : %@", [ele dataSourceUsingHardcodedLocalValues]);
-            jsCode2 = [[ele dataSourceUsingHardcodedLocalValues] objectAtIndex:0];
         }
         
         
@@ -2069,9 +1956,10 @@
                                         ele.borderRadius, @"borderRadius",
                                         [borderRadiiOn componentsJoinedByString:@" "], @"borderRadiusAsString", //the string containing four radii mesurements
                                         [self hsla:ele.colorAttributes], @"backgroundColor",
-                                        ele.dataSourceCodeString, @"dataSourceCode",
-                                        ele.actionCodeString, @"actionCode",
-                                        ele.dataSourceNameContainingKey, @"associatedModel",
+                                        [self dataSourceBindingCode:ele], @"dataSourceCode",
+                                        [self actionCodeString:ele], @"actionCode",
+                                        [self dataSourceNameContainingKey:ele], @"associatedModel",
+                                        ele.dataSourceStringEntered, DATA_SOURCE_STRING_ENTERED,
                                         //[[ele valueForKeyPath:@"opacity"] valueForKey:@"body"], @"opacity",
                                         //Also get the NSColor as a hex value
                                         nil];
@@ -3560,7 +3448,7 @@
     
     
     NSLog(@"Row margins : %@", rowMargins);
-    
+
     
 #pragma mark - CONVERSION
     
@@ -3611,6 +3499,26 @@
         NSLog(@"PRINTING EACH MODIFIED ROW: %@", row);
         
     } ];
+    
+#pragma JS CONVERSION
+    // ASSUMPTION, YOU CAN ONLY HAVE ONE DYROW ON THE PAGE
+    NSMutableArray *bucket = [NSMutableArray new];
+    for (NSMutableDictionary *element in sortedArray)
+    {
+        if ([[element objectForKey:@"tag"] isEqual:DYNAMIC_ROW_TAG]) {
+            [bucket addObject:element];
+        }
+    }
+    NSString *viewModel = [self viewModelFrom:[bucket objectAtIndex:0] amongstElements:sortedArray];
+    NSString *theClass = [self generateClassFromDynamicRow:[bucket objectAtIndex:0] withElementsOnStage:sortedArray];
+    if (viewModel != nil) {
+        [jsCode2 appendString:viewModel];
+    }
+    if (theClass != nil) {
+        [jsCode2 appendString:theClass];
+    }
+    
+    
     
     
     
@@ -3692,7 +3600,14 @@
         if ([firstObjectsInGroups containsObject:blockid])
         {
             NSLog(@"Inside firsts..");
-            groupBoxOpeningDiv = [NSMutableString stringWithString: @"<div class=\"groupBox\" "];
+            groupBoxOpeningDiv = [NSMutableString stringWithString: @"\n    <div "];
+            NSUInteger myIndex = [sortedArray indexOfObject:block];
+            NSMutableDictionary *oneBefore = [sortedArray objectAtIndex:myIndex-1];
+            if ([[oneBefore objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
+            {
+                [groupBoxOpeningDiv appendString:@"data-bind=\"foreach: seats\" "];
+            }
+            [groupBoxOpeningDiv appendString:@"class=\"groupBox\" "];
             NSMutableDictionary *groupingBoxInQuestion = [NSMutableDictionary dictionary];
             for (NSArray *each in groupings)
             {
@@ -3797,6 +3712,11 @@
         if ([lastObjectsInGroups containsObject:blockid])
         {
             postCode = [NSMutableString stringWithString:@"\n</div><!-- Closes the GroupBox -->"];
+            if ([[block objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
+            {
+                NSString *name = [block objectForKey:OBSERVABLE_NAME_ARRAY];
+                [postCode appendString:@"\n    </div><!-- Closes the dyRow -->"];
+            }
         }
         
         
@@ -4241,10 +4161,10 @@
         
         
         
-        // RECTANGLE or ROW CODE or CONTAINER
+        // RECTANGLE or ROW CODE or CONTAINER or DYNAMIC ROW
         if ( ([[block valueForKey:@"tag"] isEqualToString: @"div"]) || ([[block valueForKey:@"tag"] isEqualToString: DYNAMIC_ROW_TAG ])  || ([[block valueForKey:@"tag"] isEqualToString: CONTAINER_TAG ]) )
         {
-            NSArray *arrayH = [NSArray array];
+            NSMutableArray *arrayH = [NSMutableArray array];
             if ([block objectForKey:@"convertToGroupingbox"] == nil)
             {
                 if ([[block objectForKey:@"tag"] isEqual:CONTAINER_TAG])
@@ -4268,6 +4188,7 @@
                               [block valueForKey:@"content"],
                               @"</div>",
                               nil];
+                    
                 }
             }
             
@@ -4408,7 +4329,7 @@
         {
             
             NSArray *arrayH = [NSArray arrayWithObjects:
-                               @"<select id=\"",
+                               @"\n      <select id=\"",
                                blockidAsString,
                                @"\" ",
                                dataSourceCode,
@@ -4889,9 +4810,8 @@
      
      */
     
-    
-    
-    
+
+   
     
 #pragma mark - END CONVERSION
     

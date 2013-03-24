@@ -431,10 +431,18 @@ typedef NSInteger		ShapeCutCopyType;
 
 
 @interface StageView (knockout)
--(NSArray*)classStructureOf:(NSMutableDictionary*)dyRow amongstElements:(NSArray*)sortedArray;
+-(NSString*)viewModelFrom:(NSMutableDictionary*)dyRow amongstElements:(NSArray*)sortedArray;
+-(NSString*)generateClassFromDynamicRow: (NSMutableDictionary*)dyRowDict withElementsOnStage: (NSArray*)sortedArrayOnStage;
+-(NSString*)classStructureOf:(NSMutableDictionary*)dyRow amongstElements:(NSArray*)sortedArray;
+-(NSString *)actionCodeString: (Element*)ele;
+-(NSString *)dataSourceBindingCode: (Element*)ele;
+-(NSString*)dataSourceNameContainingKey: (Element*)ele;
 @end
 
+@interface StageView (conversion)
+-(NSArray*)elementsInside: (NSMutableDictionary *)elementBeingTested usingElements: (NSArray*) sortedArrayOnStage;
 
+@end
 
 
 

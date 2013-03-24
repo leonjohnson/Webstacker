@@ -62,6 +62,9 @@
 #define BUILDER_COMMANDS_TAB                    @"commands"
 
 #define ASSOCIATED_MODEL                        @"associatedModel"
+#define DATA_SOURCE_STRING_ENTERED              @"dataSourceStringEntered"
+
+#define OBSERVABLE_NAME_ARRAY                   @"observableArrayName"
 
 //#define XCOORDINATE                             @"xcoordinate"
 //#define YCOORDINATE                             @"ycoordinate"
