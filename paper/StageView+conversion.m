@@ -1939,6 +1939,9 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         
         NSLog(@"about to export");
+        NSLog(@"Got 1: %@", [self actionCodeString:ele]); 
+        NSLog(@"Got 2: %@", [self dataSourceBindingCode:ele]); 
+        NSLog(@"Got 3: %@", ele.dataSourceStringEntered);
         NSMutableDictionary * export = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithFloat:ele.rtFrame.origin.x], @"xcoordinate",
                                         [NSNumber numberWithFloat:ele.rtFrame.origin.y], @"ycoordinate",
@@ -1966,7 +1969,6 @@ BOOL hasLeadingNumberInString(NSString* s)
                                         [self actionCodeString:ele], @"actionCode",
                                         [self dataSourceNameContainingKey:ele], @"associatedModel",
                                         ele.dataSourceStringEntered, DATA_SOURCE_STRING_ENTERED,
-                                        [NSString stringWithFormat:@"element%@", ele.elementid],
                                         //[[ele valueForKeyPath:@"opacity"] valueForKey:@"body"], @"opacity",
                                         //Also get the NSColor as a hex value
                                         nil];

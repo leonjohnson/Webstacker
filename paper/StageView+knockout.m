@@ -60,7 +60,6 @@
             
         }
         
-        // -(NSString *)dataSourceBindingCode: (Element*)ele
         
         // Put the string together
         stringToReturn = [NSMutableString new];

@@ -82,14 +82,15 @@
 - (void)addShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d
 {
 	if ([self IsSelectedShape] == NO || [selElementArray count] > 1) {
-		return;
+		NSLog(@"returning :-(");
+        return;
 	}
 	
 	Element *shape = [selElementArray objectAtIndex:0];
 	[shape addShapeShadow:angle Distance:dist ColorR:r ColorG:g ColorB:b Opacity:alpha Blur:blur Direction:d];
 	
 	[attributeDelegate setShadowList:shape.arrayShadows];
-	
+	NSLog(@"shadow in att called");
 	[self setNeedsDisplay:YES];
 }
 

@@ -248,7 +248,7 @@
 	}
 	
 	[arrayShadows addObject:dict];
-	
+	NSLog(@"done added shadows");
 	[self setNeedsDisplay:YES];
 }
 
