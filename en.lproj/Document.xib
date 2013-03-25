@@ -58,7 +58,7 @@
 			<object class="NSWindowTemplate" id="998575448">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{100, 100}, {1151, 759}}</string>
+				<string key="NSWindowRect">{{100, 100}, {1151, 730}}</string>
 				<int key="NSWTFlags">1685587968</int>
 				<string key="NSWindowTitle">Designer</string>
 				<string key="NSWindowClass">INAppStoreWindow</string>
@@ -114,7 +114,6 @@
 																	<string key="NSFrameSize">{203, 95}</string>
 																	<reference key="NSSuperview" ref="610265007"/>
 																	<reference key="NSWindow"/>
-																	<reference key="NSNextKeyView" ref="532813818"/>
 																	<object class="NSTextContainer" key="NSTextContainer" id="52758967">
 																		<object class="NSLayoutManager" key="NSLayoutManager">
 																			<object class="NSTextStorage" key="NSTextStorage">
@@ -250,7 +249,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 													<string key="NSFrame">{{680, 315}, {205, 97}}</string>
 													<reference key="NSSuperview" ref="494326585"/>
 													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView" ref="610265007"/>
+													<reference key="NSNextKeyView" ref="532813818"/>
 													<int key="NSsFlags">133122</int>
 													<reference key="NSVScroller" ref="532813818"/>
 													<reference key="NSHScroller" ref="224122977"/>
@@ -263,7 +262,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 											<string key="NSFrameSize">{2026, 1438}</string>
 											<reference key="NSSuperview" ref="289510147"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="694089969"/>
+											<reference key="NSNextKeyView" ref="324106534"/>
 											<string key="NSClassName">StageView</string>
 										</object>
 									</array>
@@ -312,7 +311,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="NSFrameSize">{1152, 668}</string>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="289510147"/>
+							<reference key="NSNextKeyView" ref="694089969"/>
 							<int key="NSsFlags">133312</int>
 							<reference key="NSVScroller" ref="694089969"/>
 							<reference key="NSHScroller" ref="1000656136"/>
@@ -325,15 +324,15 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSNextResponder" ref="1073034890"/>
 							<int key="NSvFlags">298</int>
 							<array class="NSMutableArray" key="NSSubviews"/>
-							<string key="NSFrame">{{0, 668}, {1151, 91}}</string>
+							<string key="NSFrame">{{0, 667}, {1151, 63}}</string>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
+							<reference key="NSNextKeyView" ref="952886413"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">WarningMenuView</string>
 						</object>
 					</array>
-					<string key="NSFrameSize">{1151, 759}</string>
+					<string key="NSFrameSize">{1151, 730}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="919986294"/>
@@ -625,7 +624,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 											</object>
 										</object>
 										<double key="NSRowHeight">17</double>
-										<int key="NSTvFlags">-700448768</int>
+										<int key="NSTvFlags">-692060160</int>
 										<reference key="NSDelegate"/>
 										<reference key="NSDataSource"/>
 										<int key="NSColumnAutoresizingStyle">4</int>
@@ -1058,7 +1057,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<object class="NSSegmentedControl" id="917451109">
 						<reference key="NSNextResponder" ref="254192170"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{71, 349}, {178, 24}}</string>
+						<string key="NSFrame">{{71, 348}, {178, 25}}</string>
 						<reference key="NSSuperview" ref="254192170"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="212691554"/>
@@ -1094,14 +1093,13 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 									<int key="NSSegmentItemImageScaling">0</int>
 								</object>
 							</array>
-							<int key="NSSegmentStyle">1</int>
 						</object>
 						<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 					</object>
 					<object class="NSSegmentedControl" id="498940254">
 						<reference key="NSNextResponder" ref="254192170"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{71, 379}, {119, 24}}</string>
+						<string key="NSFrame">{{71, 378}, {119, 25}}</string>
 						<reference key="NSSuperview" ref="254192170"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="933911331"/>
@@ -1131,7 +1129,6 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 								</object>
 							</array>
 							<int key="NSTrackingMode">1</int>
-							<int key="NSSegmentStyle">1</int>
 						</object>
 						<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 					</object>
