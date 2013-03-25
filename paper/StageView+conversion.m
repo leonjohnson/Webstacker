@@ -1049,7 +1049,7 @@
 -(NSMutableArray*)arrayOfSoloItems: (NSArray *)initalSorting
 {
     NSLog(@"Received : %@", initalSorting);
-    NSMutableArray *solos = [NSMutableArray array];
+    self.solos = [NSMutableArray array];
     for (NSDictionary *elementia in initalSorting)
     {
         NSMutableArray *inMyRightRange = [NSMutableArray array];
@@ -1079,12 +1079,12 @@
         }
         if ([inMyRightRange count] == 0)
         {
-            [solos addObject:elementia];
+            [self.solos addObject:elementia];
             NSLog(@"SOLO IS: %@", elementia);
         }
     }
     
-    return solos;
+    return self.solos;
 }
 
 
@@ -1278,13 +1278,13 @@
             // get the next one highest with an empty left
             // set its margin top right and possibly left if its closest left object is the wall
             NSMutableArray *sortedArrayInsideGroupingBox = [NSMutableArray array];
-            NSMutableArray *solos = [[NSMutableArray alloc]init];
+            self.solos = [[NSMutableArray alloc]init];
             box.insideTheBox = [NSMutableArray arrayWithArray:[box.insideTheBox sortedArrayUsingDescriptors:verticalSortDescriptor]];
             
             
             
-            solos = [self arrayOfSoloItems:box.insideTheBox];
-            for (NSMutableDictionary *g in solos)
+            self.solos = [self arrayOfSoloItems:box.insideTheBox];
+            for (NSMutableDictionary *g in self.solos)
             {
                 
                 int marginTop = [self marginToObjectWithinTransformedGroupingBox:g onSide:TOP];
@@ -1619,16 +1619,15 @@ BOOL hasLeadingNumberInString(NSString* s)
         return NO;
 }
 
-#pragma mark - Generate Code
--(IBAction)generateCode:(id)sender
+
+-(void)sortElements
 {
     //JS code
     NSMutableString *jsCode = [NSMutableString string];
-    NSMutableString *jsCode2 = [NSMutableString string];
     
     self.rowMargins = [NSMutableArray array];
     NSMutableArray *whiteSpacesFound = [NSMutableArray array];
-    NSMutableDictionary *textStyles = [NSMutableDictionary dictionary];
+     self.textStyles = [NSMutableDictionary dictionary];
     //NSMutableDictionary *allStyles = [NSMutableDictionary dictionary];
     NSMutableArray *allStyles = [NSMutableArray array];
     NSDictionary *newDict = [NSDictionary dictionary];
@@ -1725,17 +1724,17 @@ BOOL hasLeadingNumberInString(NSString* s)
                 
                 /*** STYLES ***/
                 //Now clear the dictionary ready for the loop...
-                [textStyles removeAllObjects];
+                [self.textStyles removeAllObjects];
                 
                 
                 //The font name
                 NSString *theFont = [[style objectForKey:NSFontAttributeName] fontName];
-                [textStyles setObject:theFont forKey:@"fontName"];
+                [self.textStyles setObject:theFont forKey:@"fontName"];
                 
                 
                 //The font size
                 NSNumber *fontSize = [NSNumber numberWithInt:(int)[[style objectForKey:NSFontAttributeName] pointSize]];
-                [textStyles setObject:fontSize forKey:@"fontSize"];
+                [self.textStyles setObject:fontSize forKey:@"fontSize"];
                 
                 
                 // The text color
@@ -1754,7 +1753,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 
                 //[[style objectForKey:NSForegroundColorAttributeName] getRed:red green:green blue:blue alpha:alpha];
                 NSString *fontColor = [NSString stringWithFormat:@"%d,%d,%d,%d", red, green, blue, alpha];
-                [textStyles setObject:fontColor forKey:@"fontColor"];
+                [self.textStyles setObject:fontColor forKey:@"fontColor"];
                 
                 
                 
@@ -1762,7 +1761,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 NSNumber *leading = [NSNumber numberWithInt:(int)[[style objectForKey:NSParagraphStyleAttributeName] lineSpacing]];
                 if (leading != nil)
                 {
-                    [textStyles setObject:leading forKey:@"leading"];
+                    [self.textStyles setObject:leading forKey:@"leading"];
                 }
                 
                 
@@ -1771,7 +1770,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 NSNumber *kerning = [style objectForKey:NSKernAttributeName];
                 if (kerning != nil)
                 {
-                    [textStyles setObject:kerning forKey:@"kerning"];
+                    [self.textStyles setObject:kerning forKey:@"kerning"];
                 }
                 
                 
@@ -1782,7 +1781,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 NSNumber *singleUnderline = [NSNumber numberWithInt:1];
                 if ([underline isEqualToNumber:singleUnderline])
                 {
-                    [textStyles setObject:@"SingleUnderline" forKey:@"underline"];
+                    [self.textStyles setObject:@"SingleUnderline" forKey:@"underline"];
                 }
                 
                 
@@ -1792,8 +1791,8 @@ BOOL hasLeadingNumberInString(NSString* s)
                 //NSString *endRange = [NSString stringWithFormat:@"%lu", longestEffectiveRange.location + longestEffectiveRange.length -1];
                 NSUInteger startRange = currentPoint;
                 NSUInteger endRange = longestEffectiveRange.location + longestEffectiveRange.length -1;
-                [textStyles setObject:[NSNumber numberWithInteger:startRange] forKey:@"startRange"];
-                [textStyles setObject:[NSNumber numberWithInteger:endRange] forKey:@"endRange"];
+                [self.textStyles setObject:[NSNumber numberWithInteger:startRange] forKey:@"startRange"];
+                [self.textStyles setObject:[NSNumber numberWithInteger:endRange] forKey:@"endRange"];
                 
                 
                 
@@ -1838,8 +1837,8 @@ BOOL hasLeadingNumberInString(NSString* s)
                 loopCount+=1;
                 NSLog(@"Loop Count : %i", loopCount);
                 NSString *subStringName = [NSString stringWithFormat:@"substring-%i",loopCount];
-                [textStyles setObject:subStringName forKey:@"styleid"];
-                newDict = [NSDictionary dictionaryWithDictionary:textStyles];
+                [self.textStyles setObject:subStringName forKey:@"styleid"];
+                newDict = [NSDictionary dictionaryWithDictionary:self.textStyles];
                 //Dictionary and not Mutable dictionary so once it's in the daddy dictionary it doesn't change - which was annoying and a bug!
                 //[allStyles setObject:newDict forKey:subStringName];
                 [allStyles addObject:newDict];
@@ -2041,7 +2040,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     //NSArray *initalSorting = [arrayOfElementDetails sortedArrayUsingDescriptors:horizontalSortDescriptor];
     NSArray *initalSorting = [arrayOfElementDetails sortedArrayUsingDescriptors:verticalSortDescriptor];
     leftToRightTopToBottom = [NSMutableArray arrayWithArray:initalSorting];
-    NSMutableArray *solos = [NSMutableArray array];
+    self.solos = [NSMutableArray array];
     NSLog(@"GOT : %lu items", [initalSorting count]);
     
     
@@ -2056,12 +2055,12 @@ BOOL hasLeadingNumberInString(NSString* s)
     }
     [initialSortingWithoutContainer removeObjectsInArray:removeTheseContainerObjects];
     
-    solos = [self arrayOfSoloItems:[initalSorting sortedArrayUsingDescriptors:verticalSortDescriptor2]];
+    self.solos = [self arrayOfSoloItems:[initalSorting sortedArrayUsingDescriptors:verticalSortDescriptor2]];
     
-    NSLog(@"Solo has : %lu items", [solos count]); //THESE ARE OBJECTS WITH NOTHING TO THE LEFT OF THEM. CORRECT. - 03/11/2012
-    NSMutableArray *sortedArray = [NSMutableArray array];
+    NSLog(@"Solo has : %lu items", [self.solos count]); //THESE ARE OBJECTS WITH NOTHING TO THE LEFT OF THEM. CORRECT. - 03/11/2012
+    self.sortedArray = [NSMutableArray array];
     self.rows = [NSMutableArray array];
-    for (NSDictionary *g in solos)
+    for (NSDictionary *g in self.solos)
     {
         if (![[g objectForKey:@"tag"] isEqual:CONTAINER_TAG])
         {
@@ -2080,13 +2079,13 @@ BOOL hasLeadingNumberInString(NSString* s)
             toMyRight = [NSMutableArray arrayWithArray:[toMyRight sortedArrayUsingDescriptors:verticalSortDescriptor]]; // ordered by by height
             NSMutableArray *alreadyCounted = [NSMutableArray arrayWithArray:leftToRightTopToBottom];
             [alreadyCounted removeObjectsInArray:toMyRight];// ???
-            [sortedArray addObject:g]; //   Add myself
+            [self.sortedArray addObject:g]; //   Add myself
             
             while ([elementsNotCountedYet count] != 0)
             {
                 NSDictionary *next = [self highestElementWithEmptyLeft:toMyRight];//THIS EVENTUALLY WILL HAVE TO CHANGE TO BE HIGHESTELE IN GROUP.*
                 NSLog(@"calling next on : %@", [next objectForKey:@"id"]);
-                NSDictionary *previous = [sortedArray lastObject];
+                NSDictionary *previous = [self.sortedArray lastObject];
                 
                 
                 //  get all elements in the right range of the previous element and select the one with the smallest x value.
@@ -2106,18 +2105,18 @@ BOOL hasLeadingNumberInString(NSString* s)
                  }
                  }
                  */
-                if ([sortedArray containsObject:next] == NO) // As if might not hit the big if statement above and so next object may already exist in the SortedArray dataset.
+                if ([self.sortedArray containsObject:next] == NO) // As if might not hit the big if statement above and so next object may already exist in the SortedArray dataset.
                 {
-                    [sortedArray addObject:next];
+                    [self.sortedArray addObject:next];
                     NSLog(@"Just added : %@", [next objectForKey:@"id"]);
                 }
                 [toMyRight removeObject:next];
                 elementsNotCountedYet = toMyRight;
             }
-            NSLog(@"SORTED ARRAY AT 0 : %@", sortedArray);
-            NSMutableArray *filteredSortedArray = [NSMutableArray arrayWithArray: sortedArray]; // WHICH WE'LL NOW FILTER TO ONLY INCLUDE THOSE TO MY RIGHT
+            NSLog(@"SORTED ARRAY AT 0 : %@", self.sortedArray);
+            NSMutableArray *filteredSortedArray = [NSMutableArray arrayWithArray: self.sortedArray]; // WHICH WE'LL NOW FILTER TO ONLY INCLUDE THOSE TO MY RIGHT
             // **&*() AT THIS POINT,  CONVERT THE DIVS IN FILTEREDSORTEDARRAY WITH OVERLAPS TO GROUPINGBOXES ***&*() //
-            for (NSDictionary *dict in sortedArray)
+            for (NSDictionary *dict in self.sortedArray)
             {
                 if ([solidToMyRight containsObject:dict] == NO)
                 {
@@ -2176,7 +2175,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         }
         else
         {
-            [sortedArray addObject:g];
+            [self.sortedArray addObject:g];
         }
         
         
@@ -2196,7 +2195,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     ///  Let's account for objects that are neither solo's nor in the right range or solos
     NSMutableArray *elementsCounted = [NSMutableArray array];
     NSMutableArray *elementsToAdd = [NSMutableArray array];
-    for (NSMutableDictionary *elem in sortedArray)
+    for (NSMutableDictionary *elem in self.sortedArray)
     {
         
         float x = [[elem objectForKey:@"xcoordinate"] floatValue];
@@ -2209,12 +2208,12 @@ BOOL hasLeadingNumberInString(NSString* s)
         {
             
             NSLog(@"DOES THIS SCENARIO EVER GET CALLED?");
-            NSUInteger priorElementsIndex = [sortedArray indexOfObject:elem];
+            NSUInteger priorElementsIndex = [self.sortedArray indexOfObject:elem];
             
             NSMutableArray *elemsToMyRight = [NSMutableArray arrayWithArray:[self elementsToMyRight:elem]];
             for (NSDictionary *newRightie in elemsToMyRight)
             {
-                if ([sortedArray containsObject: newRightie] == NO)
+                if ([self.sortedArray containsObject: newRightie] == NO)
                 {
                     [elementsToAdd addObject:newRightie];
                 }
@@ -2224,21 +2223,21 @@ BOOL hasLeadingNumberInString(NSString* s)
                 
                 NSDictionary *next = [self highestElementWithEmptyLeft:elemsToMyRight];
                 
-                if ([sortedArray containsObject:next] == NO) // add it to the sorted array at the right point.
+                if ([self.sortedArray containsObject:next] == NO) // add it to the sorted array at the right point.
                 {
                     
                     //if it's the last entry then becareful not to raise an NSRangeException
-                    if ( ([sortedArray count] - 1) == (priorElementsIndex) )
+                    if ( ([self.sortedArray count] - 1) == (priorElementsIndex) )
                     {
-                        [sortedArray addObject:next];
+                        [self.sortedArray addObject:next];
                     }
                     else
                     {
-                        [sortedArray insertObject:next atIndex:priorElementsIndex+1];
+                        [self.sortedArray insertObject:next atIndex:priorElementsIndex+1];
                     }
                     
                 }
-                priorElementsIndex = [sortedArray indexOfObject:next];
+                priorElementsIndex = [self.sortedArray indexOfObject:next];
                 [elementsToAdd removeObject:next];
                 [elemsToMyRight removeObject:next];
             }
@@ -2261,7 +2260,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         NSMutableArray *classString = [NSMutableString string];
         NSMutableArray *functionArray = [NSMutableArray array];
         NSMutableArray *parametersList = [NSMutableArray array];
-        for (NSMutableDictionary *elementToCheck in sortedArray)
+        for (NSMutableDictionary *elementToCheck in self.sortedArray)
         {
             CGRect rect2 = CGRectMake(
                                       [[elementToCheck objectForKey:xcoordinate] floatValue],
@@ -2319,7 +2318,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                     [elementToCheck setObject:parentIDDictionary forKey:@"parentID"];
                     NSLog(@"Crashed 4");
                 }
-
+                
                 //[elementToCheck setObject:[elem objectForKey:@"id"] forKey:@"parentID"];
                 [elementsToGoInGroupingBox addObject:elementToCheck];
                 [elem setObject:[NSNumber numberWithBool:YES] forKey:@"convertToGroupingbox"];
@@ -2375,30 +2374,40 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSLog(@"About to add: %@", convertedGroupingBox);
         }
         
-    } //MORE OF SOLO LOOP
+    } //FINISHED OF SOLO LOOP
     
     
     
     /// SUMMARY OF WHAT HAPPENED :
     NSLog(@"GroupingBoxes Count is : %lu", [groupingBoxes count]);
-    if ([sortedArray count] != [leftToRightTopToBottom count])
+    if ([self.sortedArray count] != [leftToRightTopToBottom count])
     {
         NSLog(@"ERROR -- ERROR -- ERROR -- ERROR");
     }
-    NSLog(@"SORTED ARRAY AT POINT 2 : %@", sortedArray);
+    NSLog(@"SORTED ARRAY AT POINT 2 : %@", self.sortedArray);
     for (GroupingBox *g in groupingBoxes)
     {
         NSLog(@"CONTENTS OF GROUPINGBOX IS : %@", g.insideTheBox);
     }
     
+#pragma sorting finished.
     
     
     /// SET THE BOUNDS RECT FOR EACH GROUPINGBOX
     [self setGroupingBoxesBoundsRect];
+}
+
+
+-(void)generateAttr
+{
+    NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:@"ycoordinate" ascending:NO];
+    NSSortDescriptor *vertically2 = [[NSSortDescriptor alloc] initWithKey:@"ycoordinate" ascending:YES];
+    NSSortDescriptor *horizontally = [[NSSortDescriptor alloc] initWithKey:@"xcoordinate" ascending:YES];
+    NSSortDescriptor *horizontallyFarRight = [[NSSortDescriptor alloc] initWithKey:@"farRight" ascending:YES];
     
-    
-    
-    
+    NSArray *horizontalSortDescriptor = [NSArray arrayWithObject: horizontally];
+    NSArray *verticalSortDescriptor = [NSArray arrayWithObject: vertically];
+    NSArray *verticalSortDescriptor2 = [NSArray arrayWithObject: vertically2];
     
     
     /// CALCLULATE TOP (AND BOTTOM MARGINS WHEN NEEDED) FOR EACH OBJECT ON THE PAGE
@@ -2412,9 +2421,9 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     
     NSUInteger indexCount = 0;
-    for (NSMutableDictionary *dc in sortedArray) //  Was LeftToRightTopToBottom
+    for (NSMutableDictionary *dc in self.sortedArray) //  Was LeftToRightTopToBottom
     {
-        NSLog(@"Index =%lu and count=%lu", indexCount+1, [sortedArray count]); //  Was LeftToRightTopToBottom
+        NSLog(@"Index =%lu and count=%lu", indexCount+1, [self.sortedArray count]); //  Was LeftToRightTopToBottom
         NSUInteger myXlength = [[dc valueForKey:@"width"] unsignedIntegerValue];
         NSUInteger myYlength = [[dc valueForKey:@"height"] unsignedIntegerValue];
         NSUInteger myXCoordinate = [[dc valueForKey:@"xcoordinate"] unsignedIntegerValue];
@@ -2425,9 +2434,9 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         NSMutableDictionary *nextOne = nil;
         float nextX;
-        if (indexCount+1 < [sortedArray count])
+        if (indexCount+1 < [self.sortedArray count])
         {
-            nextOne = [sortedArray objectAtIndex:indexCount+1];     //  Was LeftToRightTopToBottom
+            nextOne = [self.sortedArray objectAtIndex:indexCount+1];     //  Was LeftToRightTopToBottom
             nextX = [[nextOne valueForKey:@"xcoordinate"] floatValue];
         }
         
@@ -2437,7 +2446,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         float lastW;
         if (indexCount != 0)
         {
-            lastOne = [sortedArray objectAtIndex:indexCount-1];
+            lastOne = [self.sortedArray objectAtIndex:indexCount-1];
             lastX = [[lastOne valueForKey:@"xcoordinate"] floatValue];
             lastW = [[lastOne valueForKey:@"width"] floatValue];
         }
@@ -2450,7 +2459,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         NSMutableArray *elementsAboveMe = [dc objectForKey:@"elementsAboveMe"];
         NSMutableArray *elementsBelowMe = [NSMutableArray array];
         
-        for (NSMutableDictionary *item in sortedArray)
+        for (NSMutableDictionary *item in self.sortedArray)
         {
             if ( [[item valueForKey:bottomYcoordinate] intValue]  < [[dc valueForKey:bottomYcoordinate] intValue] && ![[item objectForKey:@"tag"] isEqual:CONTAINER_TAG]) //   if it's Y coordinate is above me (and in my northern range, see below)
             {
@@ -2544,7 +2553,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 for (NSDictionary *otherDictionaryInGroup in gb1.insideTheBox)
                 {
                     NSLog(@"There are %lu objects in this groupingBox.", gb1.insideTheBox.count);
-                    if (([sortedArray indexOfObject:otherDictionaryInGroup] < [sortedArray indexOfObject:dc])
+                    if (([self.sortedArray indexOfObject:otherDictionaryInGroup] < [self.sortedArray indexOfObject:dc])
                         && [[otherDictionaryInGroup objectForKey:ycoordinate]intValue] < [[dc objectForKey:ycoordinate]intValue])
                     {
                         //so it's before me in sortedArray and has a yco above me
@@ -2609,7 +2618,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             //  **      Set the margin of the element, which may be readjusted LATER DOWN THE METHOD if it's inside a groupingBox    **
             if ([[dc objectForKey:@"tag"] isEqual:CONTAINER_TAG])
             {
-                marginTop = [[self distanceFromContainerToElementDirectlyAboveIt:dc usingElements:sortedArray] intValue];
+                marginTop = [[self distanceFromContainerToElementDirectlyAboveIt:dc usingElements:self.sortedArray] intValue];
                 NSLog(@"In special case: %d", marginTop);
             }
             else
@@ -2624,7 +2633,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 NSLog(@"HEIGHT IS %@ - %@", myHighestYPoint, highestYPoint);
                 marginTop =  [myHighestYPoint intValue] - [highestYPoint intValue];
             }
-           
+            
             
             
             
@@ -2638,7 +2647,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         
         
-        NSLog(@"SORTED ARRAY NOVEMBER 1 : %@", sortedArray);
+        NSLog(@"SORTED ARRAY NOVEMBER 1 : %@", self.sortedArray);
         
         
         
@@ -2651,7 +2660,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         BOOL objectToMyRight;
         
         righties = [NSMutableArray array];
-        for (NSMutableDictionary *objectToTheRight in sortedArray) //  Was LeftToRightTopToBottom
+        for (NSMutableDictionary *objectToTheRight in self.sortedArray) //  Was LeftToRightTopToBottom
         {
             if ([objectToTheRight isEqualToDictionary:dc] == NO && [objectToTheRight objectForKey:@"tag"] != [Container class]) // If it's not me
             {
@@ -2701,7 +2710,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         
         lefties = [NSMutableArray array];
-        for (NSMutableDictionary *objectToTheLeft in sortedArray) //check this... //  Was LeftToRightTopToBottom
+        for (NSMutableDictionary *objectToTheLeft in self.sortedArray) //check this... //  Was LeftToRightTopToBottom
         {
             
             if ([objectToTheLeft isEqualToDictionary:dc] == NO && ![[objectToTheLeft objectForKey:@"tag"] isEqual: CONTAINER_TAG])
@@ -2806,7 +2815,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 NSLog(@"Lefties are: %@", [l objectForKey:@"xcoordinate"]);
             }
             //  LEFT MARGIN LOGIC: Get its marginRight, if I'm offset by more or less than that amount the give me a marginLeft. *** THIS IS ONLY THE CASE IN A GROUPING BOX ***
-            for (NSDictionary *check in sortedArray)
+            for (NSDictionary *check in self.sortedArray)
             {
                 if ([check isEqualToDictionary:closest])
                 {
@@ -2831,12 +2840,12 @@ BOOL hasLeadingNumberInString(NSString* s)
             
         }
         
-        if ( (objectToMyLeft == NO) & ([solos containsObject:dc] == YES) )
+        if ( (objectToMyLeft == NO) & ([self.solos containsObject:dc] == YES) )
         {
-            # pragma mark -  CONTAINER CODE ADDED.
+# pragma mark -  CONTAINER CODE ADDED.
             
             NSLog(@"IN THIS");
-            NSDictionary *myContainer = [self containerContaining:dc usingElements:sortedArray];
+            NSDictionary *myContainer = [self containerContaining:dc usingElements:self.sortedArray];
             NSLog(@"dc = %@ and myContainer = %@", [dc objectForKey:xcoordinate], [myContainer objectForKey:xcoordinate]);
             if (myContainer == nil)
             {
@@ -2844,12 +2853,12 @@ BOOL hasLeadingNumberInString(NSString* s)
                 marginLeft = [[dc valueForKey:@"xcoordinate"] intValue];
                 NSLog(@"MARGIN LEFT SET ???");
             }
-                
+            
             else
             {
                 marginLeft = [[dc objectForKey:xcoordinate]intValue] - [[myContainer objectForKey:xcoordinate]intValue];
             }
-                
+            
             
             [dc setValue:[NSNumber numberWithInt:marginLeft] forKey:@"marginLeft"];
         }
@@ -2858,7 +2867,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         
         
-        NSLog(@"SORTED ARRAY NOVEMBER 2 : %@", sortedArray);
+        NSLog(@"SORTED ARRAY NOVEMBER 2 : %@", self.sortedArray);
         
         /*
          Make adjustments to marginTops for elements that need to float as their tops need to calc against the lowest in  the minirow above it.
@@ -2873,11 +2882,11 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         GroupingBox *boxImIn = [self whichGroupingBoxIsElementIn:dc];
         NSMutableArray *newMarginContenders = [NSMutableArray array];
-        NSUInteger myIndexInSortedArray = [sortedArray indexOfObject:dc];
+        NSUInteger myIndexInSortedArray = [self.sortedArray indexOfObject:dc];
         for (NSDictionary * d in boxImIn.insideTheBox)
         {
             
-            NSUInteger loopsIndexInSortedArray = [sortedArray indexOfObject:d];
+            NSUInteger loopsIndexInSortedArray = [self.sortedArray indexOfObject:d];
             
             
             if ([[d valueForKey:bottomYcoordinate]intValue] > [[dc valueForKey:bottomYcoordinate]intValue] & [lefties containsObject:d] == NO & loopsIndexInSortedArray < myIndexInSortedArray)
@@ -2885,8 +2894,8 @@ BOOL hasLeadingNumberInString(NSString* s)
                 [newMarginContenders addObject:d];
                 
                 // and if elements width for the object behind me in the sorted arrays width + my width, plus margins is not equal to or gthan groupingbox xco then flag as 'no float'
-                NSUInteger myIndex = [sortedArray indexOfObject:dc];
-                NSDictionary *objectBeforeMe = [sortedArray objectAtIndex:myIndex-1];
+                NSUInteger myIndex = [self.sortedArray indexOfObject:dc];
+                NSDictionary *objectBeforeMe = [self.sortedArray objectAtIndex:myIndex-1];
                 
                 int myWidth = [[dc valueForKey:@"width"]intValue];
                 if ((boxImIn.rtFrame.origin.x + boxImIn.rtFrame.size.width) - [[objectBeforeMe valueForKey:@"farRight"] doubleValue] >= myWidth & [[objectBeforeMe valueForKey:@"ycoordinate"] intValue] > [[dc valueForKey:ycoordinate] intValue]) //   So I can fit in that gap, above me, but don't want to.
@@ -2923,16 +2932,16 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     
     
-    NSLog(@"SORTED ARRAY NOVEMBER 3 : %@", sortedArray);
+    NSLog(@"SORTED ARRAY NOVEMBER 3 : %@", self.sortedArray);
     
     [self setMarginsForElementInGroupingBox];
     
-    NSLog(@"SORTED ARRAY NOVEMBER 10 : %@", sortedArray);
+    NSLog(@"SORTED ARRAY NOVEMBER 10 : %@", self.sortedArray);
     
     
     
     NSMutableArray *firstAndLastRowsInContainer = [NSMutableArray array];
-    for (NSMutableDictionary *each in [sortedArray reverseObjectEnumerator])
+    for (NSMutableDictionary *each in [self.sortedArray reverseObjectEnumerator])
     {
         // Calclulate its bottom margin if it's the last item in the sorted Array
         if ([each valueForKeyPath:@"parentID.div"] == nil)
@@ -2947,7 +2956,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ([[each objectForKey:@"tag"] isEqualToString:CONTAINER_TAG])
         {
             NSLog(@"inside firstAndLastRowsInContainer");
-            NSArray *elementsInsideMe = [self elementsInside:each usingElements:sortedArray];
+            NSArray *elementsInsideMe = [self elementsInside:each usingElements:self.sortedArray];
             NSLog(@"elementsInsideMe : %@", elementsInsideMe);
             NSMutableArray *idArray = [NSMutableArray array];
             for (NSDictionary *element in elementsInsideMe)
@@ -2959,32 +2968,32 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSMutableOrderedSet *rowsInThisContainer = [NSMutableOrderedSet new];
             
             
-                [self.rows enumerateObjectsUsingBlock:^(id row, NSUInteger index, BOOL *stop)
-                {
-                    for (NSDictionary *ele in row)
-                    {
-                        if ([idArray containsObject:[ele objectForKey:@"id"]])
-                        {
-                            //if this row contains an elementID from idArray then add this row to my list of contents
-                            [rowsInThisContainer addObject:[NSNumber numberWithInteger:index]];
-                            NSLog(@"Matching element found at index: %li", (unsigned long)index);
-                            //*stop = YES;
-                        }
-                    }
-                } ];
+            [self.rows enumerateObjectsUsingBlock:^(id row, NSUInteger index, BOOL *stop)
+             {
+                 for (NSDictionary *ele in row)
+                 {
+                     if ([idArray containsObject:[ele objectForKey:@"id"]])
+                     {
+                         //if this row contains an elementID from idArray then add this row to my list of contents
+                         [rowsInThisContainer addObject:[NSNumber numberWithInteger:index]];
+                         NSLog(@"Matching element found at index: %li", (unsigned long)index);
+                         //*stop = YES;
+                     }
+                 }
+             } ];
             NSNumber *min = [rowsInThisContainer valueForKeyPath:@"@min.intValue"];
             NSNumber *max = [rowsInThisContainer valueForKeyPath:@"@max.intValue"];
             [firstAndLastRowsInContainer addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                         [each objectForKey:@"id"], CONTAINER_ID,
-                                                         min, FIRST,
-                                                         max, LAST,
-                                                         nil]];
+                                                     [each objectForKey:@"id"], CONTAINER_ID,
+                                                     min, FIRST,
+                                                     max, LAST,
+                                                     nil]];
             NSLog(@"rowsInThisContainer = %@", rowsInThisContainer);
             NSLog(@"PRINTING firstAndLastRowsInContainer : %@", firstAndLastRowsInContainer);
-                
+            
         }
         
-            
+        
         
         
     }
@@ -2996,17 +3005,17 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     
     NSError *errorMsg;
-    NSString *outputFolderPath = NSHomeDirectory();
+    self.outputFolderPath = NSHomeDirectory();
     
-    outputFolderPath =[outputFolderPath stringByAppendingPathComponent:@"Documents"];
-    outputFolderPath = [outputFolderPath stringByAppendingPathComponent:@"code"];
+    self.outputFolderPath =[self.outputFolderPath stringByAppendingPathComponent:@"Documents"];
+    self.outputFolderPath = [self.outputFolderPath stringByAppendingPathComponent:@"code"];
     NSString *pathToCSS = [[NSBundle mainBundle] pathForResource:@"bootstrap" ofType:@"css"];
     NSURL *urlToCSS = [[NSBundle mainBundle] URLForResource:@"bootstrap" withExtension:@"css"];
     
     
     NSFileManager *fm = [NSFileManager defaultManager];
     BOOL isDir;
-    BOOL exists = [fm fileExistsAtPath:outputFolderPath isDirectory:&isDir];
+    BOOL exists = [fm fileExistsAtPath:self.outputFolderPath isDirectory:&isDir];
     if (exists)
     {
         NSLog(@"It does exist");
@@ -3015,7 +3024,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     else
     {
         NSLog(@"Does not exist");
-        [fm createDirectoryAtPath:outputFolderPath withIntermediateDirectories:YES attributes:nil error:&errorMsg];
+        [fm createDirectoryAtPath:self.outputFolderPath withIntermediateDirectories:YES attributes:nil error:&errorMsg];
         
         
         NSError *error;
@@ -3032,7 +3041,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         else
         {
             NSLog(@"Bundle path: %@", pathToCSS);
-            NSString *cssFullPath = [NSString stringWithString:outputFolderPath];
+            NSString *cssFullPath = [NSString stringWithString:self.outputFolderPath];
             cssFullPath = [cssFullPath stringByAppendingPathComponent:@"bootstrap"];
             cssFullPath = [cssFullPath stringByAppendingPathExtension:@"css"];
             NSLog(@"Destination path: %@", cssFullPath);
@@ -3047,25 +3056,25 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSWindowController *wc = [[curDoc windowControllers] objectAtIndex:0];
     NSString *pageTitle = [[wc window] title];
     
-    outputFolderPath = [outputFolderPath stringByAppendingPathComponent:pageTitle];
-    outputFolderPath = [outputFolderPath stringByAppendingPathExtension:@"html"];
+    self.outputFolderPath = [self.outputFolderPath stringByAppendingPathComponent:pageTitle];
+    self.outputFolderPath = [self.outputFolderPath stringByAppendingPathExtension:@"html"];
     
-    NSLog(@"Path thus far : %@", outputFolderPath);
-    
-    
-    NSURL *directoryURLToPlaceFiles = [NSURL fileURLWithPath:outputFolderPath isDirectory:YES];
+    NSLog(@"Path thus far : %@", self.outputFolderPath);
     
     
+    self.directoryURLToPlaceFiles = [NSURL fileURLWithPath:self.outputFolderPath isDirectory:YES];
     
     
     
-    if (directoryURLToPlaceFiles == nil)
+    
+    
+    if (self.directoryURLToPlaceFiles == nil)
     {
         NSLog(@"COULD NOT GET DIRECTORY URL. Error");
     }
     else
     {
-        NSLog(@"DirectoryURL is: %@", directoryURLToPlaceFiles);
+        NSLog(@"DirectoryURL is: %@", self.directoryURLToPlaceFiles);
     }
     
     
@@ -3076,7 +3085,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         documentsDirectory = [paths objectAtIndex:0];
     }
     
-    for (NSMutableDictionary *d in sortedArray)
+    for (NSMutableDictionary *d in self.sortedArray)
     {
         //  Clean up
         [d removeObjectForKey:@"elementsAboveMe"];
@@ -3098,7 +3107,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     //NSString *file = [documentsDirectory stringByAppendingString:@"/testFile2.html"];
     
-    NSLog(@"SORTED ARRAY CONTAINS: %@", sortedArray);
+    NSLog(@"SORTED ARRAY CONTAINS: %@", self.sortedArray);
     NSMutableArray *finalGrouping = [NSMutableArray array];
     
     
@@ -3128,10 +3137,10 @@ BOOL hasLeadingNumberInString(NSString* s)
         }
         else
         {
-             # pragma mark -  CONTAINER CODE IS!! NEEDED.
+# pragma mark -  CONTAINER CODE IS!! NEEDED.
             // THIS IS THE FIRST ROW IN THE ARRAY
             // CHECK IF THIS ROW IS IN A CONTAINER
-            NSDictionary *rowsContainer = [self containerContaining:highestElementInRow usingElements:sortedArray];
+            NSDictionary *rowsContainer = [self containerContaining:highestElementInRow usingElements:self.sortedArray];
             if ( rowsContainer != nil)
             {
                 NSLog(@"LOGGING the first row");
@@ -3173,7 +3182,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     /***    CALCULATE MARGINTOPS FOR ELEMENTS NOT IN GROUPINGBOX..., BUT ALSO CONVERT MARGIN TO %    ***/
     
-    for (NSMutableDictionary *dc in sortedArray)
+    for (NSMutableDictionary *dc in self.sortedArray)
     {
         
         BOOL insideGroupingBoxFlag = NO;
@@ -3226,7 +3235,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     
     
-    NSLog(@"Any goodnesss? : %@", sortedArray);
+    NSLog(@"Any goodnesss? : %@", self.sortedArray);
     
     
     
@@ -3241,7 +3250,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         {
             NSLog(@"Skipping the tweaking of margins for the groupingBox as this was taken from the rect I was previouslyKnownAs");
             // set the margin top and right from the element PreviouslyKnownAs
-            for (NSDictionary *elements in sortedArray)
+            for (NSDictionary *elements in self.sortedArray)
             {
                 if ( [[elements objectForKey:@"id"] isEqualToString:[g idPreviouslyKnownAs]] )
                 {
@@ -3312,7 +3321,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     BOOL allElementsAreFlexible = YES;
     // Set flexible margins - for elements with % and - widths if inside a gb; any margin lefts; and any margin rights for
-    for (NSMutableDictionary *dc in sortedArray)
+    for (NSMutableDictionary *dc in self.sortedArray)
     {
         if ([[dc objectForKey:LAYOUT_KEY] isEqualToString:@"%"])
         {
@@ -3331,7 +3340,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 {
                     //get the parent object
                     
-                    for (NSDictionary *checking in sortedArray) {
+                    for (NSDictionary *checking in self.sortedArray) {
                         if ([[checking valueForKey:@"id"] isEqualToString:[dc valueForKeyPath:[NSString stringWithFormat:@"%@.%@", PARENT_ID, DIV_TAG]]]) {
                             parent = [[checking objectForKey:@"width"]floatValue];
                         }
@@ -3346,16 +3355,16 @@ BOOL hasLeadingNumberInString(NSString* s)
                 }
                 else
                 {
-                    #pragma mark - CONTAINER CODE ADDED.
+#pragma mark - CONTAINER CODE ADDED.
                     
-                    NSDictionary *container = [self containerContaining:dc usingElements:sortedArray];
+                    NSDictionary *container = [self containerContaining:dc usingElements:self.sortedArray];
                     if (container == nil)
                         parent = self.frame.size.width;
                     else
                         parent = [[container objectForKey:@"width"] floatValue];
                     
                     NSLog(@"Parent width is: %f", parent);
-
+                    
                 }
                 CGFloat context = parent;
                 // (target/context)*100;
@@ -3374,7 +3383,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 {
                     //get the parent object
                     
-                    for (NSDictionary *checking in sortedArray) {
+                    for (NSDictionary *checking in self.sortedArray) {
                         if ([[checking valueForKey:@"id"] isEqualToString:[dc valueForKeyPath:[NSString stringWithFormat:@"%@.%@", PARENT_ID, DIV_TAG]]]) {
                             parent = [[checking objectForKey:@"width"]floatValue];
                         }
@@ -3388,9 +3397,9 @@ BOOL hasLeadingNumberInString(NSString* s)
                 }
                 else
                 {
-                    #pragma mark - CONTAINER CODE ADDED.
+#pragma mark - CONTAINER CODE ADDED.
                     
-                    NSDictionary *container = [self containerContaining:dc usingElements:sortedArray];
+                    NSDictionary *container = [self containerContaining:dc usingElements:self.sortedArray];
                     if (container == nil)
                         parent = self.frame.size.width;
                     else
@@ -3465,8 +3474,40 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     
     NSLog(@"Row margins : %@", rowMargins);
+}
 
+-(void)generatejs
+{
+#pragma JS CONVERSION
+    // ASSUMPTION, YOU CAN ONLY HAVE ONE DYROW ON THE PAGE
+    NSMutableArray *bucket = [NSMutableArray new];
+    NSLog(@"self.sorted = %@", self.sortedArray);
+    for (NSMutableDictionary *element in self.sortedArray)
+    {
+        if ([[element objectForKey:@"tag"] isEqual:DYNAMIC_ROW_TAG]) {
+            [bucket addObject:element];
+        }
+    }
     
+    if ([bucket count] > 0)
+    {
+        NSString *viewModel = [self viewModelFrom:[bucket objectAtIndex:0] amongstElements:self.sortedArray];
+        NSString *theClass = [self generateClassFromDynamicRow:[bucket objectAtIndex:0] withElementsOnStage:self.sortedArray];
+        if (viewModel != nil) {
+            [self.jsCode2 appendString:viewModel];
+        }
+        if (theClass != nil) {
+            [self.jsCode2 appendString:theClass];
+        }
+    }
+    
+    
+}
+
+
+
+-(void)pieceItTogether
+{
 #pragma mark - CONVERSION
     
     
@@ -3483,7 +3524,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSMutableArray *styleStore = [NSMutableArray array];
     NSString *styleString = [NSString string];
     NSMutableString *s = [NSMutableString string];
-    NSArray *groupings = [NSArray arrayWithArray:finalGrouping];
+    NSArray *groupings = [NSArray arrayWithArray:self.finalGrouping];
     
     NSLog(@"At step : 1 in generate code function.");
     //  1.Get the Start and End rows
@@ -3500,7 +3541,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         [endRows addObject:[[row lastObject] valueForKey:@"id"]];
         
         
-        for (NSDictionary *eachContainer in firstAndLastRowsInContainer)
+        for (NSDictionary *eachContainer in self.firstAndLastRowsInContainer)
         {
             if ([[eachContainer objectForKey:FIRST] isEqualTo:[NSNumber numberWithInteger:indexCounter]])
             {
@@ -3517,23 +3558,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
     } ];
     
-#pragma JS CONVERSION
-    // ASSUMPTION, YOU CAN ONLY HAVE ONE DYROW ON THE PAGE
-    NSMutableArray *bucket = [NSMutableArray new];
-    for (NSMutableDictionary *element in sortedArray)
-    {
-        if ([[element objectForKey:@"tag"] isEqual:DYNAMIC_ROW_TAG]) {
-            [bucket addObject:element];
-        }
-    }
-    NSString *viewModel = [self viewModelFrom:[bucket objectAtIndex:0] amongstElements:sortedArray];
-    NSString *theClass = [self generateClassFromDynamicRow:[bucket objectAtIndex:0] withElementsOnStage:sortedArray];
-    if (viewModel != nil) {
-        [jsCode2 appendString:viewModel];
-    }
-    if (theClass != nil) {
-        [jsCode2 appendString:theClass];
-    }
+    
     
     
     
@@ -3563,7 +3588,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSString *blockid = [NSString string];
     
     
-    for (NSMutableDictionary *block in sortedArray)
+    for (NSMutableDictionary *block in self.sortedArray)
     {
         for (NSArray *array in groupings)
         {
@@ -3618,8 +3643,8 @@ BOOL hasLeadingNumberInString(NSString* s)
         {
             NSLog(@"Inside firsts..");
             groupBoxOpeningDiv = [NSMutableString stringWithString: @"\n    <div "];
-            NSUInteger myIndex = [sortedArray indexOfObject:block];
-            NSMutableDictionary *oneBefore = [sortedArray objectAtIndex:myIndex-1];
+            NSUInteger myIndex = [self.sortedArray indexOfObject:block];
+            NSMutableDictionary *oneBefore = [self.sortedArray objectAtIndex:myIndex-1];
             if ([[oneBefore objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
             {
                 [groupBoxOpeningDiv appendString:@"data-bind=\"foreach: seats\" "];
@@ -3976,7 +4001,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ([[block valueForKey:@"tag"] isEqualToString:@"paragraph"])
         {
             NSLog(@"in para");
-            NSLog(@"%@", textStyles);
+            NSLog(@"%@", self.textStyles);
             //if "marginTop" in block:
             if ([block valueForKey:@"marginTop"] != nil)
             {
@@ -4772,13 +4797,13 @@ BOOL hasLeadingNumberInString(NSString* s)
     {
         loopCount = [self.rowMargins indexOfObject:n]+1;
         // get the id of the Container this row sits within, and then place that id where .container currently is in the code below. If Nil then replace it with 'body'.
-        NSMutableString *containerID = [self containerThatContainsRow:loopCount-1 usingElements:sortedArray];
+        NSMutableString *containerID = [self containerThatContainsRow:loopCount-1 usingElements:self.sortedArray];
         if (containerID != nil)
             [containerID insertString:@"#" atIndex:0]; //ASSUMPTION: This is an id not a class
         else
             containerID = [NSMutableString stringWithString:@"body"];
         
-                
+        
         rowCodeForNthChild = [NSMutableString stringWithFormat:@"%@ .row:nth-child(%lu) {\n  margin-top: %@px;\n\n}", containerID, loopCount, n];
         css = [NSMutableString stringWithString:[css stringByAppendingString:rowCodeForNthChild]];
     }
@@ -4795,7 +4820,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     }
     
     NSString *imgMaxWidth = [NSString stringWithFormat:@"%d%%", 100];
-    start = [NSMutableString stringWithFormat: @"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<title>%@</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"\"><meta name=\"author\" content=\"\">\n<!-- Le styles --><link href=\"bootstrap.css\" rel=\"stylesheet\"><style type=\"text/css\">\n <script>%@</script>\nbody { \n  font-size: 0.75em;\n  background-color: %@;\n} \n.groupBox {\n  height: auto;\n  padding: none;\n} \nimg {\n  max-width: %@;\n}  \n", pageTitle, jsCode2, backgroundColourAsString, imgMaxWidth];
+    start = [NSMutableString stringWithFormat: @"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<title>%@</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"\"><meta name=\"author\" content=\"\">\n<!-- Le styles --><link href=\"bootstrap.css\" rel=\"stylesheet\"><style type=\"text/css\">\n <script>%@</script>\nbody { \n  font-size: 0.75em;\n  background-color: %@;\n} \n.groupBox {\n  height: auto;\n  padding: none;\n} \nimg {\n  max-width: %@;\n}  \n", self.pageTitle, self.jsCode2, backgroundColourAsString, imgMaxWidth];
     //[start stringByAppendingString:backgroundColourAsString];
     //[start stringByAppendingString:@""];
     
@@ -4808,10 +4833,10 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     NSLog(@"OUTPUT IS: %@", doc);
     NSError *error = nil;
-    if ([doc writeToURL:directoryURLToPlaceFiles atomically:YES encoding:NSUTF8StringEncoding error:&error])
+    if ([doc writeToURL:self.directoryURLToPlaceFiles atomically:YES encoding:NSUTF8StringEncoding error:&error])
     {
         NSLog(@"SUCCESS!");
-        NSLog(@"Wrote doc to: %@", directoryURLToPlaceFiles);
+        NSLog(@"Wrote doc to: %@", self.directoryURLToPlaceFiles);
     }
     else
     {
@@ -4827,8 +4852,8 @@ BOOL hasLeadingNumberInString(NSString* s)
      
      */
     
-
-   
+    
+    
     
 #pragma mark - END CONVERSION
     
@@ -4847,8 +4872,8 @@ BOOL hasLeadingNumberInString(NSString* s)
         {
             
             //  IMPROVE: EXPORT IN THE FORMAT THAT IT CAME AS, NOT NECESSARILY JPEG.
-            NSLog(@"PATH IS - %@", outputFolderPath);
-            NSMutableString *imagePath = [NSMutableString stringWithString:[outputFolderPath stringByDeletingLastPathComponent]];
+            NSLog(@"PATH IS - %@", self.outputFolderPath);
+            NSMutableString *imagePath = [NSMutableString stringWithString:[self.outputFolderPath stringByDeletingLastPathComponent]];
             [imagePath appendString:@"/"];
             NSString *fileEnding = ((Image *)ele).filePath.lastPathComponent;
             [imagePath appendString:fileEnding];
@@ -4888,10 +4913,25 @@ BOOL hasLeadingNumberInString(NSString* s)
             
         }
     }
-    NSArray *fileURLs = [NSArray arrayWithObjects:directoryURLToPlaceFiles, nil];
+    NSArray *fileURLs = [NSArray arrayWithObjects:self.directoryURLToPlaceFiles, nil];
     [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:fileURLs];
     
     NSLog(@"exiting...");
+}
+
+
+
+
+#pragma mark - Generate Code
+-(IBAction)generateCode:(id)sender
+{
+    [self sortElements];
+    [self generateAttr];
+    NSLog(@"self.sorted 2 = %@", self.sortedArray);
+    [self generatejs];
+    NSLog(@"self.sorted 3 = %@", self.sortedArray);
+    [self pieceItTogether];
+
 }
 
 

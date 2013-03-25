@@ -152,6 +152,17 @@ typedef NSInteger		ShapeCutCopyType;
 	NSMutableArray						*fontFaceArray;
 	IBOutlet NSTableView				*fontTableView;
 }
+@property (nonatomic, assign) NSMutableArray *sortedArray;
+@property (nonatomic, assign) NSMutableString *jsCode2;
+@property (nonatomic, assign) NSMutableString *pageTitle;
+@property (nonatomic, assign) NSMutableArray *finalGrouping;
+@property (nonatomic, assign) NSMutableArray *solos;
+@property (nonatomic, assign) NSMutableArray *firstAndLastRowsInContainer;
+@property (nonatomic, assign) NSMutableDictionary *textStyles;
+@property (nonatomic, assign) NSURL *directoryURLToPlaceFiles;
+@property (nonatomic, assign) NSString *outputFolderPath;
+
+
 @property (assign) NSPanel *panel;
 //Flags
 @property (assign) BOOL elementBeenDroppedToStage;

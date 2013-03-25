@@ -26,6 +26,9 @@
 
 @implementation StageView
 
+@synthesize sortedArray;
+@synthesize jsCode2;
+@synthesize finalGrouping;
 
 @synthesize attributeDelegate, elementCount, currentElement, numberOfGroupings, groupItems, documentSettingsButton, textboxView, sv;
 @synthesize groupingBoxes;
