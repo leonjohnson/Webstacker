@@ -7,8 +7,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
-        [self setBorderWidth:[NSNumber numberWithInt:0]];
-        [self setColorAttributes:[NSColor cyanColor]];
+        [self setBorderWidth:[NSNumber numberWithInt:1]];
+        [self setColorAttributes:[NSColor colorWithCalibratedRed: 0.975 green: 0.975 blue: 0.975 alpha: 1]];
     }
     
     return self;

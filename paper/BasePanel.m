@@ -127,7 +127,8 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-	NSColor *color = [NSColor colorWithCalibratedRed:0.185 green:0.185 blue:0.185 alpha:1.0];
+	/*
+    NSColor *color = [NSColor redColor];
 	[color set];
 	NSRectFill([self bounds]);
 	
@@ -148,6 +149,21 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
 	[path stroke];
 	
 	[path release];
+    */
+    
+    //// Color Declarations
+    NSColor* gradientColor = [NSColor colorWithCalibratedRed: 0.186 green: 0.189 blue: 0.195 alpha: 1];
+    NSColor* gradientColor2 = [NSColor colorWithCalibratedRed: 0.278 green: 0.282 blue: 0.289 alpha: 1];
+    
+    //// Gradient Declarations
+    NSGradient* panelGrad = [[NSGradient alloc] initWithStartingColor: gradientColor2 endingColor: gradientColor];
+    
+    //// Rounded Rectangle Drawing
+    NSBezierPath* roundedRectanglePath = [NSBezierPath bezierPathWithRect:self.frame];
+    [panelGrad drawInBezierPath: roundedRectanglePath angle: -90];
+    
+    
+
 }
 
 @end
@@ -283,7 +299,7 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
 		[roundedRectangle2Path lineToPoint: NSMakePoint(NSMinX(roundedRectangle2Frame), NSMaxY(roundedRectangle2Frame))];
 		[roundedRectangle2Path closePath];
 		
-		[panelBarGradient drawInBezierPath: roundedRectangle2Path angle: -90];
+		[panelBarGradient drawInBezierPath: roundedRectangle2Path angle: 90];
 		
 		////// Rounded Rectangle 2 Inner Shadow
 		NSRect roundedRectangle2BorderRect = NSInsetRect([roundedRectangle2Path bounds], -panelBarTopShadow.shadowBlurRadius, -panelBarTopShadow.shadowBlurRadius);

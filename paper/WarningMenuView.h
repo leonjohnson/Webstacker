@@ -9,5 +9,8 @@
 #import <Cocoa/Cocoa.h>
 
 @interface WarningMenuView : NSView
+{
+    IBOutlet NSTextField *label;
+}
 
 @end

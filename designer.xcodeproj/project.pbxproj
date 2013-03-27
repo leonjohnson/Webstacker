@@ -295,7 +295,6 @@
 				3F1CEAE816D55BED009246C2 /* DataSourceTableView.m */,
 				3F1CEAE916D55BED009246C2 /* DataSourceWindowController.h */,
 				3F1CEAEA16D55BED009246C2 /* DataSourceWindowController.m */,
-				3F1CEAEB16D55BED009246C2 /* DataSourceWindowController.xib */,
 				3F1CEAEC16D55BED009246C2 /* HeaderTextDelegate.h */,
 				3F1CEAED16D55BED009246C2 /* HeaderTextField.h */,
 				3F1CEAEE16D55BED009246C2 /* HeaderTextField.m */,
@@ -326,7 +325,6 @@
 			children = (
 				3FEF2DEB16D930EC005A05B9 /* NewContainerWindowController.h */,
 				3FEF2DEC16D930EC005A05B9 /* NewContainerWindowController.m */,
-				3FEF2DED16D930EC005A05B9 /* NewContainerWindowController.xib */,
 			);
 			name = NewContainer;
 			sourceTree = "<group>";
@@ -388,6 +386,7 @@
 		5877F01B155588AA005FF829 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				F74A1742170104500057BF06 /* Interfaces */,
 				F74A172716FF91E90057BF06 /* BuilderWindow */,
 				F7B3116F1684B6BD0047BC57 /* AppDelegate */,
 				F7B3116E1684B60E0047BC57 /* NSWindow subclass */,
@@ -641,7 +640,6 @@
 				F74A173016FF92520057BF06 /* ChangeSelectedActionsDataSource.h */,
 				F74A173116FF92520057BF06 /* BuilderWindowController.h */,
 				F74A173216FF92520057BF06 /* BuilderWindowController.m */,
-				F74A173C16FF958D0057BF06 /* Builder.xib */,
 			);
 			name = BuilderWindow;
 			sourceTree = "<group>";
@@ -659,12 +657,23 @@
 			name = "DataSource and Delegate methods";
 			sourceTree = "<group>";
 		};
+		F74A1742170104500057BF06 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				5877F0BD1556F8F7005FF829 /* MainMenu.xib */,
+				F74A173C16FF958D0057BF06 /* Builder.xib */,
+				3FEF2DED16D930EC005A05B9 /* NewContainerWindowController.xib */,
+				F7DB1C5F162C87A300CD72D4 /* Document.xib */,
+				3F1CEAEB16D55BED009246C2 /* DataSourceWindowController.xib */,
+			);
+			name = Interfaces;
+			sourceTree = "<group>";
+		};
 		F7B3116C1684B59C0047BC57 /* DocumentWindow */ = {
 			isa = PBXGroup;
 			children = (
 				F70AF48D16302EFB00912A6F /* DocumentWindowController.h */,
 				F70AF48E16302EFB00912A6F /* DocumentWindowController.m */,
-				F7DB1C5F162C87A300CD72D4 /* Document.xib */,
 			);
 			name = DocumentWindow;
 			sourceTree = "<group>";
@@ -692,7 +701,6 @@
 			children = (
 				580D7A2F15E01CAC004C9E3F /* AppDelegate.h */,
 				580D7A3015E01CAC004C9E3F /* AppDelegate.m */,
-				5877F0BD1556F8F7005FF829 /* MainMenu.xib */,
 			);
 			name = AppDelegate;
 			sourceTree = "<group>";
