@@ -186,6 +186,7 @@
         [arrayOfStatements addObject:genericAction];
     }
     
+    NSLog(@"Returning : %@", arrayOfStatements);
     return arrayOfStatements;
 }
 
@@ -222,6 +223,7 @@
 
 -(id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index
 {
+    NSLog(@"Loading : %@", [[self loadActions] objectAtIndex:index]);
     return [[self loadActions] objectAtIndex:index];
 }
 

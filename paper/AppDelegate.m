@@ -1119,4 +1119,13 @@
 }
 
 
+
+#pragma mark - Builder methods
+
+-(IBAction)showBuilderScreen:(id)sender
+{
+    Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+    [[curDoc stageView] DeselectAllShaps];
+    [curDoc showBuilderScreen];
+}
 @end

@@ -20,7 +20,8 @@
 {
 	BOOL								GridLineVisible;
     BOOL								RulerVisible;
-	
+	IBOutlet NSPanel *builderScreen;
+    
     // shape gallery view, user can select shape type (rectangle, circle, triangl and so on).
 	IBOutlet GalleryView				*galleryView;
 	NSData								*dataFromeFile;
@@ -56,6 +57,8 @@
 				dataFromFile isn't nil, stage view created by dataFromFile.
  */
 - (void)initWithData;
+
+-(void)showBuilderScreen;
 
 /*
  @function:		createAdvancedShape

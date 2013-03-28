@@ -12,6 +12,7 @@
 #import "DocumentWindowController.h"
 #import "TextBox.h"
 #import "CustomRulerView.h"
+#import "BuilderWindowController.h"
 
 @implementation Document
 
@@ -78,6 +79,17 @@
 	
 }
 
+
+-(void)showBuilderScreen
+{
+    
+    NSLog(@"gonna try and show the builder screen");
+    BuilderWindowController *builderWindowController = [[BuilderWindowController alloc] initWithWindowNibName:@"Builder" owner:self];
+    [builderWindowController setShouldCloseDocument:NO];
+    [self addWindowController:builderWindowController];
+    [builderWindowController showWindow:self];
+    NSLog(@"Done with showBuilderScreen");
+}
 
 
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController

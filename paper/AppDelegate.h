@@ -153,7 +153,7 @@
 //@property (assign, nonatomic) NSNumber *kerningValue;
 //@property (assign, nonatomic) NSNumber *leadingValue;
 
-
+-(IBAction)showBuilderScreen:(id)sender;
 -(IBAction)setTypeFaceFamily:(id)sender;
 -(IBAction)setTypeStyle:(id)sender;
 -(IBAction)setFontTrait:(id)sender;
