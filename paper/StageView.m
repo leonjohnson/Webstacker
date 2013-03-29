@@ -433,7 +433,6 @@ static NSImage *bottomImage;
 {
     
     // Test if any text is selected, if so then select text and set its font size.
-    //NSRange totalRange = [[self textboxView] selectedRange];
 	NSRange totalRange = [[self textboxView] selectedRange];
 	
 	if (totalRange.length == 0) {
@@ -897,6 +896,7 @@ static NSImage *bottomImage;
 
 -(void)setKerningValue:(NSNumber *)kerningValueReceived //:(NSNumber *)k //updateKerningOrLeadingFields
 {
+    NSLog(@"IN SETKERNING IN STAGEVIEW");
     CGFloat valueTypedIn = [kerningValueReceived floatValue];
     CGFloat kerning = [[self textboxView] kerning];
     
@@ -921,6 +921,7 @@ static NSImage *bottomImage;
     }
     
     [[self textboxView] setKerning:valueTypedIn];
+    NSLog(@"done with kerning");
 }
 
 
@@ -1248,10 +1249,7 @@ static NSImage *bottomImage;
 	}
 }
 
--(void)hey
-{
-    NSLog(@"hey");
-}
+
 /*
  @function:		SetTextBoxText
  @params:		nothing
@@ -3186,7 +3184,8 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
 	[fontTableView reloadData];
 	
 	// select current font
-	/*NSRange totalRange;
+	/* start comm
+    NSRange totalRange;
 	totalRange.location = 0;
 	totalRange.length = [[self textboxView].string length];
     if (totalRange.length > 0)
@@ -3198,7 +3197,8 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
 		//UPDATE THE FONT FAMILY
 		NSString *selectedTypeFace = [theFont familyName];
 		[self selectFontofCurrentTextBox:selectedTypeFace];
-	}*/
+	}
+    */
 }
 
 - (void)hideFontTab

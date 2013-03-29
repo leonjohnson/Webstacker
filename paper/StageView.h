@@ -167,8 +167,8 @@ typedef NSInteger		ShapeCutCopyType;
 //Flags
 @property (assign) BOOL elementBeenDroppedToStage;
 
-@property (assign, nonatomic)  NSPopUpButton *typeFaceName;
-@property (assign, nonatomic)  NSPopUpButton *typeFaceTrait;
+@property (nonatomic, strong)  NSPopUpButton *typeFaceName;
+@property (nonatomic, strong)  NSPopUpButton *typeFaceTrait;
 
 @property (nonatomic, assign) int containerWidth;
 @property (nonatomic, assign) int containerHeight;
@@ -208,14 +208,17 @@ typedef NSInteger		ShapeCutCopyType;
 @property (assign) IBOutlet NSSearchField	*searchField;
 @property (nonatomic) BOOL					isShowFontTab;
 
+
+//Font based methods
 -(IBAction)setFontTrait:(id)sender;
+-(IBAction)setFontSize:(id)sender;
 -(IBAction)setTypeFaceFamily:(id)sender;
 -(IBAction)setTypeStyle:(id)sender;
-
--(void)hey;
-
-
+-(void)setKerningValue:(NSNumber *)kerningValueReceived;
+-(void)setLeadingValue:(NSNumber *)leadingValueReceived;
+-(IBAction)setAlignmentOfText:(id)sender;
 -(void)updateCustomFontMenu:(NSDictionary*)attributes;
+
 
 //VALIDATION OF ELEMENTS EDITED
 -(BOOL)isElementIDUnique: (NSMutableString *)string;
@@ -362,17 +365,15 @@ typedef NSInteger		ShapeCutCopyType;
  */
 - (BOOL)IsSelectedShape;
 
+
+// Cut, copy, paster and delete
+- (void)CutSelElements;
+- (void)CopySelElements;
+- (void)PasteSelElements;
 - (void)DeleteAllElements;
-
 - (void)DeleteSelElements;
-
 - (void)DeleteSubElements:(Element*)element;
 
-- (void)CutSelElements;
-
-- (void)CopySelElements;
-
-- (void)PasteSelElements;
 
 
 
@@ -449,6 +450,7 @@ typedef NSInteger		ShapeCutCopyType;
 -(NSString *)dataSourceBindingCode: (Element*)ele;
 -(NSString*)dataSourceNameContainingKey: (Element*)ele;
 @end
+
 
 @interface StageView (conversion)
 -(NSArray*)elementsInside: (NSMutableDictionary *)elementBeingTested usingElements: (NSArray*) sortedArrayOnStage;

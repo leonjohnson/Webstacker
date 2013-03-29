@@ -142,7 +142,6 @@
 {
     NSGraphicsContext *tvarNSGraphicsContext = [NSGraphicsContext currentContext];
 	CGContextRef ctx = (CGContextRef) [tvarNSGraphicsContext graphicsPort];
-    NSLog(@"GOT A TEXT BOX!!");
     [self DrawShape:ctx];
 }
 
