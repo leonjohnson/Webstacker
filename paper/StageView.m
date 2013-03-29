@@ -46,7 +46,6 @@
 @synthesize typeFaceName;
 @synthesize typeFaceTrait;
 @synthesize fontColorWell;
-@synthesize fontSizeTextField;
 @synthesize elementBeenDroppedToStage;
 
 @synthesize panel;
@@ -204,7 +203,7 @@ static NSImage *bottomImage;
     [kerningTextField bind:@"value" toObject:self withKeyPath:@"kerningValue" options:nil];
     [leadingStepper bind:@"value" toObject:self withKeyPath:@"leadingValue" options:nil];
     [leadingTextField bind:@"value" toObject:self withKeyPath:@"leadingValue" options:nil];
-    [fontSizeTextField bind:@"value" toObject:self withKeyPath:@"textboxView.fontSize" options:nil];
+    [fontSizeTextField2 bind:@"value" toObject:self withKeyPath:@"textboxView.fontSize" options:nil];
 	
 	self.isShowFontTab = NO;
 	
@@ -727,7 +726,7 @@ static NSImage *bottomImage;
         [[[self textboxView] textStorage] endEditing];
     }
     
-    
+    NSLog(@"finished set font trait");
 }
 
 
@@ -780,13 +779,15 @@ static NSImage *bottomImage;
 
 -(void)updateCustomFontMenu:(NSDictionary*)attributes //called when the text selection is changed, from the stageView
 {
+    
+    NSLog(@"START updateCustomFontMenu");
     NSFontManager *fm = [NSFontManager sharedFontManager];
     NSFont *theFont = [attributes objectForKey:NSFontAttributeName];
     
         
     //UPDATE THE FONT FAMILY
     NSString *selectedTypeFace = [theFont familyName];
-    //[typeFaceName selectItemWithTitle:selectedTypeFace];
+    [typeFaceName selectItemWithTitle:selectedTypeFace];
 	[self selectFontofCurrentTextBox:selectedTypeFace];
     
     // Get all of the traits
@@ -874,8 +875,9 @@ static NSImage *bottomImage;
     
     
     //UPDATE THE FONT SIZE
-    [fontSizeTextField setStringValue:[NSString stringWithFormat:@"%d",((int)[theFont pointSize])]];
+    [fontSizeTextField2 setStringValue:[NSString stringWithFormat:@"%d",((int)[theFont pointSize])]];
     
+    NSLog(@"END : updateCustomFontMenu.");
 }
 
 

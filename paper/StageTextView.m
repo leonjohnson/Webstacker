@@ -115,6 +115,7 @@
 
 -(void)setFontSize:(id)sender
 {
+    
     NSLog(@"setting font to : %@", sender);
     NSRange selectedRange = [self selectedRange]; //NSMakeRange (0, [[self textStorage]length]);
     NSUInteger cursorAt = selectedRange.location - 1;
@@ -138,6 +139,19 @@
     [atts setObject:convertedFont forKey:NSFontAttributeName];
     [[self textStorage] setAttributes:atts range:selectedRange];
     [self setNeedsDisplay:YES];
+    NSLog(@"exiting set font size");
+    
+    NSRange totalRange = NSMakeRange (0, [[self textStorage]length]);
+    textJustEdited = [[NSMutableAttributedString alloc]initWithAttributedString:[[self textStorage]attributedSubstringFromRange:totalRange]];
+    Singleton *sg = [[Singleton alloc]init];
+    sg.currentElement.contentText = textJustEdited;
+    
+    [self postNotificationToClearKerningLeading];
+    
+    [self setNeedsDisplay:YES];
+    readyToTakeFontColor = NO;
+    NSLog(@"Called from textDidEndEditing in StageTextView");
+    
 
 }
 
@@ -154,21 +168,14 @@
 
 -(void)textDidEndEditing:(NSNotification *)notification
 {
-    NSRange totalRange = NSMakeRange (0, [[self textStorage]length]);
-    NSMutableAttributedString *textJustEdited = [[NSMutableAttributedString alloc]initWithAttributedString:[[self textStorage]attributedSubstringFromRange:totalRange]];
-    Singleton *sg = [[Singleton alloc]init];
-    sg.currentElement.contentText = textJustEdited;
     
-    [self postNotificationToClearKerningLeading];
-    
-    [self setNeedsDisplay:YES];
-    readyToTakeFontColor = NO;
-    NSLog(@"Called from textDidEndEditing in StageTextView");
+
 }
 
 -(void)textViewDidChangeSelection:(NSNotification *)notification
 {
-	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+	/*
+    Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
     readyToTakeFontColor = YES;
 	
     // Get where the cursor is
@@ -217,6 +224,9 @@
     
     //Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
     [[curDoc stageView] updateCustomFontMenu:atts];
+    
+    NSLog(@"TEXT SELECTION JUST CHANGED IN THE STAGE-TEXT-VIEW");
+    */
     
 }
 
@@ -276,27 +286,24 @@
     NSTextContainer *textContainer = [self textContainer];
     NSUInteger glyphIndex, charIndex, textLength = [[self textStorage] length];
     NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    NSRange lineGlyphRange, lineCharRange, wordCharRange, textCharRange = NSMakeRange(0, textLength);
+    NSRange lineGlyphRange, lineCharRange, wordCharRange = NSMakeRange(0, textLength);
     NSRect glyphRect;
     
     // Remove any existing coloring.
     //[layoutManager removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:textCharRange];
-    NSLog(@"THE POINT IN NEW METHOD IS : %@", NSStringFromPoint(point));
+
     // Convert view coordinates to container coordinates
     point.x -= [self textContainerOrigin].x;
     point.y -= [self textContainerOrigin].y;
-    NSLog(@"THE POINT IN NEW METHOD 2 IS : %@", NSStringFromPoint(point));
     
     // Convert those coordinates to the nearest glyph index
     glyphIndex = [layoutManager glyphIndexForPoint:point inTextContainer:textContainer];
-    NSLog(@"WHAT IS THE GLYPH INDEX : %lu", glyphIndex);
     
     // Check to see whether the mouse actually lies over the glyph it is nearest to
     glyphRect = [layoutManager boundingRectForGlyphRange:NSMakeRange(glyphIndex, 1) inTextContainer:textContainer];
     NSLog(@"THE RECT COORDINATES ARE : %@", NSStringFromRect(glyphRect));
     if (NSPointInRect(point, glyphRect)) {
         
-        NSLog(@"In the IF statement");
         // Convert the glyph index to a character index
         charIndex = [layoutManager characterIndexForGlyphAtIndex:glyphIndex];
         

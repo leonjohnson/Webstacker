@@ -174,7 +174,7 @@
     [kerningTextField bind:@"value" toObject:self withKeyPath:@"kerningValue" options:nil];
     [leadingStepper bind:@"value" toObject:self withKeyPath:@"leadingValue" options:nil];
     [leadingTextField bind:@"value" toObject:self withKeyPath:@"leadingValue" options:nil];
-    [fontSizeComboBox bind:@"value" toObject:self withKeyPath:@"stageView.textboxView.fontSize" options:nil];
+    [fontSizeTextField2 bind:@"value" toObject:self withKeyPath:@"stageView.textboxView.fontSize" options:nil];
     
     //Bind the ID field
     [elementidField bind:@"value" toObject:self withKeyPath:@"sg.currentElement.elementid" options:nil];
@@ -294,7 +294,7 @@
         for (int i = 0; i < difference; i++) 
             {
                 [[stageView textboxView] loosenKerning:nil];
-                NSLog(@"iNCREASING THE KERNING");
+                NSLog(@"iNCREASING THE KERNING EEE");
             }
     }
     else //The value typed in is smaller than the iVar
@@ -305,7 +305,7 @@
                 // we want to treat all these replacements as a single replacement for undo purposes
             
                 [[stageView textboxView] tightenKerning:nil];
-                NSLog(@"DECREASING THE KERNING");
+                NSLog(@"DECREASING THE KERNING EEE");
             }
         
     }

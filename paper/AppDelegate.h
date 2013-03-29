@@ -55,6 +55,7 @@
     IBOutlet NSColorWell *pl;
     NSNumber *nu;
     
+    IBOutlet NSTextField                *fontSizeTextField2;
     IBOutlet NSComboBox *fontSizeComboBox;
     
     //For the border width

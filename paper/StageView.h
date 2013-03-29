@@ -137,7 +137,7 @@ typedef NSInteger		ShapeCutCopyType;
     IBOutlet NSTextField                *kerningTextField;
     IBOutlet NSStepper                  *leadingStepper;
     IBOutlet NSTextField                *leadingTextField;
-    IBOutlet NSTextField                *fontSizeTextField;
+    IBOutlet NSTextField                *fontSizeTextField2;
     IBOutlet NSSegmentedControl         *fontTraitControl;
     
     //Flags
@@ -198,8 +198,6 @@ typedef NSInteger		ShapeCutCopyType;
 // Text objects
 @property (nonatomic, assign) IBOutlet NSPopover *textPopover;//NSPopover *textPopover;
 @property (assign, nonatomic) NSColorWell *fontColorWell;
-
-@property (assign, nonatomic) NSTextField *fontSizeTextField;
 
 @property (assign, nonatomic) NSMutableString *layoutType;
 @property (assign, nonatomic) NSMutableArray *orderOfLayers;

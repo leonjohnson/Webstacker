@@ -186,7 +186,7 @@
         [arrayOfStatements addObject:genericAction];
     }
     
-    NSLog(@"Returning : %@", arrayOfStatements);
+    //NSLog(@"Returning : %@", arrayOfStatements);
     return arrayOfStatements;
 }
 
