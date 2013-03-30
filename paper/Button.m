@@ -24,9 +24,7 @@
 
 -(void)setBoundRect:(NSRect)rt
 {
-    rtFrame = CGRectStandardize(rt);
-    [self setFrame:CGRectMake(rtFrame.origin.x - 2, rtFrame.origin.y - 2, rtFrame.size.width + 8, rtFrame.size.height + 8)];
-	[self setNeedsDisplay:YES];
+    [super setBoundRect:rt];
 }
 
 -(NSString *)buttonString
