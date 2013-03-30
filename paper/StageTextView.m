@@ -141,16 +141,7 @@
     [self setNeedsDisplay:YES];
     NSLog(@"exiting set font size");
     
-    NSRange totalRange = NSMakeRange (0, [[self textStorage]length]);
-    textJustEdited = [[NSMutableAttributedString alloc]initWithAttributedString:[[self textStorage]attributedSubstringFromRange:totalRange]];
-    Singleton *sg = [[Singleton alloc]init];
-    sg.currentElement.contentText = textJustEdited;
-    
-    [self postNotificationToClearKerningLeading];
-    
-    [self setNeedsDisplay:YES];
-    readyToTakeFontColor = NO;
-    NSLog(@"Called from textDidEndEditing in StageTextView");
+    [self placeTextFromStageTextViewIntoElement];
     
 
 }
@@ -165,16 +156,31 @@
 }
 */
 
+-(void)placeTextFromStageTextViewIntoElement
+{
+    NSRange totalRange = NSMakeRange (0, [[self textStorage]length]);
+    NSMutableAttributedString *textJustEdited = [[NSMutableAttributedString alloc]initWithAttributedString:[[self textStorage]attributedSubstringFromRange:totalRange]];
+    Singleton *sg = [[Singleton alloc]init];
+    sg.currentElement.contentText = textJustEdited;
+    
+    [self postNotificationToClearKerningLeading];
+    
+    [self setNeedsDisplay:YES];
+    readyToTakeFontColor = NO;
+    NSLog(@"Called from textDidEndEditing in StageTextView");
+}
+
 
 -(void)textDidEndEditing:(NSNotification *)notification
 {
-    
+    [self placeTextFromStageTextViewIntoElement];
 
 }
 
 -(void)textViewDidChangeSelection:(NSNotification *)notification
 {
-	/*
+	// Called whenever the cursor is moved within the stageTextView
+    
     Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
     readyToTakeFontColor = YES;
 	
@@ -226,7 +232,7 @@
     [[curDoc stageView] updateCustomFontMenu:atts];
     
     NSLog(@"TEXT SELECTION JUST CHANGED IN THE STAGE-TEXT-VIEW");
-    */
+    
     
 }
 

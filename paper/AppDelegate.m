@@ -199,8 +199,8 @@
     
     NSError *error = [[NSError alloc] init];
     
-    NSArray *directoryAndFileNames = [fm contentsOfDirectoryAtPath:path error:&error];
-    NSLog(@"dir : %@", directoryAndFileNames);
+    //NSArray *directoryAndFileNames = [fm contentsOfDirectoryAtPath:path error:&error];
+    //NSLog(@"dir : %@", directoryAndFileNames);
     
 	self.arrayDataSource = nil;
 }

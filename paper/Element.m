@@ -305,40 +305,54 @@
 {
 	// create handle points array
 	[self createHandleArray];
-	
-	CGContextSetLineWidth( context, 1 );
-	CGContextSetRGBStrokeColor( context, 0.0, 0.0, 1.0, 1.0 );
-	CGContextSetRGBFillColor( context, 0.7, 0.7, 1.0, 1.0 );
-	
-	// draw 4 apex frame of shape with ellipse
-	CGContextStrokeEllipseInRect( context, handleArray[0] );
-	CGContextFillEllipseInRect( context, handleArray[0] );
-	
-    CGContextStrokeEllipseInRect( context, handleArray[1] );
-	CGContextFillEllipseInRect( context, handleArray[1] );
-	
-	CGContextStrokeEllipseInRect( context, handleArray[2] );
-	CGContextFillEllipseInRect( context, handleArray[2] );
-	
-	CGContextStrokeEllipseInRect( context, handleArray[3] );
-	CGContextFillEllipseInRect( context, handleArray[3] );
-	
-	// draw self apex frame of shape with rectangle
-	//if (abs(rtFrame.size.width) > 20) {
-    CGContextStrokeRect( context, handleArray[4] );
-    CGContextFillRect( context, handleArray[4] );
     
-    CGContextStrokeRect( context, handleArray[5] );
-    CGContextFillRect( context, handleArray[5] );
-	//}
-	
-	//if (abs(rtFrame.size.height) > 20) {
-    CGContextStrokeRect( context, handleArray[6] );
-    CGContextFillRect( context, handleArray[6] );
+   	CGContextSetLineWidth( context, 0 );
+	CGContextSetRGBStrokeColor( context, 230/255, 230/255, 230/255, 0.2 );
 	
     
-    CGContextStrokeRect( context, handleArray[7] );
-    CGContextFillRect( context, handleArray[7] );
+    //// Color Declarations
+    NSColor* fillColor = [NSColor colorWithCalibratedRed: 1 green: 1 blue: 1 alpha: 0.4];
+    NSColor* strokeColor = [NSColor colorWithCalibratedRed: 0 green: 0 blue: 0 alpha: 0.1];
+    NSColor* colorA = [NSColor colorWithCalibratedRed: 0.902 green: 0.902 blue: 0.902 alpha: 0.2];
+    
+    //// Gradient Declarations
+    NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:
+                            colorA, 0.0,
+                            [NSColor colorWithCalibratedRed: 0.951 green: 0.951 blue: 0.951 alpha: 1], 0.26,
+                            fillColor, 1.0, nil];
+    
+    //// Shadow Declarations
+    NSShadow* shadow = [[NSShadow alloc] init];
+    [shadow setShadowColor: [NSColor lightGrayColor]];
+    [shadow setShadowOffset: NSMakeSize(0.1, -1.1)];
+    [shadow setShadowBlurRadius: 0];
+    
+    
+    
+    
+    for (int i=0; i<sizeof(handleArray); i++) {
+        /// Rectangle Drawing
+        NSBezierPath* rectanglePath = [NSBezierPath bezierPathWithRect: handleArray[i]];
+        [NSGraphicsContext saveGraphicsState];
+        [shadow set];
+        CGContextBeginTransparencyLayer(context, NULL);
+        [gradient drawInBezierPath: rectanglePath angle: -90];
+        CGContextEndTransparencyLayer(context);
+        [NSGraphicsContext restoreGraphicsState];
+        
+        [strokeColor setStroke];
+        [rectanglePath setLineWidth: 1];
+        [rectanglePath stroke];
+        
+        //[gradient drawInRect: handleArray[i] angle: 90];
+        //[strokeColor setStroke];
+        
+        
+        //[rectanglePath setLineWidth: 1];
+        //[rectanglePath stroke];
+        //CGContextStrokeRect( context, handleArray[i] );
+        //CGContextFillRect( context, handleArray[i] );
+    }
 	//}
 }
 
@@ -454,7 +468,7 @@
 			}
 			break;
 	}
-	
+
 	//[self setFrame:CGRectMake(rtFrame.origin.x - 2, rtFrame.origin.y - 2, rtFrame.size.width + 4, rtFrame.size.height + 4)];
 	[self setBoundRect:rtFrame];
     
@@ -517,7 +531,7 @@
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
-{	
+{
 	if ([insideOperationElement isInsideElement:self] == NO) {
 		isTouched = NO;
 		[[self superview] mouseDragged:theEvent];

@@ -33,7 +33,7 @@
 		
 		//_measurementUnit = [NSMeasurementUnit measurementUnitNamed:@"Inches"];
 		
-		[self setRuleThickness:DEFAULT_RULE_THICKNESS];
+		[self setRuleThickness:DEFAULT_RULE_THICKNESS]; // height of rulerview
 		[self setReservedThicknessForMarkers:DEFAULT_MARKER_THICKNESS];
 		[self setReservedThicknessForAccessoryView:0.0];		
 	}
@@ -54,7 +54,7 @@
     [style setAlignment:NSLeftTextAlignment];
     
     return [NSDictionary dictionaryWithObjectsAndKeys:
-			[NSFont systemFontOfSize:10], NSFontAttributeName,
+			[NSFont systemFontOfSize:9], NSFontAttributeName,
 			style, NSParagraphStyleAttributeName,
 			[NSColor grayColor], NSForegroundColorAttributeName,
 			nil];
@@ -113,7 +113,7 @@
 		NSBezierPath *path = [NSBezierPath bezierPathWithRect:rtUnit];
 		[path fill];
 		
-		[[NSColor grayColor] setFill];
+		[[NSColor lightGrayColor] setFill];
 		path = [NSBezierPath bezierPathWithRect:lineUnit];
 		[path fill];
 		
@@ -121,14 +121,14 @@
 			rtUnit.origin.x += pointsPerUnit * 10 ;
 			
 			lineUnit.origin.x += pointsPerUnit * 10;
-			lineUnit.origin.y = (((i+1) % 10 == 0)? 0: rect.size.height / 2);
-			lineUnit.size.height = (((i+1) % 10 == 0)? rect.size.height: rect.size.height / 2);
+			lineUnit.origin.y = (((i+1) % 10 == 0)? 0: rect.size.height * 0.65);
+			lineUnit.size.height = (((i+1) % 10 == 0)? rect.size.height: rect.size.height * 0.35);
 		} else {
 			rtUnit.origin.y += pointsPerUnit * 10;
 			
-			lineUnit.origin.x = (((i+1) % 10 == 0)? 0: rect.size.width / 2);
+			lineUnit.origin.x = (((i+1) % 10 == 0)? 0: rect.size.width * 0.65);
 			lineUnit.origin.y += pointsPerUnit * 10;
-			lineUnit.size.width = (((i+1) % 10 == 0)? rect.size.width: rect.size.width / 2);
+			lineUnit.size.width = (((i+1) % 10 == 0)? rect.size.width: rect.size.width * 0.35);
 		}
 	}
 	
@@ -164,7 +164,7 @@
 	
 	[self drawHashMarksAndLabelsInRect:dirtyRect];
 	
-	[[NSColor grayColor] set];
+	[[NSColor lightGrayColor] set];
 	NSRectFill(rtBar);
 }
 

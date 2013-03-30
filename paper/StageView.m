@@ -273,7 +273,7 @@ static NSImage *bottomImage;
     CGFloat gridBlockSize = 20;
     CGFloat blocksUntilThickLine = 10;
     
-    for (CGFloat x = 0; x < self.frame.size.width; x+=gridBlockSize)
+    for (CGFloat x = -0.5; x < self.frame.size.width; x+=gridBlockSize)
     {
         // Set line width and colour
         CGContextSetLineWidth(contextref, 1);
@@ -284,7 +284,7 @@ static NSImage *bottomImage;
         CGContextMoveToPoint(contextref, x, 0);
         CGContextAddLineToPoint(contextref, x, self.frame.size.height);
         
-        CGFloat division = x / (gridBlockSize * blocksUntilThickLine);
+        CGFloat division = (x+0.5) / (gridBlockSize * blocksUntilThickLine);
         if ( floorf(division) == division ) // if it's an integer
         {
             CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.2);
@@ -293,7 +293,7 @@ static NSImage *bottomImage;
     }
     
     // draw vertically
-    for (CGFloat y = 0; y < self.frame.size.height; y+=gridBlockSize)
+    for (CGFloat y = -0.5; y < self.frame.size.height; y+=gridBlockSize)
     {
         // Set line width and colour
         CGContextSetLineWidth(contextref, 1);
@@ -304,7 +304,7 @@ static NSImage *bottomImage;
         CGContextMoveToPoint(contextref, 0, y);
         CGContextAddLineToPoint(contextref, self.frame.size.width, y);
         
-        CGFloat division = y / (gridBlockSize * blocksUntilThickLine);
+        CGFloat division = (y+0.5) / (gridBlockSize * blocksUntilThickLine);
         if ( floorf(division) == division ) // if it's an integer
         {
             CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.2);
@@ -341,10 +341,11 @@ static NSImage *bottomImage;
     {
         
         //// Abstracted Graphic Attributes
+        NSLog(@"super : %f", [self superview].frame.size.width);
         NSSize centeredRectSize = NSMakeSize(500, 300);
         NSString* textContent = @"To start, drag items from the gallery on the left and place them here.";
         
-        NSRect centredRect = NSMakeRect((self.frame.size.width/2) - centeredRectSize.width/2, (self.frame.size.height/2) - centeredRectSize.height/2, centeredRectSize.width, centeredRectSize.height);
+        NSRect centredRect = NSMakeRect((self.superview.frame.size.width/2) - centeredRectSize.width/2, (self.superview.frame.size.height/2) - centeredRectSize.height/2, centeredRectSize.width, centeredRectSize.height);
         
         
         //// Rectangle Drawing
@@ -362,7 +363,7 @@ static NSImage *bottomImage;
         //// Text Drawing
         NSSize centeredText = NSMakeSize(232, 104);
         
-        NSRect textRect = NSMakeRect((self.frame.size.width/2) - centeredText.width/2, (self.frame.size.height/2) - centeredText.height/2, centeredText.width, centeredText.height);
+        NSRect textRect = NSMakeRect((self.superview.frame.size.width/2) - centeredText.width/2, (self.superview.frame.size.height/2) - centeredText.height/2, centeredText.width, centeredText.height);
         NSMutableParagraphStyle* textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
         [textStyle setAlignment: NSCenterTextAlignment];
         
@@ -1161,7 +1162,6 @@ static NSImage *bottomImage;
     
     return;
 }
-
 
 #pragma mark - UPDATE UI
 

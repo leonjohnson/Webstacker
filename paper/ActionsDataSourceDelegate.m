@@ -154,7 +154,6 @@
     
    
     // catch all generic statements that do not belong in a loop
-    NSLog(@"Now at 5");
     NSArray *genericStatements = [NSArray arrayWithObjects:
                                @"get Facebook photos posted by me",
                                @"get Facebook photos posted by friends",
