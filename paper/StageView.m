@@ -248,6 +248,7 @@ static NSImage *bottomImage;
 }
 
 
+
 /*
  When the view is redraw, all shapes in shape array and current shape are draw.
  */
@@ -341,7 +342,6 @@ static NSImage *bottomImage;
     {
         
         //// Abstracted Graphic Attributes
-        NSLog(@"super : %f", [self superview].frame.size.width);
         NSSize centeredRectSize = NSMakeSize(500, 300);
         NSString* textContent = @"To start, drag items from the gallery on the left and place them here.";
         
