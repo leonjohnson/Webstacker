@@ -33,16 +33,15 @@
 
 /*
  @function:		setShadowProperty
- @params:		angle:		shadow angle
- dist:		shadow distance
- r, g, b, alpha: color property of shadow
+ @params:		x:		x offset of shadow
+				y:		y offset of shadow
+				r, g, b, alpha: color property of shadow
  direct:		shadow direction, if it's YES, outset. otherwise inset.
  index:		shadow index of the shape
  @return:		void
  @purpose:		This funcation set the shape's shadow property to shadow panel.
  */
-- (void)setShadowProperty:(CGFloat)angle Distance:(CGFloat)dist colorR:(CGFloat)r colorG:(CGFloat)g colorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direct:(BOOL)d Index:(NSInteger)index;
-
+- (void)setShadowProperty:(CGFloat)x offY:(CGFloat)y colorR:(CGFloat)r colorG:(CGFloat)g colorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direct:(BOOL)d Index:(NSInteger)index;
 
 /*
  @function:		setShadowList

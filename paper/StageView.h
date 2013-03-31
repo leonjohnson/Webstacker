@@ -442,8 +442,8 @@ typedef NSInteger		ShapeCutCopyType;
 @interface StageView (colorsShadowsGradients)
 -(void)updateStageViewBackgroundColor: (NSDictionary *)dict;
 -(NSString *)hsla:(NSColor *)color;
-- (void)drawShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d Index:(NSInteger)index;
-- (void)addShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d;
+- (void)drawShapeShadow:(CGFloat)x offY:(CGFloat)y ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d Index:(NSInteger)index;
+- (void)addShapeShadow:(CGFloat)x offY:(CGFloat)y ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d;
 - (void)removeShapeShadow:(NSInteger)index;
 @end
 

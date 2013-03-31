@@ -64,6 +64,10 @@ SetAttributeDelegate
 @property (assign) IBOutlet NSTextField						*BlurField;
 @property (assign) IBOutlet NSMatrix						*Direction;
 @property (assign) IBOutlet NSTabView						*_tabView;
+@property (assign) IBOutlet NSTextField						*OffsetXField;
+@property (assign) IBOutlet NSSlider						*OffsetXSlider;
+@property (assign) IBOutlet NSTextField						*OffsetYField;
+@property (assign) IBOutlet NSSlider						*OffsetYSlider;
 
 
 //- (void)setTab:(NSInteger)index;
@@ -140,6 +144,18 @@ SetAttributeDelegate
  @purpose:		This function called when the user controls the Distance Slider
  */
 - (IBAction)OnDistanceSlider:(id)sender;
+
+/*
+ @function:		OnOffsetXSlider
+ @purpose:		This function called when the user controls the Distance Slider
+ */
+- (IBAction)OnOffsetXSlider:(id)sender;
+
+/*
+ @function:		OnOffsetYSlider
+ @purpose:		This function called when the user controls the Distance Slider
+ */
+- (IBAction)OnOffsetYSlider:(id)sender;
 
 /*
  @function:		OnColorChange

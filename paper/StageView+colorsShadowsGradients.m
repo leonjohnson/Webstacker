@@ -45,24 +45,25 @@
 
 #pragma mark - shadow
 
+
 /*
  @function:		drawShapeShadow
- @params:		angle:		shadow angle
- dist:		shadow distance
- r, g, b, alpha: color property of shadow
- direct:		shadow direction, if it's YES, outset. otherwise inset.
- index:		index of shadow in shadow list
+ @params:		x:			x offset of shadow
+				y:			y offset of shadow
+				r, g, b, alpha: color property of shadow
+				direct:		shadow direction, if it's YES, outset. otherwise inset.
+				index:		index of shadow in shadow list
  @return:		void
  @purpose:		This function draws the shadow of shape with params.
  */
-- (void)drawShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d Index:(NSInteger)index
+- (void)drawShapeShadow:(CGFloat)x offY:(CGFloat)y ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d Index:(NSInteger)index
 {
 	if ([self IsSelectedShape] == NO || [selElementArray count] > 1) {
 		return;
 	}
 	
 	Element *shape = [selElementArray objectAtIndex:0];
-	[shape setShadowOfShape:angle distance:dist colorR:r colorG:g colorB:b opacity:alpha Blur:blur direct:d Index:index];
+	[shape setShadowOfShape:x offY:y colorR:r colorG:g colorB:blur opacity:alpha Blur:blur direct:d Index:index];
 	
 	[attributeDelegate setShadowList:shape.arrayShadows];
 	
@@ -72,21 +73,21 @@
 
 /*
  @function:		addShapeShadow
- @params:		angle:		shadow angle
- dist:		shadow distance
- r, g, b, alpha: color property of shadow
- direct:		shadow direction, if it's YES, outset. otherwise inset.
+ @params:		x:		x offset of shadow
+				y:		y offset of shadow
+				r, g, b, alpha: color property of shadow
+				direct:		shadow direction, if it's YES, outset. otherwise inset.
  @return:		void
  @purpose:		This function add the new shadow to current shape
  */
-- (void)addShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d
+- (void)addShapeShadow:(CGFloat)x offY:(CGFloat)y ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d
 {
 	if ([self IsSelectedShape] == NO || [selElementArray count] > 1) {
 		return;
 	}
 	
 	Element *shape = [selElementArray objectAtIndex:0];
-	[shape addShapeShadow:angle Distance:dist ColorR:r ColorG:g ColorB:b Opacity:alpha Blur:blur Direction:d];
+	[shape addShapeShadow:x offY:y ColorR:r ColorG:g ColorB:b Opacity:alpha Blur:blur Direction:d];
 	
 	[attributeDelegate setShadowList:shape.arrayShadows];
 	

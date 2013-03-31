@@ -200,21 +200,21 @@
 
 /*
  @function:		setShadowOfShape
- @params:		angle:		shadow angle
- dist:		shadow distance
- r, g, b, alpha: color property of shadow
- direct:		shadow direction, if it's YES, outset. otherwise inset.
- index:		index of shadow in shadow list
+ @params:		x:			x offset of shadow
+				y:			y offset of shadow
+				r, g, b, alpha: color property of shadow
+				direct:		shadow direction, if it's YES, outset. otherwise inset.
+				index:		index of shadow in shadow list
  @return:		void
  @purpose:		This function draws the shadow of shape with params.
  */
-- (void)setShadowOfShape:(CGFloat)angle distance:(CGFloat)dist colorR:(CGFloat)r colorG:(CGFloat)g colorB:(CGFloat)b opacity:(CGFloat)alpha Blur:(CGFloat)blur direct:(BOOL)d Index:(NSInteger)index
+- (void)setShadowOfShape:(CGFloat)x offY:(CGFloat)y colorR:(CGFloat)r colorG:(CGFloat)g colorB:(CGFloat)b opacity:(CGFloat)alpha Blur:(CGFloat)blur direct:(BOOL)d Index:(NSInteger)index
 {
 	NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 	
 	[dict setValue:[NSNumber numberWithBool:d] forKey:@"Direction"];
-	[dict setValue:[NSNumber numberWithFloat:angle] forKey:@"Angle"];
-	[dict setValue:[NSNumber numberWithFloat:dist] forKey:@"Distance"];
+	[dict setValue:[NSNumber numberWithFloat:x] forKey:@"OffsetX"];
+	[dict setValue:[NSNumber numberWithFloat:y] forKey:@"OffsetY"];
 	[dict setValue:[NSNumber numberWithFloat:r] forKey:@"RColor"];
 	[dict setValue:[NSNumber numberWithFloat:g] forKey:@"GColor"];
 	[dict setValue:[NSNumber numberWithFloat:b] forKey:@"BColor"];
@@ -229,20 +229,20 @@
 
 /*
  @function:		addShapeShadow
- @params:		angle:		shadow angle
- dist:		shadow distance
- r, g, b, alpha: color property of shadow
- direct:		shadow direction, if it's YES, outset. otherwise inset.
+ @params:		x:			x offset of shadow
+				y:			y offset of shadow
+				r, g, b, alpha: color property of shadow
+				direct:		shadow direction, if it's YES, outset. otherwise inset.
  @return:		void
  @purpose:		This function add the new shadow to current shape
  */
-- (void)addShapeShadow:(CGFloat)angle Distance:(CGFloat)dist ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d
+- (void)addShapeShadow:(CGFloat)x offY:(CGFloat)y ColorR:(CGFloat)r ColorG:(CGFloat)g ColorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direction:(BOOL)d
 {
 	NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 	
 	[dict setValue:[NSNumber numberWithBool:d] forKey:@"Direction"];
-	[dict setValue:[NSNumber numberWithFloat:angle] forKey:@"Angle"];
-	[dict setValue:[NSNumber numberWithFloat:dist] forKey:@"Distance"];
+	[dict setValue:[NSNumber numberWithFloat:x] forKey:@"OffsetX"];
+	[dict setValue:[NSNumber numberWithFloat:y] forKey:@"OffsetY"];
 	[dict setValue:[NSNumber numberWithFloat:r] forKey:@"RColor"];
 	[dict setValue:[NSNumber numberWithFloat:g] forKey:@"GColor"];
 	[dict setValue:[NSNumber numberWithFloat:b] forKey:@"BColor"];

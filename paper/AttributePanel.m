@@ -11,6 +11,7 @@
 @synthesize changeAttributeDelegate;
 @synthesize layoutTypeDisplay;
 @synthesize RadioField, RadioSlider, DistanceField, DistanceSlider, OpacityField, OpacitySlider, ColorWell, Direction, BlurField, BlurSlider;
+@synthesize OffsetXField, OffsetXSlider, OffsetYField, OffsetYSlider;
 @synthesize _tabView;
 
 - (void)awakeFromNib
@@ -257,8 +258,8 @@
 	[curColor getRed:&r green:&g blue:&b alpha:&alpha];
 	
 	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-	[curDoc.stageView drawShapeShadow:[RadioField floatValue]
-							 Distance:[DistanceField floatValue]
+	[curDoc.stageView drawShapeShadow:[OffsetXField floatValue]
+								 offY:[OffsetYField floatValue]
 							   ColorR:r ColorG:g ColorB:b
 							  Opacity:[OpacityField floatValue]
 								 Blur:[BlurField floatValue]
@@ -281,8 +282,8 @@
 	[curColor getRed:&r green:&g blue:&b alpha:&alpha];
 	
 	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-	[curDoc.stageView drawShapeShadow:[RadioField floatValue]
-							 Distance:[DistanceField floatValue]
+	[curDoc.stageView drawShapeShadow:[OffsetXField floatValue]
+								 offY:[OffsetYField floatValue]
 							   ColorR:r ColorG:g ColorB:b
 							  Opacity:[OpacityField floatValue]
 								 Blur:[BlurField floatValue]
@@ -306,8 +307,58 @@
 	[curColor getRed:&r green:&g blue:&b alpha:&alpha];
 	
 	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-	[curDoc.stageView drawShapeShadow:[RadioField floatValue]
-							 Distance:[DistanceField floatValue]
+	[curDoc.stageView drawShapeShadow:[OffsetXField floatValue]
+								 offY:[OffsetYField floatValue]
+							   ColorR:r ColorG:g ColorB:b
+							  Opacity:[OpacityField floatValue]
+								 Blur:[BlurField floatValue]
+							Direction:([[Direction selectedCell] tag] == 0)? YES: NO
+								Index:indexOfShadow];
+}
+
+
+/*
+ @function:		OnOffsetXSlider
+ @purpose:		This function called when the user controls the Distance Slider
+ */
+- (IBAction)OnOffsetXSlider:(id)sender
+{
+	CGFloat intVal = [sender floatValue];
+	[OffsetXSlider setFloatValue:intVal];
+	[OffsetXField setFloatValue:intVal];
+	
+	NSColor *curColor = [ColorWell color];
+	CGFloat r, g, b, alpha;
+	[curColor getRed:&r green:&g blue:&b alpha:&alpha];
+	
+	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+	[curDoc.stageView drawShapeShadow:[OffsetXField floatValue]
+							 offY:[OffsetYField floatValue]
+							   ColorR:r ColorG:g ColorB:b
+							  Opacity:[OpacityField floatValue]
+								 Blur:[BlurField floatValue]
+							Direction:([[Direction selectedCell] tag] == 0)? YES: NO
+								Index:indexOfShadow];
+}
+
+
+/*
+ @function:		OnOffsetYSlider
+ @purpose:		This function called when the user controls the Distance Slider
+ */
+- (IBAction)OnOffsetYSlider:(id)sender
+{
+	CGFloat intVal = [sender floatValue];
+	[OffsetYSlider setFloatValue:intVal];
+	[OffsetYField setFloatValue:intVal];
+	
+	NSColor *curColor = [ColorWell color];
+	CGFloat r, g, b, alpha;
+	[curColor getRed:&r green:&g blue:&b alpha:&alpha];
+	
+	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+	[curDoc.stageView drawShapeShadow:[OffsetXField floatValue]
+								 offY:[OffsetYField floatValue]
 							   ColorR:r ColorG:g ColorB:b
 							  Opacity:[OpacityField floatValue]
 								 Blur:[BlurField floatValue]
@@ -327,8 +378,8 @@
 	[curColor getRed:&r green:&g blue:&b alpha:&alpha];
 	
 	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-	[curDoc.stageView drawShapeShadow:[RadioField floatValue]
-							 Distance:[DistanceField floatValue]
+	[curDoc.stageView drawShapeShadow:[OffsetXField floatValue]
+								 offY:[OffsetYField floatValue]
 							   ColorR:r ColorG:g ColorB:b
 							  Opacity:[OpacityField floatValue]
 								 Blur:[BlurField floatValue]
@@ -352,8 +403,8 @@
 	[curColor getRed:&r green:&g blue:&b alpha:&alpha];
 	
 	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-	[curDoc.stageView drawShapeShadow:[RadioField floatValue]
-							 Distance:[DistanceField floatValue]
+	[curDoc.stageView drawShapeShadow:[OffsetXField floatValue]
+								 offY:[OffsetYField floatValue]
 							   ColorR:r ColorG:g ColorB:b
 							  Opacity:[OpacityField floatValue]
 								 Blur:[BlurField floatValue]
@@ -381,12 +432,12 @@
 	[curColor getRed:&r green:&g blue:&b alpha:&alpha];
 	
 	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-	[curDoc.stageView drawShapeShadow:[RadioField floatValue]
-							 Distance:[DistanceField floatValue]
+	[curDoc.stageView drawShapeShadow:[OffsetXField floatValue]
+								 offY:[OffsetYField floatValue]
 							   ColorR:r ColorG:g ColorB:b
 							  Opacity:[OpacityField floatValue]
 								 Blur:[BlurField floatValue]
-							Direction:isOutset
+							Direction:([[Direction selectedCell] tag] == 0)? YES: NO
 								Index:indexOfShadow];
 }
 
@@ -397,7 +448,7 @@
 - (IBAction)OnAddShadow:(id)sender
 {
 	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-	[curDoc.stageView addShapeShadow:0 Distance:15.0 ColorR:0 ColorG:0 ColorB:0 Opacity:1.0 Blur:10 Direction:YES];
+	[curDoc.stageView addShapeShadow:3 offY:3.0 ColorR:0 ColorG:0 ColorB:0 Opacity:1.0 Blur:10 Direction:YES];
 	
 	[_tableViewShadowList reloadData];
 	
@@ -425,21 +476,21 @@
 
 /*
  @function:		setShadowProperty
- @params:		angle:		shadow angle
- dist:		shadow distance
- r, g, b, alpha: color property of shadow
- direct:		shadow direction, if it's YES, outset. otherwise inset.
- index:		shadow index of the shape
+ @params:		x:			x offset of shadow
+				y:			y offset of shadow
+				r, g, b, alpha: color property of shadow
+				direct:		shadow direction, if it's YES, outset. otherwise inset.
+				index:		shadow index of the shape
  @return:		void
  @purpose:		This funcation set the shape's shadow property to shadow panel.
  */
-- (void)setShadowProperty:(CGFloat)angle Distance:(CGFloat)dist colorR:(CGFloat)r colorG:(CGFloat)g colorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direct:(BOOL)d Index:(NSInteger)index
+- (void)setShadowProperty:(CGFloat)x offY:(CGFloat)y colorR:(CGFloat)r colorG:(CGFloat)g colorB:(CGFloat)b Opacity:(CGFloat)alpha Blur:(CGFloat)blur Direct:(BOOL)d Index:(NSInteger)index
 {
-	[RadioField setFloatValue:angle];
-	[RadioSlider setFloatValue:angle];
+	[OffsetXField setFloatValue:x];
+	[OffsetXSlider setFloatValue:x];
 	
-	[DistanceField setFloatValue:dist];
-	[DistanceSlider setFloatValue:dist];
+	[OffsetYField setFloatValue:y];
+	[OffsetYSlider setFloatValue:y];
 	
 	[ColorWell setColor:[NSColor colorWithCalibratedRed:r green:g blue:b alpha:1.0]];
 	
@@ -542,15 +593,15 @@
 		NSDictionary *dict = [_arrayShadows objectAtIndex:row];
 		
 		BOOL direction = [[dict valueForKey:@"Direction"] boolValue];
-		CGFloat angle = [[dict valueForKey:@"Angle"] floatValue];
-		CGFloat distance = [[dict valueForKey:@"Distance"] floatValue];
+		CGFloat x = [[dict valueForKey:@"OffsetX"] floatValue];
+		CGFloat y = [[dict valueForKey:@"OffsetY"] floatValue];
 		CGFloat RColor = [[dict valueForKey:@"RColor"] floatValue];
 		CGFloat GColor = [[dict valueForKey:@"GColor"] floatValue];
 		CGFloat BColor = [[dict valueForKey:@"BColor"] floatValue];
 		CGFloat opacity = [[dict valueForKey:@"Opacity"] floatValue];
 		CGFloat blur = [[dict valueForKey:@"Blur"] floatValue];
 		
-		[self setShadowProperty:angle Distance:distance colorR:RColor colorG:GColor colorB:BColor Opacity:opacity Blur:blur Direct:direction Index:row];
+		[self setShadowProperty:x offY:y colorR:RColor colorG:GColor colorB:BColor Opacity:opacity Blur:blur Direct:direction Index:row];
 	}
 	
 	return YES;
