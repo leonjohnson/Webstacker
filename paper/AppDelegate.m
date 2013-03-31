@@ -48,6 +48,21 @@
 @synthesize actionField;
 @synthesize visibilityField;
 
+@synthesize xCoordinateLabel;
+@synthesize yCoordinateLabel;
+@synthesize layoutTypeLabel;
+@synthesize widthLabel;
+@synthesize heightLabel;
+@synthesize backgroundColorLabel;
+@synthesize borderWidthLabel;
+@synthesize borderRadiusLabel;
+@synthesize topLeftLabel;
+@synthesize topRightLabel;
+@synthesize bottomLeftLabel;
+@synthesize bottomRightLabel;
+@synthesize tagLabel;
+
+
 
 - (BOOL)windowShouldClose:(id)sender
 {
@@ -81,7 +96,44 @@
 
 -(void)applicationWillFinishLaunching:(NSNotification *)notification
 {
+    
     NSLog(@"app will finish in app del called first.");
+    /*
+    NSString *backgroundColorString = NSLocalizedString(@"Background Colour", nil);
+    NSDictionary* text2FontAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSFont fontWithName: @"Helvetica Neue" size: 12], NSFontAttributeName,
+                                         [NSColor redColor], NSForegroundColorAttributeName, nil];
+    NSAttributedString *att = [[NSAttributedString alloc]initWithString:backgroundColorString attributes:text2FontAttributes];
+
+    backgroundColorLabel.attributedStringValue = att;
+     */
+    
+    //backgroundColorLabel.stringValue = NSLocalizedString(@"Background Colourz", nil);
+    //[[backgroundColorLabel cell] setBackgroundStyle:NSBackgroundStyleLowered];
+    
+    
+    
+    // Create the white shadow that sits behind the text
+    NSShadow *shadow = [[NSShadow alloc] init];
+    [shadow setShadowColor:[NSColor colorWithDeviceWhite:1.0 alpha:0.25]];
+    [shadow setShadowOffset:NSMakeSize(1.0, -1.1)];
+    // Create the attributes dictionary, you can change the font size
+    // to whatever is useful to you
+    NSMutableDictionary *sAttribs = [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                      [NSFont systemFontOfSize:15.0],NSFontAttributeName,
+                                      shadow, NSShadowAttributeName,
+                                      [NSColor blackColor], NSForegroundColorAttributeName,
+                                      nil] autorelease];
+    // The shadow object has been assigned to the dictionary, so release
+    [shadow release];
+    // Create a new attributed string with your attributes dictionary attached
+    NSAttributedString *s = [[NSAttributedString alloc] initWithString:@"Background color"
+                                                            attributes:sAttribs];
+    // Set your text value
+    [backgroundColorLabel setAttributedStringValue:s];
+    // Clean up
+    [s release];
+    
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification

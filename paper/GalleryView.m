@@ -101,7 +101,7 @@
     //customise look and feel
     NSFont *cellFont = [NSFont fontWithName:@"HelveticaNeue-Light" size:10];
     [cell setFont:cellFont];
-    [cell setTextColor:[NSColor blackColor]];
+    [cell setTextColor:[NSColor whiteColor]];
     [cell setAlignment:NSLeftTextAlignment];
 }
 

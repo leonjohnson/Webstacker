@@ -151,6 +151,9 @@ typedef NSInteger		ShapeCutCopyType;
     BOOL								isShowFontTab;
 	NSMutableArray						*fontFaceArray;
 	IBOutlet NSTableView				*fontTableView;
+    
+    // background appearance
+    BOOL showGridlines;
 }
 @property (nonatomic, assign) NSMutableArray *sortedArray;
 @property (nonatomic, assign) NSMutableString *jsCode2;
@@ -162,6 +165,9 @@ typedef NSInteger		ShapeCutCopyType;
 @property (nonatomic, assign) NSURL *directoryURLToPlaceFiles;
 @property (nonatomic, assign) NSString *outputFolderPath;
 
+
+//background Appearance
+@property (nonatomic) BOOL showGridlines;
 
 @property (assign) NSPanel *panel;
 //Flags
@@ -455,5 +461,9 @@ typedef NSInteger		ShapeCutCopyType;
 BOOL hasLeadingNumberInString(NSString* s);
 @end
 
+
+@interface StageView (backgroundAppearance)
+-(IBAction)toggleGridlineVisibility:(id)sender;
+@end
 
 

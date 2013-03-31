@@ -55,6 +55,8 @@
 @synthesize layerDelegate;
 @synthesize isShowFontTab;
 
+@synthesize showGridlines;
+
 
 /* These images are displayed as markers on the rulers. */
 static NSImage *leftImage;
@@ -82,16 +84,12 @@ static NSImage *bottomImage;
 + (void)initialize
 {
     
-    static BOOL beenHere = NO; // AN: Don't need this in an initialize - it's only ever called once in the lifetime of the class within an app
     NSBundle *mainBundle = nil;
     NSString *imgPath = nil;
     NSArray *upArray = nil;
     NSArray *downArray = nil;
     
-    if (beenHere) return;
     
-    beenHere = YES;
-
     mainBundle = [NSBundle mainBundle];
     imgPath = [mainBundle pathForImageResource:@"shape_0_circle"];
     leftImage = [[NSImage alloc] initWithContentsOfFile:imgPath];
@@ -124,7 +122,6 @@ static NSImage *bottomImage;
 - (void)awakeFromNib
 {
 	//[self setTranslatesAutoresizingMaskIntoConstraints:NO];
-    //set the size of the documents Container
     self.containerWidth = 300;
     self.containerHeight = 600;
     NSColorSpace *colorSpace = [NSColorSpace genericRGBColorSpace];
@@ -147,6 +144,7 @@ static NSImage *bottomImage;
 	isSelectedShape = NO;
     isSelArea = NO;
 	CutOrCopyFlag = SHAPE_NORMAL;
+    self.showGridlines = YES;
     
 	// set accepting mouse move event
 	[[self window] setInitialFirstResponder:self];
@@ -269,49 +267,52 @@ static NSImage *bottomImage;
 	CGContextStrokeRect( contextref, CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) );
     CGContextFillRect(contextref, stageRect);
     
-    // gridlines
-    //CGFloat numberOfLines =  floorf(self.frame.size.width/5);
-    CGFloat gridBlockSize = 20;
-    CGFloat blocksUntilThickLine = 10;
-    
-    for (CGFloat x = -0.5; x < self.frame.size.width; x+=gridBlockSize)
+    // GRIDLINES
+    if (showGridlines)
     {
-        // Set line width and colour
-        CGContextSetLineWidth(contextref, 1);
-        CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.1);
+        CGFloat gridBlockSize = 20;
+        CGFloat blocksUntilThickLine = 10;
         
-        // draw the horizontal line
-        CGContextBeginPath(contextref);
-        CGContextMoveToPoint(contextref, x, 0);
-        CGContextAddLineToPoint(contextref, x, self.frame.size.height);
-        
-        CGFloat division = (x+0.5) / (gridBlockSize * blocksUntilThickLine);
-        if ( floorf(division) == division ) // if it's an integer
+        for (CGFloat x = -0.5; x < self.frame.size.width; x+=gridBlockSize)
         {
-            CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.2);
+            // Set line width and colour
+            CGContextSetLineWidth(contextref, 1);
+            CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.1);
+            
+            // draw the horizontal line
+            CGContextBeginPath(contextref);
+            CGContextMoveToPoint(contextref, x, 0);
+            CGContextAddLineToPoint(contextref, x, self.frame.size.height);
+            
+            CGFloat division = (x+0.5) / (gridBlockSize * blocksUntilThickLine);
+            if ( floorf(division) == division ) // if it's an integer
+            {
+                CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.2);
+            }
+            CGContextDrawPath(contextref, kCGPathStroke);
         }
-        CGContextDrawPath(contextref, kCGPathStroke);
+        
+        // draw vertically
+        for (CGFloat y = -0.5; y < self.frame.size.height; y+=gridBlockSize)
+        {
+            // Set line width and colour
+            CGContextSetLineWidth(contextref, 1);
+            CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.1);
+            
+            // draw the horizontal line
+            CGContextBeginPath(contextref);
+            CGContextMoveToPoint(contextref, 0, y);
+            CGContextAddLineToPoint(contextref, self.frame.size.width, y);
+            
+            CGFloat division = (y+0.5) / (gridBlockSize * blocksUntilThickLine);
+            if ( floorf(division) == division ) // if it's an integer
+            {
+                CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.2);
+            }
+            CGContextDrawPath(contextref, kCGPathStroke);
+        }
     }
     
-    // draw vertically
-    for (CGFloat y = -0.5; y < self.frame.size.height; y+=gridBlockSize)
-    {
-        // Set line width and colour
-        CGContextSetLineWidth(contextref, 1);
-        CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.1);
-        
-        // draw the horizontal line
-        CGContextBeginPath(contextref);
-        CGContextMoveToPoint(contextref, 0, y);
-        CGContextAddLineToPoint(contextref, self.frame.size.width, y);
-        
-        CGFloat division = (y+0.5) / (gridBlockSize * blocksUntilThickLine);
-        if ( floorf(division) == division ) // if it's an integer
-        {
-            CGContextSetRGBStrokeColor(contextref, 0.0, 0.0, 0.0, 0.2);
-        }
-        CGContextDrawPath(contextref, kCGPathStroke);
-    }
     
     
 	

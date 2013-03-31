@@ -84,6 +84,7 @@
 		F74A174016FF9ABF0057BF06 /* CustomTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A173F16FF9AAB0057BF06 /* CustomTableCellView.m */; };
 		F74A174116FFA2380057BF06 /* NSString+shortcuts.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A173516FF92790057BF06 /* NSString+shortcuts.m */; };
 		F74A17431703C1E60057BF06 /* BuilderWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A173216FF92520057BF06 /* BuilderWindowController.m */; };
+		F74A17461708BFD60057BF06 /* StageView+backgroundAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A17451708BFD60057BF06 /* StageView+backgroundAppearance.m */; };
 		F7631AF116F6177B00C8A011 /* StageView+conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = F7631AF016F6177B00C8A011 /* StageView+conversion.m */; };
 		F79D93F816024E3300AE661E /* TextInputField.m in Sources */ = {isa = PBXBuildFile; fileRef = F79D93F716024E3300AE661E /* TextInputField.m */; };
 		F7B311851687A7930047BC57 /* DropDown.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B311841687A7930047BC57 /* DropDown.m */; };
@@ -243,6 +244,7 @@
 		F74A173C16FF958D0057BF06 /* Builder.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Builder.xib; sourceTree = "<group>"; };
 		F74A173E16FF9AAB0057BF06 /* CustomTableCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomTableCellView.h; sourceTree = "<group>"; };
 		F74A173F16FF9AAB0057BF06 /* CustomTableCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomTableCellView.m; sourceTree = "<group>"; };
+		F74A17451708BFD60057BF06 /* StageView+backgroundAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StageView+backgroundAppearance.m"; sourceTree = "<group>"; };
 		F7631AF016F6177B00C8A011 /* StageView+conversion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StageView+conversion.m"; sourceTree = "<group>"; };
 		F79D93F616024E3300AE661E /* TextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextInputField.h; sourceTree = "<group>"; };
 		F79D93F716024E3300AE661E /* TextInputField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextInputField.m; sourceTree = "<group>"; };
@@ -434,8 +436,6 @@
 				5877F08815558A4C005FF829 /* SetAttributeDelegate.h */,
 				5877F08915558A4C005FF829 /* AttributePanel.h */,
 				5877F08A15558A4C005FF829 /* AttributePanel.m */,
-				3FC1BC4616EA511400C350C9 /* CustomButton.h */,
-				3FC1BC4716EA511400C350C9 /* CustomButton.m */,
 			);
 			name = AttributePanel;
 			sourceTree = "<group>";
@@ -483,6 +483,7 @@
 				5877F04C155589C5005FF829 /* OperationInsideShapeDelegate.h */,
 				5877F04D155589C5005FF829 /* StageView.h */,
 				5877F04E155589C5005FF829 /* StageView.m */,
+				F74A17451708BFD60057BF06 /* StageView+backgroundAppearance.m */,
 				F71E3D9C16F5EEC00081B0E4 /* StageView+flexibileWidth.m */,
 				F71E3D9F16F5F31D0081B0E4 /* StageView+colorsShadowsGradients.m */,
 				F7631AF016F6177B00C8A011 /* StageView+conversion.m */,
@@ -666,6 +667,8 @@
 				3FEF2DED16D930EC005A05B9 /* NewContainerWindowController.xib */,
 				F7DB1C5F162C87A300CD72D4 /* Document.xib */,
 				3F1CEAEB16D55BED009246C2 /* DataSourceWindowController.xib */,
+				3FC1BC4616EA511400C350C9 /* CustomButton.h */,
+				3FC1BC4716EA511400C350C9 /* CustomButton.m */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -866,6 +869,7 @@
 				F71E3D9D16F5EEC00081B0E4 /* StageView+flexibileWidth.m in Sources */,
 				F71E3DA016F5F31D0081B0E4 /* StageView+colorsShadowsGradients.m in Sources */,
 				F74A172616FE30EF0057BF06 /* StageView+knockout.m in Sources */,
+				F74A17461708BFD60057BF06 /* StageView+backgroundAppearance.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

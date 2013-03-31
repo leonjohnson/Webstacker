@@ -102,6 +102,23 @@
     
 	BOOL isRestored;
 }
+
+// Labels on Attributes Panel
+@property (assign) IBOutlet NSTextField *xCoordinateLabel;
+@property (assign) IBOutlet NSTextField *yCoordinateLabel;
+@property (assign) IBOutlet NSTextField *layoutTypeLabel;
+@property (assign) IBOutlet NSTextField *widthLabel;
+@property (assign) IBOutlet NSTextField *heightLabel;
+@property (assign) IBOutlet NSTextField *backgroundColorLabel;
+@property (assign) IBOutlet NSTextField *borderWidthLabel;
+@property (assign) IBOutlet NSTextField *borderRadiusLabel;
+@property (assign) IBOutlet NSTextField *topLeftLabel;
+@property (assign) IBOutlet NSTextField *topRightLabel;
+@property (assign) IBOutlet NSTextField *bottomLeftLabel;
+@property (assign) IBOutlet NSTextField *bottomRightLabel;
+@property (assign) IBOutlet NSTextField *tagLabel;
+
+
 @property(assign) IBOutlet NSComboBox *actionField;
 @property(assign) IBOutlet NSComboBox *dataSourceField;
 @property(assign) IBOutlet NSTextField *visibilityField;
