@@ -114,7 +114,7 @@
 																	<string key="NSFrameSize">{208, 93}</string>
 																	<reference key="NSSuperview" ref="610265007"/>
 																	<reference key="NSWindow"/>
-																	<reference key="NSNextKeyView" ref="532813818"/>
+																	<reference key="NSNextKeyView"/>
 																	<object class="NSTextContainer" key="NSTextContainer" id="52758967">
 																		<object class="NSLayoutManager" key="NSLayoutManager">
 																			<object class="NSTextStorage" key="NSTextStorage">
@@ -250,7 +250,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 													<string key="NSFrame">{{680, 315}, {210, 95}}</string>
 													<reference key="NSSuperview" ref="494326585"/>
 													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView" ref="610265007"/>
+													<reference key="NSNextKeyView" ref="532813818"/>
 													<int key="NSsFlags">133122</int>
 													<reference key="NSVScroller" ref="532813818"/>
 													<reference key="NSHScroller" ref="224122977"/>
@@ -263,7 +263,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 											<string key="NSFrameSize">{2031, 1436}</string>
 											<reference key="NSSuperview" ref="289510147"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="694089969"/>
+											<reference key="NSNextKeyView" ref="324106534"/>
 											<string key="NSClassName">StageView</string>
 										</object>
 									</array>
@@ -312,7 +312,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="NSFrameSize">{1155, 666}</string>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="289510147"/>
+							<reference key="NSNextKeyView" ref="694089969"/>
 							<int key="NSsFlags">133312</int>
 							<reference key="NSVScroller" ref="694089969"/>
 							<reference key="NSHScroller" ref="1000656136"/>
@@ -329,6 +329,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="694615925"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSPopUpButtonCell" key="NSCell" id="82386501">
 								<int key="NSCellFlags">-2080374720</int>
@@ -369,6 +370,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="264425675"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSPopUpButtonCell" key="NSCell" id="827645470">
 								<int key="NSCellFlags">-2076180416</int>
@@ -405,6 +407,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="547202933"/>
 							<string key="NSReuseIdentifierKey">_NS:1535</string>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="886413327">
 								<int key="NSCellFlags">68157504</int>
@@ -435,6 +438,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="483549536"/>
 							<string key="NSReuseIdentifierKey">_NS:1535</string>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="270306173">
 								<int key="NSCellFlags">68157504</int>
@@ -498,6 +502,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="263563816"/>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="819744037">
 								<int key="NSCellFlags">-1804599231</int>
@@ -572,6 +577,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="164483683"/>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="964921098">
 								<int key="NSCellFlags">-1804074943</int>
@@ -646,6 +652,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="945054783"/>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="10425890">
 								<int key="NSCellFlags">68157504</int>
@@ -668,6 +675,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="973471059"/>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="438380208">
 								<int key="NSCellFlags">68157504</int>
@@ -686,6 +694,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="NSFrame">{{418, 696}, {49, 21}}</string>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView" ref="465054348"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="990317807">
 								<int key="NSCellFlags">68157504</int>
@@ -705,6 +714,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="421977029"/>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="275024881">
 								<int key="NSCellFlags">68157504</int>
@@ -784,6 +794,8 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="NSFrame">{{274, 672}, {29, 22}}</string>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView" ref="442311186"/>
+							<int key="NSTag">50</int>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="278143090">
 								<int key="NSCellFlags">-1804599231</int>
@@ -869,6 +881,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<string key="NSFrame">{{14, 26}, {249, 19}}</string>
 						<reference key="NSSuperview" ref="1017913685"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="129960918">
@@ -1802,6 +1815,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="NSFrame">{{20, 19}, {260, 19}}</string>
 							<reference key="NSSuperview" ref="227490375"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="853803759">
@@ -1982,14 +1996,6 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<int key="connectionID">339</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">fontTraitControl</string>
-						<reference key="source" ref="494326585"/>
-						<reference key="destination" ref="498940254"/>
-					</object>
-					<int key="connectionID">349</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">setAlignmentOfText:</string>
 						<reference key="source" ref="494326585"/>
@@ -2071,22 +2077,6 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">kerningTextField</string>
-						<reference key="source" ref="494326585"/>
-						<reference key="destination" ref="945054783"/>
-					</object>
-					<int key="connectionID">1302</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">leadingTextField</string>
-						<reference key="source" ref="494326585"/>
-						<reference key="destination" ref="442311186"/>
-					</object>
-					<int key="connectionID">1303</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">fontColorWell</string>
 						<reference key="source" ref="494326585"/>
 						<reference key="destination" ref="322901736"/>
@@ -2119,11 +2109,83 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">fontTraitControl</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="1025159341"/>
+					</object>
+					<int key="connectionID">1330</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fontFamilyLabel</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="837721290"/>
+					</object>
+					<int key="connectionID">1346</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fontStyleLabel</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="547202933"/>
+					</object>
+					<int key="connectionID">1347</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">textSizeLabel</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="264425675"/>
+					</object>
+					<int key="connectionID">1348</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">kerningLabel</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="421977029"/>
+					</object>
+					<int key="connectionID">1349</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">leadingLabel</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="1000769945"/>
+					</object>
+					<int key="connectionID">1350</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fontcolourWellLabel</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="973471059"/>
+					</object>
+					<int key="connectionID">1351</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">leadingField</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="442311186"/>
+					</object>
+					<int key="connectionID">1352</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">kerningField</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="945054783"/>
+					</object>
+					<int key="connectionID">1353</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">fontSizeTextField2</string>
 						<reference key="source" ref="494326585"/>
 						<reference key="destination" ref="465054348"/>
 					</object>
-					<int key="connectionID">1324</int>
+					<int key="connectionID">1354</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -3305,7 +3367,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1324</int>
+			<int key="maxID">1354</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3489,13 +3551,20 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<string key="superclassName">NSView</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="InsertImageToStage:">id</string>
+						<string key="attributedStringToCSS:">id</string>
+						<string key="bringElementToFront:">id</string>
 						<string key="clearPopover:">id</string>
+						<string key="copy:">id</string>
+						<string key="delete:">id</string>
 						<string key="displayDocumentSettingsView:">id</string>
+						<string key="generateCode:">id</string>
+						<string key="groupElements:">id</string>
 						<string key="setAlignmentOfText:">id</string>
 						<string key="setFontSize:">id</string>
 						<string key="setFontTrait:">id</string>
 						<string key="setTypeFaceFamily:">id</string>
 						<string key="setTypeStyle:">id</string>
+						<string key="toggleGridlineVisibility:">id</string>
 						<string key="zoomIn:">id</string>
 						<string key="zoomOut:">id</string>
 					</dictionary>
@@ -3504,12 +3573,36 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="name">InsertImageToStage:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="attributedStringToCSS:">
+							<string key="name">attributedStringToCSS:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="bringElementToFront:">
+							<string key="name">bringElementToFront:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="clearPopover:">
 							<string key="name">clearPopover:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="copy:">
+							<string key="name">copy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="delete:">
+							<string key="name">delete:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="displayDocumentSettingsView:">
 							<string key="name">displayDocumentSettingsView:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="generateCode:">
+							<string key="name">generateCode:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="groupElements:">
+							<string key="name">groupElements:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="setAlignmentOfText:">
@@ -3532,6 +3625,10 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="name">setTypeStyle:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="toggleGridlineVisibility:">
+							<string key="name">toggleGridlineVisibility:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="zoomIn:">
 							<string key="name">zoomIn:</string>
 							<string key="candidateClassName">id</string>
@@ -3546,19 +3643,28 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<string key="documentSettingsPopover">NSPopover</string>
 						<string key="documentSettingsView">DocumentSettingsView</string>
 						<string key="fontColorWell">NSColorWell</string>
+						<string key="fontFamilyLabel">NSTextField</string>
 						<string key="fontSizeTextField2">NSTextField</string>
+						<string key="fontStyleLabel">NSTextField</string>
 						<string key="fontTableView">NSTableView</string>
 						<string key="fontTraitControl">NSSegmentedControl</string>
 						<string key="fontView">NSView</string>
+						<string key="fontcolourWellLabel">NSTextField</string>
 						<string key="groupItems">NSButton</string>
+						<string key="kerningField">NSTextField</string>
+						<string key="kerningLabel">NSTextField</string>
 						<string key="kerningStepper">NSStepper</string>
 						<string key="kerningTextField">NSTextField</string>
+						<string key="leadingField">NSTextField</string>
+						<string key="leadingLabel">NSTextField</string>
 						<string key="leadingStepper">NSStepper</string>
 						<string key="leadingTextField">NSTextField</string>
 						<string key="panel">NSPanel</string>
 						<string key="searchField">NSSearchField</string>
+						<string key="sizeTextField">NSTextField</string>
 						<string key="sv">NSScrollView</string>
 						<string key="textPopover">NSPopover</string>
+						<string key="textSizeLabel">NSTextField</string>
 						<string key="textboxView">StageTextView</string>
 						<string key="typeFaceName">NSPopUpButton</string>
 						<string key="typeFaceTrait">NSPopUpButton</string>
@@ -3580,8 +3686,16 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="name">fontColorWell</string>
 							<string key="candidateClassName">NSColorWell</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="fontFamilyLabel">
+							<string key="name">fontFamilyLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="fontSizeTextField2">
 							<string key="name">fontSizeTextField2</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="fontStyleLabel">
+							<string key="name">fontStyleLabel</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="fontTableView">
@@ -3596,9 +3710,21 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="name">fontView</string>
 							<string key="candidateClassName">NSView</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="fontcolourWellLabel">
+							<string key="name">fontcolourWellLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="groupItems">
 							<string key="name">groupItems</string>
 							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="kerningField">
+							<string key="name">kerningField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="kerningLabel">
+							<string key="name">kerningLabel</string>
+							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="kerningStepper">
 							<string key="name">kerningStepper</string>
@@ -3606,6 +3732,14 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						</object>
 						<object class="IBToOneOutletInfo" key="kerningTextField">
 							<string key="name">kerningTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="leadingField">
+							<string key="name">leadingField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="leadingLabel">
+							<string key="name">leadingLabel</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="leadingStepper">
@@ -3624,6 +3758,10 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="name">searchField</string>
 							<string key="candidateClassName">NSSearchField</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="sizeTextField">
+							<string key="name">sizeTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="sv">
 							<string key="name">sv</string>
 							<string key="candidateClassName">NSScrollView</string>
@@ -3631,6 +3769,10 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<object class="IBToOneOutletInfo" key="textPopover">
 							<string key="name">textPopover</string>
 							<string key="candidateClassName">NSPopover</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="textSizeLabel">
+							<string key="name">textSizeLabel</string>
+							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="textboxView">
 							<string key="name">textboxView</string>

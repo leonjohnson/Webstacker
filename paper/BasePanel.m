@@ -151,9 +151,14 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
 	[path release];
     */
     
+    
+    
+    
+    
+    
     //// Color Declarations
-    NSColor* gradientColor = [NSColor colorWithCalibratedRed: 0.186 green: 0.189 blue: 0.195 alpha: 1];
-    NSColor* gradientColor2 = [NSColor colorWithCalibratedRed: 0.278 green: 0.282 blue: 0.289 alpha: 1];
+    NSColor* gradientColor = [NSColor colorWithCalibratedRed: 0.185 green: 0.188 blue: 0.196 alpha: 1];
+    NSColor* gradientColor2 = [NSColor colorWithCalibratedRed: 0.285 green: 0.285 blue: 0.293 alpha: 1];
     
     //// Gradient Declarations
     NSGradient* panelGrad = [[NSGradient alloc] initWithStartingColor: gradientColor2 endingColor: gradientColor];
@@ -162,6 +167,13 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
     NSBezierPath* roundedRectanglePath = [NSBezierPath bezierPathWithRect:self.frame];
     [panelGrad drawInBezierPath: roundedRectanglePath angle: -90];
     
+    
+    
+    
+    
+    
+    
+
     
 
 }
@@ -694,7 +706,7 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
 {
     _showsBaselineSeparator = YES;
     _centerTrafficLightButtons = YES;
-    _titleBarHeight = 26;//[self _minimumTitlebarHeight];
+    _titleBarHeight = 29;//[self _minimumTitlebarHeight];
     _trafficLightButtonsLeftMargin = 13;//[self _defaultTrafficLightLeftMargin];
     _delegateProxy = [BasePanelDelegateProxy alloc];
     [super setDelegate:_delegateProxy];

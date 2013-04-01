@@ -43,9 +43,7 @@
 @synthesize stageBackgroundColor;
 @synthesize textPopover;
 
-@synthesize typeFaceName;
-@synthesize typeFaceTrait;
-@synthesize fontColorWell;
+
 @synthesize elementBeenDroppedToStage;
 
 @synthesize panel;
@@ -56,6 +54,18 @@
 @synthesize isShowFontTab;
 
 @synthesize showGridlines;
+
+@synthesize fontFamilyLabel; //
+@synthesize fontStyleLabel; //
+@synthesize textSizeLabel; //
+@synthesize kerningLabel; //
+@synthesize leadingLabel; //
+@synthesize fontcolourWellLabel; //
+
+@synthesize fontSizeTextField2, kerningField, leadingField, fontColorWell, fontTraitControl;
+
+@synthesize kerningStepper, leadingStepper;
+
 
 
 /* These images are displayed as markers on the rulers. */
@@ -176,14 +186,14 @@ static NSImage *bottomImage;
     //Fonts panel
     NSFontManager *fontManager = [NSFontManager sharedFontManager];
     NSArray *typeFaceFamilies = [fontManager availableFontFamilies];
-    [typeFaceName addItemsWithTitles:typeFaceFamilies];
-    [typeFaceName selectItemWithTitle:@"Helvetica Neue"];
+    [_typeFaceName addItemsWithTitles:typeFaceFamilies];
+    [_typeFaceName selectItemWithTitle:@"Helvetica Neue"];
 	
 	fontFaceArray = [[NSMutableArray alloc] initWithArray:typeFaceFamilies];
 	
 	{ // custom menu item
 		for (NSString *fontName in typeFaceFamilies) {
-			NSMenuItem *item = [typeFaceName itemWithTitle:fontName];
+			NSMenuItem *item = [_typeFaceName itemWithTitle:fontName];
 			/*NSTextField *txtField = [[NSTextField alloc] initWithFrame:typeFaceName.frame];
 			[txtField setStringValue:fontName];
 			[txtField setEditable:NO];
@@ -195,12 +205,12 @@ static NSImage *bottomImage;
 		}
 	}
 	
-    [self setTypeFaceFamily:typeFaceName];
+    [self setTypeFaceFamily:_typeFaceName];
     [fontColorWell bind:@"value" toObject:self withKeyPath:@"textboxView.fontColor" options:nil];
     [kerningStepper bind:@"value" toObject:self withKeyPath:@"kerningValue" options:nil]; // setKerningValue //
-    [kerningTextField bind:@"value" toObject:self withKeyPath:@"kerningValue" options:nil];
+    [kerningField bind:@"value" toObject:self withKeyPath:@"kerningValue" options:nil];
     [leadingStepper bind:@"value" toObject:self withKeyPath:@"leadingValue" options:nil];
-    [leadingTextField bind:@"value" toObject:self withKeyPath:@"leadingValue" options:nil];
+    [leadingField bind:@"value" toObject:self withKeyPath:@"leadingValue" options:nil];
     [fontSizeTextField2 bind:@"value" toObject:self withKeyPath:@"textboxView.fontSize" options:nil];
 	
 	self.isShowFontTab = NO;
@@ -312,8 +322,51 @@ static NSImage *bottomImage;
             CGContextDrawPath(contextref, kCGPathStroke);
         }
     }
+    [fontFamilyLabel setHidden:YES];
+    [fontStyleLabel setHidden:YES];
+    [textSizeLabel setHidden:YES];
+    [kerningLabel setHidden:YES];
+    [leadingLabel setHidden:YES];
+    [fontcolourWellLabel setHidden:YES];
+    
+    [_typeFaceName setHidden:YES];
+    [_typeFaceTrait setHidden:YES];
+    [fontSizeTextField2 setHidden:YES];
+    [kerningField setHidden:YES];
+    [leadingField setHidden:YES];
+    [fontColorWell setHidden:YES];
+    [fontTraitControl setHidden:YES];
+    
+    [kerningStepper setHidden:YES];
+    [leadingStepper setHidden:YES];
+
+
     
     
+    if (selElementArray.count == 1)
+    {
+        if ([selElementArray[0] isMemberOfClass:[TextBox class]])
+        {
+            [fontFamilyLabel setHidden:NO];
+            [fontStyleLabel setHidden:NO];
+            [textSizeLabel setHidden:NO];
+            [kerningLabel setHidden:NO];
+            [leadingLabel setHidden:NO];
+            [fontcolourWellLabel setHidden:NO];
+            
+            [_typeFaceName setHidden:NO];
+            [_typeFaceTrait setHidden:NO];
+            [fontSizeTextField2 setHidden:NO];
+            [kerningField setHidden:NO];
+            [leadingField setHidden:NO];
+            [fontColorWell setHidden:NO];
+            [fontTraitControl setHidden:NO];
+            
+            [kerningStepper setHidden:NO];
+            [leadingStepper setHidden:NO];
+            
+        }
+    }
     
 	
 	// draw all shapes in shape array
@@ -545,8 +598,8 @@ static NSImage *bottomImage;
         [traits addObject: [entry objectAtIndex:1]];
     }
     //update the textbox dropdown menu UI
-    [typeFaceTrait removeAllItems];
-    [typeFaceTrait addItemsWithTitles:traits];
+    [_typeFaceTrait removeAllItems];
+    [_typeFaceTrait addItemsWithTitles:traits];
     
     // Send a message to the object currently selected, tell it's text delegate to change the font of the selected text.
     Singleton *sg = [[Singleton alloc]init];
@@ -789,7 +842,7 @@ static NSImage *bottomImage;
         
     //UPDATE THE FONT FAMILY
     NSString *selectedTypeFace = [theFont familyName];
-    [typeFaceName selectItemWithTitle:selectedTypeFace];
+    [_typeFaceName selectItemWithTitle:selectedTypeFace];
 	[self selectFontofCurrentTextBox:selectedTypeFace];
     
     // Get all of the traits
@@ -803,8 +856,8 @@ static NSImage *bottomImage;
     
     
     // POPULATE THE TRAIT POPUP
-    [typeFaceTrait removeAllItems];
-    [typeFaceTrait addItemsWithTitles:traits];
+    [_typeFaceTrait removeAllItems];
+    [_typeFaceTrait addItemsWithTitles:traits];
     
     NSString *fullFontName = [theFont displayName];
     NSString *seperateFamilyName = [selectedTypeFace stringByAppendingString:@" "];
@@ -814,7 +867,7 @@ static NSImage *bottomImage;
     {
         seperateFamilyName = @"Regular";
     }
-    [typeFaceTrait selectItemWithTitle:seperateFamilyName];
+    [_typeFaceTrait selectItemWithTitle:seperateFamilyName];
     
     
     

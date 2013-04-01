@@ -22,9 +22,8 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-	NSSize sizz = NSMakeSize(self.frame.size.width, 40);
+	NSSize sizz = NSMakeSize(self.frame.size.width, 32);
     [self setFrameSize: sizz];
-    NSLog(@"HEIGHT IS : %f", self.frame.size.height);
     //// Color Declarations
     NSColor* lightBlack1 = [NSColor colorWithCalibratedRed: 0.189 green: 0.189 blue: 0.189 alpha: 1];
     NSColor* darkBlack1 = [NSColor colorWithCalibratedRed: 0.098 green: 0.098 blue: 0.098 alpha: 1];
@@ -74,7 +73,7 @@
     [NSGraphicsContext restoreGraphicsState];
     
     [darkBlack1 setStroke];
-    [roundedRectangle2Path setLineWidth: 1.5];
+    [roundedRectangle2Path setLineWidth: 2];
     [roundedRectangle2Path stroke];
     
     

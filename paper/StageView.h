@@ -128,16 +128,20 @@ typedef NSInteger		ShapeCutCopyType;
     NSRect documentContainer; // change this to an element with a rect in it
     NSColor *stageBackgroundColor;
     
-    IBOutlet NSPopUpButton *typeFaceName;
-    IBOutlet NSPopUpButton *typeFaceTrait;
+    //IBOutlet NSPopUpButton *typeFaceName;
+    //IBOutlet NSPopUpButton *typeFaceTrait;
     
     //Font panel bits
     IBOutlet NSColorWell *fontColorWell;
+    
+    IBOutlet NSTextField                *sizeTextField;
     IBOutlet NSStepper                  *kerningStepper;
     IBOutlet NSTextField                *kerningTextField;
     IBOutlet NSStepper                  *leadingStepper;
     IBOutlet NSTextField                *leadingTextField;
     IBOutlet NSTextField                *fontSizeTextField2;
+    
+     
     IBOutlet NSSegmentedControl         *fontTraitControl;
     
     //Flags
@@ -173,8 +177,7 @@ typedef NSInteger		ShapeCutCopyType;
 //Flags
 @property (assign) BOOL elementBeenDroppedToStage;
 
-@property (nonatomic, strong)  NSPopUpButton *typeFaceName;
-@property (nonatomic, strong)  NSPopUpButton *typeFaceTrait;
+
 
 @property (nonatomic, assign) int containerWidth;
 @property (nonatomic, assign) int containerHeight;
@@ -201,9 +204,41 @@ typedef NSInteger		ShapeCutCopyType;
 @property (nonatomic, assign) NSRect documentContainer;
 @property (nonatomic, assign) NSColor *stageBackgroundColor;
 
-// Text objects
+//TextBox Menu items
+
+// Labels 
+@property (assign) IBOutlet NSTextField *fontFamilyLabel; //
+@property (assign) IBOutlet NSTextField *fontStyleLabel; //
+@property (assign) IBOutlet NSTextField *textSizeLabel; //
+@property (assign) IBOutlet NSTextField *kerningLabel; //
+@property (assign) IBOutlet NSTextField *leadingLabel; //
+@property (assign) IBOutlet NSTextField *fontcolourWellLabel; //
+
+// Fields
+
+@property (nonatomic, strong)  IBOutlet NSPopUpButton *typeFaceName;
+@property (nonatomic, strong) IBOutlet NSPopUpButton *typeFaceTrait;
+@property (assign) IBOutlet NSTextField *fontSizeTextField2;
+@property (assign) IBOutlet NSTextField *kerningField;
+@property (assign) IBOutlet NSTextField *leadingField; //
+@property (assign, nonatomic) NSColorWell *fontColorWell; 
+@property (assign, nonatomic) NSSegmentedControl *fontTraitControl;
+
+
+// Stepper
+@property (assign, nonatomic) NSStepper *kerningStepper;
+@property (assign, nonatomic) NSStepper *leadingStepper;
+
+
+
+
+
+
 @property (nonatomic, assign) IBOutlet NSPopover *textPopover;//NSPopover *textPopover;
-@property (assign, nonatomic) NSColorWell *fontColorWell;
+@property (assign) NSTextField *sizeTextField;
+
+
+
 
 @property (assign, nonatomic) NSMutableString *layoutType;
 @property (assign, nonatomic) NSMutableArray *orderOfLayers;
@@ -222,6 +257,9 @@ typedef NSInteger		ShapeCutCopyType;
 -(void)setLeadingValue:(NSNumber *)leadingValueReceived;
 -(IBAction)setAlignmentOfText:(id)sender;
 -(void)updateCustomFontMenu:(NSDictionary*)attributes;
+
+
+
 
 
 //VALIDATION OF ELEMENTS EDITED
