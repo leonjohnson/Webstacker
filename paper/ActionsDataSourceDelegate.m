@@ -152,7 +152,7 @@
     } // end of for loop
     
     
-   
+   /*
     // catch all generic statements that do not belong in a loop
     NSArray *genericStatements = [NSArray arrayWithObjects:
                                @"get Facebook photos posted by me",
@@ -184,8 +184,7 @@
         }
         [arrayOfStatements addObject:genericAction];
     }
-    
-    //NSLog(@"Returning : %@", arrayOfStatements);
+    */
     return arrayOfStatements;
 }
 
@@ -222,8 +221,8 @@
 
 -(id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index
 {
-    NSLog(@"Loading : %@", [[self loadActions] objectAtIndex:index]);
-    return [[self loadActions] objectAtIndex:index];
+    NSLog(@"Loading : %@", [[[self loadActions] objectAtIndex:index] objectAtIndex:0]);
+    return [[[self loadActions] objectAtIndex:index] objectAtIndex:0];
 }
 
 

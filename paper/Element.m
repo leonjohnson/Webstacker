@@ -674,6 +674,7 @@
 #pragma mark - provide image representation
 - (NSImage *)imageWithSubviews
 {
+    // Take a picture of itself
     NSSize mySize = self.bounds.size;
     NSSize imgSize = NSMakeSize( mySize.width, mySize.height );
     

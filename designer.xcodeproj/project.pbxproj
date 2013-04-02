@@ -390,7 +390,6 @@
 				F74A1742170104500057BF06 /* Interfaces */,
 				F74A172716FF91E90057BF06 /* BuilderWindow */,
 				F7B3116F1684B6BD0047BC57 /* AppDelegate */,
-				F7B3116E1684B60E0047BC57 /* NSWindow subclass */,
 				3F1CEAE516D55BC9009246C2 /* DataSourceWindow */,
 				F70AF48B16302EA700912A6F /* NSDocument items */,
 				F73C3F1B1617A3120081C459 /* Popovers */,
@@ -662,6 +661,7 @@
 		F74A1742170104500057BF06 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				F7B3116E1684B60E0047BC57 /* NSWindow subclass */,
 				5877F0BD1556F8F7005FF829 /* MainMenu.xib */,
 				F74A173C16FF958D0057BF06 /* Builder.xib */,
 				3FEF2DED16D930EC005A05B9 /* NewContainerWindowController.xib */,

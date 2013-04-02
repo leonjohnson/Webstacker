@@ -60,7 +60,7 @@
     NSLog(@"Theory it's not 0. Equals : %lu", [objectsToLoopThrough count]);
     
     
-    for (NSDictionary *compare in objectsToLoopThrough)
+    for (NSMutableDictionary *compare in objectsToLoopThrough)
     {
         if ([compare isEqualToDictionary:element] == NO && [compare objectForKey:@"tag"] != [Container class])    //  If not me
         {
@@ -375,7 +375,7 @@
     return rowImIn;
 }
 
--(NSDictionary *)highestElementWithEmptyLeft:(NSArray *)array
+-(NSMutableDictionary *)highestElementWithEmptyLeft:(NSArray *)array
 {
     //  This function receives an array sorted by height.
     
@@ -383,7 +383,7 @@
     NSMutableArray *contestants = [NSMutableArray array];
     NSMutableArray *inMyLeftRange = nil;
     NSMutableArray *elementsChecked = nil;
-    for (NSDictionary *test in array)
+    for (NSMutableDictionary *test in array)
     {
         elementsChecked = [NSMutableArray array];
         inMyLeftRange = [NSMutableArray array];
@@ -714,7 +714,7 @@
         {
             NSLog(@"ERROR IN 2?");
             //nearest = [[[elementsInPath objectAtIndex:0]objectForKey:xcoordinate]intValue] - [[element objectForKey:@"farRight"]intValue];
-            nearest = [[element objectForKey:ycoordinate]intValue] - [[[elementsInPath objectAtIndex:0]objectForKey:bottomYcoordinate]intValue];
+            nearest = [[[elementsInPath objectAtIndex:0]objectForKey:xcoordinate]intValue] - [[element objectForKey:@"farRight"]intValue];
             NSLog(@"Nope");
         }
         
@@ -728,8 +728,9 @@
         }
         else
         {
-            NSLog(@"Write some magic");
-            nearest = borderDistance;
+            NSLog(@"Write some magic - nearest is border so set to 0?");
+            //nearest = borderDistance;
+            nearest = 0;
         }
         
     }
@@ -1181,7 +1182,7 @@
     NSArray *AG = [NSArray array];
     for (GroupingBox *box in groupingBoxes)
     {
-        NSLog(@"previously know as: %@", box.idPreviouslyKnownAs);
+        NSLog(@"previously knownn as: %@", box.idPreviouslyKnownAs);
         AG = [box insideTheBox];
         NSMutableDictionary *highest = [[AG sortedArrayUsingDescriptors:verticalSortDescriptor] lastObject];
         
@@ -1268,7 +1269,6 @@
         }
         
         
-        
         //  Set all objects within this Grouping that does not have anything above it (thats inside the Grouping) to have the necessary marginTops
         if ( ([box idPreviouslyKnownAs] != nil) )
         {
@@ -1319,9 +1319,9 @@
                 [sortedArrayInsideGroupingBox addObject:g]; //   Add myself
                 while ([elementsNotCountedYet count] != 0)
                 {
-                    NSDictionary *next = [self highestElementWithEmptyLeft:toMyRightInThisGroupingBox];//THIS EVENTUALLY WILL HAVE TO CHANGE TO BE HIGHESTELE IN GROUP.*
+                    NSMutableDictionary *next = [self highestElementWithEmptyLeft:toMyRightInThisGroupingBox];//THIS EVENTUALLY WILL HAVE TO CHANGE TO BE HIGHESTELE IN GROUP.*
                     NSDictionary *previous = [sortedArrayInsideGroupingBox lastObject];
-                    
+                    NSLog(@"toMyRightInThisGroupingBox are %lu", toMyRightInThisGroupingBox.count);
                     
                     //  get all elements in the right range of the previous element and select the one with the smallest x value.
                     //  Bug fixed: So that it nows reads better, left to right, rather than just next object with nothing to its left
@@ -1340,22 +1340,44 @@
                         }
                     }
                     
+                    int marginTop2, marginRight2, marginLeft2;
                     if ([sortedArrayInsideGroupingBox containsObject:next] == NO) // As if might not hit the big if statement above and so next object may already exist in the SortedArray dataset.
                     {
                         [sortedArrayInsideGroupingBox addObject:next];
-                        int marginTop = [self marginToObjectWithinTransformedGroupingBox:next onSide:TOP];
-                        int marginRight = [self marginToObjectWithinTransformedGroupingBox:next onSide:RIGHT];
-                        int marginLeft;
+                        marginTop2 = [self marginToObjectWithinTransformedGroupingBox:next onSide:TOP];
+                        marginRight2 = [self marginToObjectWithinTransformedGroupingBox:next onSide:RIGHT];
                         if ([self isClosestObjectToMyLeftAnElement:next] == NO)
                         {
-                            marginLeft = [self marginToObjectWithinTransformedGroupingBox:next onSide:LEFT];
+                            marginLeft2 = [self marginToObjectWithinTransformedGroupingBox:next onSide:LEFT];
+                            //[next setObject:[NSNumber numberWithInt:marginLeft] forKey:@"marginLeft"];
                         }
                         NSLog(@"TOP = %i\n RIGHT = %i \n. LEFT = %i \n", marginTop, marginRight, marginLeft);
+                        //[next setObject:[NSNumber numberWithInt:marginRight] forKey:@"marginLeft"];
+                        NSLog(@"Now settt");
+                        
                     }
+                    NSLog(@"toMyRightInThisGroupingBox: 0 %lu", toMyRightInThisGroupingBox.count);
+                    
                     [toMyRightInThisGroupingBox removeObject:next];
+                    
+                    NSLog(@"toMyRightInThisGroupingBox: 1 %lu", toMyRightInThisGroupingBox.count);
+                    
                     elementsNotCountedYet = toMyRightInThisGroupingBox;
                     
+                    NSLog(@"elements not counted yet %lu", elementsNotCountedYet.count);
+                    
+                    if (marginTop2)
+                        [next setObject:[NSNumber numberWithInt:marginTop2] forKey:@"marginTop"];
+                    
+                    if (marginRight2)
+                        [next setObject:[NSNumber numberWithInt:marginRight2] forKey:@"marginRight"];
+                    
+                    if (marginLeft2)
+                        [next setObject:[NSNumber numberWithInt:marginLeft2] forKey:@"marginLeft"];
+                
+                    
                 }
+                
             }
             
         }
@@ -1363,6 +1385,7 @@
         
     }
 }
+
 
 -(void)setGroupingBoxMargin: (GroupingBox*)g
 {
@@ -2367,9 +2390,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             [convertedGroupingBox setXcoordinate:[[elem objectForKey:xcoordinate]intValue]];
             [convertedGroupingBox setWidth:[[elem objectForKey:@"width"]intValue]];
             [convertedGroupingBox setHeight:[[elem objectForKey:@"height"]intValue]];
-            NSLog(@"UPDATE GB3 : %lu", groupingBoxes.count);
             [self updateNestedGroupingBoxesVariable];
-            NSLog(@"UPDATE GB4 : %lu", groupingBoxes.count);
             [groupingBoxes addObject:convertedGroupingBox];
             NSLog(@"UPDATE GB5 : %lu", groupingBoxes.count);
             NSLog(@"idprevknownas : %@", convertedGroupingBox.idPreviouslyKnownAs);
@@ -3110,7 +3131,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     //NSString *file = [documentsDirectory stringByAppendingString:@"/testFile2.html"];
     
     NSLog(@"SORTED ARRAY CONTAINS: %@", self.sortedArray);
-    NSMutableArray *finalGrouping = [NSMutableArray array];
+    self.finalGrouping = [NSMutableArray array];
     
     
     
@@ -3316,7 +3337,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         
         
-        [finalGrouping addObject:[g insideTheBox]];
+        [self.finalGrouping addObject:[g insideTheBox]];
         //NSLog(@"FG = %@", finalGrouping);
         
     }
@@ -3454,7 +3475,6 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSMutableDictionary *header = [g.insideTheBox objectAtIndex:0]; // get the header inforation
             
             //Set the flexible margin Right
-            NSLog(@"GOT HERE");
             Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
             CGFloat containingElementWidth = [[curDoc stageView] sizeOfHighestContainingElement:g].width; // just changed to make it work with categories
             CGFloat mRight = [[[g.insideTheBox objectAtIndex:0] objectForKey:@"GroupBoxMarginRight"] floatValue];
@@ -3463,7 +3483,6 @@ BOOL hasLeadingNumberInString(NSString* s)
             
             //Set the flexible width of the element
             CGFloat fw = [self sizeAsPercentageOfHighestContainingElement:g].width; // this is the size of my containing element. Even a grouping box will work here as it inherits from Element class and has an rtFrame. If nothing is enclosing this element then it uses the stageView as the enclosing element.
-            NSLog(@"GOT HERE 2");
             NSNumber *newFlexibleWidth = [NSNumber numberWithFloat:fw];
             NSLog(@"GOT HERE THREE.. trying to add %@... to %@", newFlexibleWidth, header);
             [header setObject:newFlexibleWidth forKey:WIDTH_AS_A_PERCENTAGE];
@@ -3483,7 +3502,7 @@ BOOL hasLeadingNumberInString(NSString* s)
 #pragma JS CONVERSION
     // ASSUMPTION, YOU CAN ONLY HAVE ONE DYROW ON THE PAGE
     NSMutableArray *bucket = [NSMutableArray new];
-    NSLog(@"self.sorted = %@", self.sortedArray);
+    self.jsCode2 = [NSMutableString string];
     for (NSMutableDictionary *element in self.sortedArray)
     {
         if ([[element objectForKey:@"tag"] isEqual:DYNAMIC_ROW_TAG]) {
@@ -3503,7 +3522,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         }
     }
     
-    
+    NSLog(@"jscode2 = %@", self.jsCode2);
 }
 
 
@@ -3528,7 +3547,6 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSMutableString *s = [NSMutableString string];
     NSArray *groupings = [NSArray arrayWithArray:self.finalGrouping];
     
-    NSLog(@"At step : 1 in generate code function.");
     //  1.Get the Start and End rows
     
     NSMutableArray *startRows = [NSMutableArray array];
@@ -3564,9 +3582,6 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     
     
-    
-    
-    NSLog(@"At step : 2");
     //  2.The Big Loop
     NSString *prefix = @"element";
     
@@ -3649,7 +3664,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSMutableDictionary *oneBefore = [self.sortedArray objectAtIndex:myIndex-1];
             if ([[oneBefore objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
             {
-                [groupBoxOpeningDiv appendString:@"data-bind=\"foreach: seats\" "];
+                [groupBoxOpeningDiv appendFormat:@"data-bind=\"foreach: %@\" ", [oneBefore objectForKey:@"id"]];
             }
             [groupBoxOpeningDiv appendString:@"class=\"groupBox\" "];
             NSMutableDictionary *groupingBoxInQuestion = [NSMutableDictionary dictionary];
@@ -3767,7 +3782,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         //  Row code
         if ([startRows containsObject:blockid])
         {
-            startRowCode = [NSMutableString stringWithString:@"\n      <div class=\"row\">"];
+            startRowCode = [NSMutableString stringWithString:@"\n      <div class=\"row\">        "];
             
         }
         if ([endRows containsObject:blockid])
@@ -4505,12 +4520,12 @@ BOOL hasLeadingNumberInString(NSString* s)
             if ([block objectForKey:@"widthAsPercentage"])
             {
                 CWidth = [[block objectForKey:@"widthAsPercentage"]floatValue];
-                widthAsANumber = [NSNumber numberWithFloat:CWidth-(([borderStrokeString intValue]*2) )];
+                widthAsANumber = [NSNumber numberWithFloat:CWidth-(([TEXT_FIELD_PADDING intValue]*2) )];
             }
             else
             {
                 CWidth = [[block valueForKey:@"width"] intValue];
-                widthAsANumber =[NSNumber numberWithInt:CWidth-(([borderStrokeString intValue]*2) )];
+                widthAsANumber =[NSNumber numberWithInt:CWidth-(([TEXT_FIELD_PADDING intValue]*2) )];
             }
             
             CHeight = [[block valueForKey:@"height"] intValue];

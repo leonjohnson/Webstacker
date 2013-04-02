@@ -19,7 +19,8 @@
     {
         // The Model
         // If you create a dataSource, you automatically get an observableArray, the ability to add a row, and delete a row. These are standard.
-        NSString *className = [NSString stringWithFormat:@"\nfunction ReservationsViewModel() {\n"];
+        self.pageTitle = [NSMutableString stringWithString:@"reservations"];
+        NSString *className = [NSString stringWithFormat:@"\nfunction %@ViewModel() {\n", self.pageTitle.capitalizedString];
         NSString *selfStatement = @"    var self = this;\n\n    // Non-editable catalog data\n    ";
         NSArray *datasource = [self dataSourceUsingHardcodedLocalValues];
         if ([datasource count]  < 1) {
@@ -149,6 +150,7 @@
     [classArray appendString:@"}\n"];
     [openingString appendString:classArray];
     [openingString appendString:@"\n\n\n"];
+    [openingString appendFormat:@"ko.applyBindings(new %@ViewModel());", self.pageTitle.capitalizedString];
     
     // IF ANY ELEMENT USES DATASOURCE, THEN THE CONTROL THAT REPRESENTS THE DATASOURCE MUST BE KO.OBSERVABLE
     

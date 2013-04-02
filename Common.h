@@ -11,6 +11,8 @@
 #ifndef DrawShape_Common_h
 #define DrawShape_Common_h
 
+#define TEXT_FIELD_PADDING                      @"4"
+
 #define	SAVE_ERROR_MESSAGE                      @"Can't save to file."
 #define OPEN_ERROR_MESSAGE                      @"Can't open from file."
 #define POPOVER_AVAILABLE                       Class popoverclass = NSClassFromString(@"NSPopover"); 
