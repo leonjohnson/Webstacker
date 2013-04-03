@@ -236,6 +236,11 @@
     [actionField bind:@"value" toObject:self withKeyPath:@"sg.currentElement.actionStringEntered" options:nil];
     [visibilityField bind:@"value" toObject:self withKeyPath:@"sg.currentElement.visibilityActionStringEntered" options:nil];
     
+    //Bind the hex value box
+    [_borderHexValue bind:@"value" toObject:self withKeyPath:@"sg.currentElement.colorAttributesWithHexString" options:nil];
+    
+    [_borderColour bind:@"value" toObject:self withKeyPath:@"sg.currentElement.colorAttributes" options:nil];
+
     
     
     

@@ -667,8 +667,10 @@
         }
     }
     NSLog(@"this far1");
+    NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:ycoordinate ascending:YES];
     NSSortDescriptor *horizontally = [[NSSortDescriptor alloc] initWithKey:xcoordinate ascending:YES];
     NSArray *horizontalSortDescriptor = [NSArray arrayWithObject: horizontally];
+    NSArray *verticalSortDescriptor = [NSArray arrayWithObject: vertically];
     if ([groubingBoxesInPath count] > 0)
     {
         NSLog(@"this far2");
@@ -714,7 +716,23 @@
         {
             NSLog(@"ERROR IN 2?");
             //nearest = [[[elementsInPath objectAtIndex:0]objectForKey:xcoordinate]intValue] - [[element objectForKey:@"farRight"]intValue];
-            nearest = [[[elementsInPath objectAtIndex:0]objectForKey:xcoordinate]intValue] - [[element objectForKey:@"farRight"]intValue];
+            
+            
+            if (sideToTest == TOP)
+            {
+                [elementsInPath sortedArrayUsingDescriptors:verticalSortDescriptor];
+                nearest = [[element objectForKey:ycoordinate] intValue] - ( [[[elementsInPath lastObject]objectForKey:ycoordinate]intValue] + [[[elementsInPath lastObject]objectForKey:@"height"]intValue] );
+            }
+            
+            if (sideToTest == RIGHT)
+            {
+                nearest = [[[elementsInPath objectAtIndex:0]objectForKey:xcoordinate]intValue] - [[element objectForKey:FAR_RIGHT_X]intValue];
+            }
+            
+            if (sideToTest == LEFT)
+            {
+                nearest = [[element objectForKey:xcoordinate]intValue] - [[[elementsInPath lastObject]objectForKey:FAR_RIGHT_X]intValue];
+            }
             NSLog(@"Nope");
         }
         
@@ -729,8 +747,8 @@
         else
         {
             NSLog(@"Write some magic - nearest is border so set to 0?");
-            //nearest = borderDistance;
-            nearest = 0;
+            nearest = borderDistance;
+            //nearest = 0;
         }
         
     }
@@ -1182,7 +1200,7 @@
     NSArray *AG = [NSArray array];
     for (GroupingBox *box in groupingBoxes)
     {
-        NSLog(@"previously knownn as: %@", box.idPreviouslyKnownAs);
+        NSLog(@"previously know as: %@", box.idPreviouslyKnownAs);
         AG = [box insideTheBox];
         NSMutableDictionary *highest = [[AG sortedArrayUsingDescriptors:verticalSortDescriptor] lastObject];
         
@@ -1269,6 +1287,7 @@
         }
         
         
+        
         //  Set all objects within this Grouping that does not have anything above it (thats inside the Grouping) to have the necessary marginTops
         if ( ([box idPreviouslyKnownAs] != nil) )
         {
@@ -1351,7 +1370,7 @@
                             marginLeft2 = [self marginToObjectWithinTransformedGroupingBox:next onSide:LEFT];
                             //[next setObject:[NSNumber numberWithInt:marginLeft] forKey:@"marginLeft"];
                         }
-                        NSLog(@"TOP = %i\n RIGHT = %i \n. LEFT = %i \n", marginTop, marginRight, marginLeft);
+                        NSLog(@"TOP = %i\n RIGHTZ = %i \n. LEFT = %i \n", marginTop2, marginRight2, marginLeft2);
                         //[next setObject:[NSNumber numberWithInt:marginRight] forKey:@"marginLeft"];
                         NSLog(@"Now settt");
                         
@@ -1369,13 +1388,12 @@
                     if (marginTop2)
                         [next setObject:[NSNumber numberWithInt:marginTop2] forKey:@"marginTop"];
                     
-                    if (marginRight2)
+                    if (marginRight2 && (elementsNotCountedYet.count > 0) )
                         [next setObject:[NSNumber numberWithInt:marginRight2] forKey:@"marginRight"];
+                        NSLog(@"yes it is");
                     
                     if (marginLeft2)
                         [next setObject:[NSNumber numberWithInt:marginLeft2] forKey:@"marginLeft"];
-                
-                    
                 }
                 
             }
@@ -4520,15 +4538,16 @@ BOOL hasLeadingNumberInString(NSString* s)
             if ([block objectForKey:@"widthAsPercentage"])
             {
                 CWidth = [[block objectForKey:@"widthAsPercentage"]floatValue];
-                widthAsANumber = [NSNumber numberWithFloat:CWidth-(([TEXT_FIELD_PADDING intValue]*2) )];
+                // The width of the textfield in the app includes padidng and border so the printed value should also.
+                widthAsANumber = [NSNumber numberWithFloat:CWidth];
             }
             else
             {
                 CWidth = [[block valueForKey:@"width"] intValue];
-                widthAsANumber =[NSNumber numberWithInt:CWidth-(([TEXT_FIELD_PADDING intValue]*2) )];
+                widthAsANumber =[NSNumber numberWithInt:CWidth-(([TEXT_FIELD_PADDING_LEFT intValue] + [TEXT_FIELD_PADDING_RIGHT intValue]) + [borderStrokeString intValue]*2)];
             }
             
-            CHeight = [[block valueForKey:@"height"] intValue];
+            CHeight = [[block valueForKey:@"height"] intValue] - ( [TEXT_FIELD_PADDING_TOP intValue] + [TEXT_FIELD_PADDING_BOTTOM intValue] );
             CmarginTop = [[block valueForKey:@"marginTop"]intValue];
             CmarginBottom = [[block valueForKey:@"marginBottom"]intValue];
             CmarginLeft = [[block valueForKey:@"marginLeft"]intValue];

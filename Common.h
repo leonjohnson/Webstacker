@@ -11,7 +11,10 @@
 #ifndef DrawShape_Common_h
 #define DrawShape_Common_h
 
-#define TEXT_FIELD_PADDING                      @"4"
+#define TEXT_FIELD_PADDING_TOP                  @"4"
+#define TEXT_FIELD_PADDING_BOTTOM               @"4"
+#define TEXT_FIELD_PADDING_LEFT                 @"4"
+#define TEXT_FIELD_PADDING_RIGHT                @"4"
 
 #define	SAVE_ERROR_MESSAGE                      @"Can't save to file."
 #define OPEN_ERROR_MESSAGE                      @"Can't open from file."
@@ -28,6 +31,8 @@
 #define MARGIN_LEFT_AS_A_PERCENTAGE             @"marginLeftAsAPercentage"
 #define MARGIN_RIGHT_AS_A_PERCENTAGE            @"marginRightAsAPercentage"
 #define WIDTH_AS_A_PERCENTAGE                   @"widthAsPercentage"
+
+#define FAR_RIGHT_X                             @"farRight"
 
 #define TEXT_INPUT_FIELD_TAG                    @"textInputField"
 #define TEXT_BOX_TAG                            @"TextBox"

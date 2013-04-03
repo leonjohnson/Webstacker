@@ -17,21 +17,32 @@
 
 - (void)setBoundRect:(NSRect)rt
 {
-	rtFrame = CGRectStandardize(NSMakeRect(rt.origin.x, rt.origin.y, 210 , 20 ));
+	
+    rtFrame = CGRectStandardize(NSMakeRect(rt.origin.x, rt.origin.y, 210 , 20 ));
     //  4+4 for padding, 4+4 for inset
     //  NOTE  //
     //        //
     //   if you change any of the numbers above then the generation method needs to be modified accordingly.
     //        //
     
-    [self setFrame:CGRectMake(rtFrame.origin.x - 2, rtFrame.origin.y - 2, rtFrame.size.width + 8, rtFrame.size.height + 8 )];
+    [self setFrame:CGRectMake(rtFrame.origin.x - 6, rtFrame.origin.y -6, rtFrame.size.width + 18, rtFrame.size.height +6 )];
 	[self setNeedsDisplay:YES];
+     
+    
+    //[super setBoundRect:rt];
 }
 
 - (void)DrawShape:(CGContextRef)context
 {
+    
+    //NSRect rectangleFrame = NSMakeRect(2, 2, rtFrame.size.width, rtFrame.size.height);
+    
+    // rounded edges
+    //NSRect rectangleInnerRect = NSInsetRect(rectangleFrame, rectangleCornerRadius, rectangleCornerRadius);
+    
     //CGFloat rectangleCornerRadius = [borderRadius floatValue];
-    NSRect bRect = CGRectInset ([self bounds], 1, 1);
+    //NSRect bRect = CGRectInset ([self bounds], 0, 0);
+    NSRect bRect = NSMakeRect(6, 6, rtFrame.size.width-6, rtFrame.size.height-6);
     NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:bRect xRadius:3 yRadius:3];
     [[NSColor whiteColor] set];
     

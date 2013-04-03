@@ -127,6 +127,9 @@
 @property (assign) IBOutlet NSTextField *labelWarningField;
 @property (assign) IBOutlet NSTextField *elementidField;
 
+@property (assign) IBOutlet NSColorWell *borderColour; 
+@property (assign) IBOutlet NSTextField *borderHexValue;;
+
 @property(assign) IBOutlet DataSourcePanel *dataSourcePanel;
 
 
