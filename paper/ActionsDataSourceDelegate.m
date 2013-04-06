@@ -123,14 +123,23 @@
             if (([ele isMemberOfClass:[DropDown class]]))
             {
                 NSArray *dataSource = ((DropDown*)ele).dataSource;
-                for (NSString *key in [dataSource objectAtIndex:0]) // every row in the array has the same dictionary structure so the first will do.
-                {
-                    NSString *myString = [NSString stringWithFormat:@"Get the %@ for the selected %@", key, ele.elementid];
-                    NSArray *dropDownArray = [NSArray arrayWithObjects:myString, [ele imageWithSubviews], @"", nil];
-                    [arrayOfStatements addObject:dropDownArray];
-                }
+                if (dataSource.count > 1)
+                    for (NSString *key in [dataSource objectAtIndex:0]) // every row in the array has the same dictionary structure so the first will do.
+                    {
+                        NSString *myString = [NSString stringWithFormat:@"Get the %@ for the selected %@", key, ele.elementid];
+                        NSArray *dropDownArray = [NSArray arrayWithObjects:myString, [ele imageWithSubviews], @"", nil];
+                        [arrayOfStatements addObject:dropDownArray];
+                    }
             }
             
+            /*
+            //For buttons and dyRow on stage
+            if ([ele isMemberOfClass:[Button class]]) {
+                if ([elementsArray ]) {
+                    <#statements#>
+                }
+            }
+            */
             //Generic statements for all elements
             NSString *showElement = [NSString stringWithFormat:@"show element with tag %@", ele.elementid];
             NSArray *showElementArray = [NSArray arrayWithObjects:showElement, [ele imageWithSubviews], @"", nil];

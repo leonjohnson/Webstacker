@@ -215,6 +215,8 @@ typedef NSInteger LayoutTag;
 @property (nonatomic) BOOL							isPtInElement;
 @property (assign) NSMutableArray					*arrayShadows;
 
+@property (assign, nonatomic) NSString *jsid;
+
 - (void)dealloc;
 
 /*

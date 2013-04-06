@@ -153,9 +153,6 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
     
     
     
-    
-    
-    
     //// Color Declarations
     NSColor* gradientColor = [NSColor colorWithCalibratedRed: 0.185 green: 0.188 blue: 0.196 alpha: 1];
     NSColor* gradientColor2 = [NSColor colorWithCalibratedRed: 0.285 green: 0.285 blue: 0.293 alpha: 1];
@@ -501,6 +498,7 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
     if ((self = [super initWithContentRect:contentRect styleMask:aStyle backing:bufferingType defer:flag])) {
         [self _doInitialWindowSetup];
     }
+    [self setBecomesKeyOnlyIfNeeded:YES];
     return self;
 }
 

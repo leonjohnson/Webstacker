@@ -97,32 +97,24 @@
 -(void)applicationWillFinishLaunching:(NSNotification *)notification
 {
     
-    NSLog(@"app will finish in app del called first.");
-    /*
-    NSString *backgroundColorString = NSLocalizedString(@"Background Colour", nil);
-    NSDictionary* text2FontAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [NSFont fontWithName: @"Helvetica Neue" size: 12], NSFontAttributeName,
-                                         [NSColor redColor], NSForegroundColorAttributeName, nil];
-    NSAttributedString *att = [[NSAttributedString alloc]initWithString:backgroundColorString attributes:text2FontAttributes];
+    NSLog(@"applicationWillFinishLaunching called.");
+        
+    //// Color Declarations
+    NSColor* fillColor = [NSColor colorWithCalibratedRed: 0.9 green: 0.9 blue: 0.9 alpha: 1];
+    NSColor* color2 = [NSColor colorWithCalibratedRed: 0.5 green: 0.5 blue: 0.5 alpha: 1];
+    
+    //// Shadow Declarations
+    NSShadow* shadow = [[NSShadow alloc] init];
+    [shadow setShadowColor: color2];
+    [shadow setShadowOffset: NSMakeSize(-1.1, -1.1)];
+    [shadow setShadowBlurRadius: 0];
 
-    backgroundColorLabel.attributedStringValue = att;
-     */
-    
-    //backgroundColorLabel.stringValue = NSLocalizedString(@"Background Colourz", nil);
-    //[[backgroundColorLabel cell] setBackgroundStyle:NSBackgroundStyleLowered];
-    
-    
-    
-    // Create the white shadow that sits behind the text
-    NSShadow *shadow = [[NSShadow alloc] init];
-    [shadow setShadowColor:[NSColor colorWithDeviceWhite:1.0 alpha:0.25]];
-    [shadow setShadowOffset:NSMakeSize(1.0, -1.1)];
     // Create the attributes dictionary, you can change the font size
     // to whatever is useful to you
     NSMutableDictionary *sAttribs = [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                      [NSFont systemFontOfSize:15.0],NSFontAttributeName,
-                                      shadow, NSShadowAttributeName,
-                                      [NSColor blackColor], NSForegroundColorAttributeName,
+                                      [NSFont boldSystemFontOfSize:10.0],NSFontAttributeName,
+                                      //shadow, NSShadowAttributeName,
+                                      fillColor, NSForegroundColorAttributeName,
                                       nil] autorelease];
     // The shadow object has been assigned to the dictionary, so release
     [shadow release];
@@ -130,7 +122,14 @@
     NSAttributedString *s = [[NSAttributedString alloc] initWithString:@"Background color"
                                                             attributes:sAttribs];
     // Set your text value
-    [backgroundColorLabel setAttributedStringValue:s];
+    
+    [xCoordinateLabel setStringValue:NSLocalizedString(@"X", nil)];
+    [yCoordinateLabel setStringValue:NSLocalizedString(@"Y", nil)];
+    [layoutTypeLabel setStringValue:NSLocalizedString(@"Type", nil)];
+    [widthLabel setStringValue:NSLocalizedString(@"Width", nil)];
+    [heightLabel setStringValue:NSLocalizedString(@"Height", nil)];
+    [backgroundColorLabel setStringValue:NSLocalizedString(@"Background color", nil)];
+    [borderWidthLabel setStringValue:NSLocalizedString(@"Border Width", nil)];
     // Clean up
     [s release];
     
@@ -145,7 +144,7 @@
     [NSColorPanel setPickerMask:NSColorPanelWheelModeMask];
     
     // Insert code here to initialize your application
-    NSLog(@"app did fini in app del called first.");
+    NSLog(@"applicationDidFinishLaunching called.");
     /*
     alignmentPanel.delegate = self;
     attributePanel.delegate = self;
@@ -242,7 +241,7 @@
     [_borderColour bind:@"value" toObject:self withKeyPath:@"sg.currentElement.colorAttributes" options:nil];
 
     
-    
+    [_currentlySelectedLabel bind:@"value" toObject:self withKeyPath:@"sg.currentElement.elementid" options:nil];
     
         
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -250,14 +249,6 @@
                                                  name:UPDATE_KERNING_TEXTFIELD 
                                                object:nil];
     
-    
-    NSString *path = [[NSBundle mainBundle] resourcePath];
-    NSFileManager *fm = [NSFileManager defaultManager];
-    
-    NSError *error = [[NSError alloc] init];
-    
-    //NSArray *directoryAndFileNames = [fm contentsOfDirectoryAtPath:path error:&error];
-    //NSLog(@"dir : %@", directoryAndFileNames);
     
 	self.arrayDataSource = nil;
 }

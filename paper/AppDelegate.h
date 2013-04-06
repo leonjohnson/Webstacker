@@ -117,6 +117,8 @@
 @property (assign) IBOutlet NSTextField *bottomLeftLabel;
 @property (assign) IBOutlet NSTextField *bottomRightLabel;
 @property (assign) IBOutlet NSTextField *tagLabel;
+@property (assign) IBOutlet NSTextField *currentlySelectedLabel;
+
 
 
 @property(assign) IBOutlet NSComboBox *actionField;

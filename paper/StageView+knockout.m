@@ -6,6 +6,7 @@
 #import "TextInputField.h"
 #import "TextBox.h"
 #import "StageView.h"
+#import "NSString+shortcuts.h"
 
 
 @implementation StageView (knockout)
@@ -101,10 +102,19 @@
     //NSString *stringContainingClass = [NSString string];
     NSArray *elementsInsideMe = [self elementsInside:dyRowDict usingElements:sortedArrayOnStage];
     NSMutableArray *elementsInsideMeIDs = [NSMutableArray array];
+    NSMutableArray *parameterList = [NSMutableArray array];
+    NSString *parameterString = @"";
     for (NSDictionary *ele in elementsInsideMe)
     {
         [elementsInsideMeIDs addObject:[ele objectForKey:JS_ID]];
+        if ([ele isMemberOfClass:[TextInputField class] || [DropDown class]] )
+            [parameterList addObject:[ele objectForKey:JS_ID]];
+        
     }
+    if (parameterList) 
+        [parameterList insertObject:[dyRowDict objectForKey:JS_ID] atIndex:0];
+        parameterString = [parameterList componentsJoinedByString:@", "];
+    
     NSMutableString *openingString = [NSMutableString stringWithFormat:@"function %@(", [[dyRowDict objectForKey:JS_ID] capitalizedString]];
     NSMutableString *classArray = [NSMutableString string];
     
@@ -130,7 +140,7 @@
                 [classArray appendString:[NSString stringWithFormat:@"self.%@ = %@;\n", [ele objectForKey:JS_ID], [ele objectForKey:JS_ID]]];
                 
                 // and add the elements elementID to the function definition
-                [openingString appendString:[NSString stringWithFormat:@"%@,", [ele objectForKey:JS_ID]]];
+                //[openingString appendString:[NSString stringWithFormat:@"%@,", [ele objectForKey:JS_ID]]];
                 
             }
         }
@@ -145,12 +155,14 @@
         
     }
     NSLog(@"closing class generation");
-    [openingString substringToIndex:[openingString length]-1]; // clean up, we remove the comma left over at the end
+    //[openingString substringToIndex:[openingString length]-1]; // clean up, we remove the comma left over at the end
+    [openingString appendString:parameterString];
     [openingString appendString:@") {\n"];
     [classArray appendString:@"}\n"];
     [openingString appendString:classArray];
     [openingString appendString:@"\n\n\n"];
     [openingString appendFormat:@"ko.applyBindings(new %@ViewModel());", self.pageTitle.capitalizedString];
+    [openingString appendString:@"\n"];
     
     // IF ANY ELEMENT USES DATASOURCE, THEN THE CONTROL THAT REPRESENTS THE DATASOURCE MUST BE KO.OBSERVABLE
     
@@ -175,7 +187,7 @@
         if ([[ele objectForKey:@"tag"] isEqual:DROP_DOWN_MENU_TAG])
         {
             NSString *associatedModel = [ele objectForKey:ASSOCIATED_MODEL];
-            NSString *dataSourceRef = [NSString stringWithFormat:@"self.%@[0]", associatedModel];
+            NSString *dataSourceRef = [NSString stringWithFormat:@"self.%@", associatedModel];
             parameter = dataSourceRef;
         }
         [array addObject:parameter];
@@ -291,7 +303,7 @@
         dataSourceCodeStringToReturn = [NSString stringWithFormat: @"data-bind=\"options: $root.%@, optionsText: \'%@\', value: %@\"",
                                         dataSourceName,
                                         ele.dataSourceStringEntered,
-                                        @"chosenOption"]; // the last choice was 'ele.elementid'but to make sure viewModel method can set the matching name, I've just used a static string.
+                                        ele.jsid]; // the last choice was 'ele.elementid'but to make sure viewModel method can set the matching name, I've just used a static string.
         
     }
     
@@ -310,25 +322,39 @@
     NSLog(@"starting point");
     NSString *actionsStringToReturn = [NSMutableString string];
     
+    DynamicRow *dyRow = nil;
+    Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+    NSArray *elementsOnStage = [[curDoc stageView] elementArray];
+    for (Element *e in elementsOnStage) {
+        if ([e isMemberOfClass:[dyRow class]]) {
+            dyRow = (DynamicRow*)e; // assuming there is just one dyRow in elementsArray.
+        }
+    }
+    NSString *dyRowID = [dyRow elementid];
+    NSArray *words = [ele.actionStringEntered componentsSeparatedByString:@" "];
+    NSString *firstWord = words[0];
+    NSString *secondWord = words[1];
+    
     // Remove row
-    if (([ele.actionStringEntered caseInsensitiveCompare:@"Remove row"] == NSOrderedSame))
+    if ([firstWord containsString:@"Remove"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) )
     {
-        NSLog(@"IN REMOVE ROW");
         NSLog(@"ACTION STRING IS : %@", ele.actionStringEntered);
-        actionsStringToReturn = @"data-bind=\"click: $root.removeRow\"";
+        NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
+        actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: $root.%@\"", methodName];
         return actionsStringToReturn;
     }
     
     
     // Add row
-    if (([ele.actionStringEntered caseInsensitiveCompare:@"Add row"] == NSOrderedSame)) //what if the dyRow element has an id of myRow and not row?
+    if ([firstWord containsString:@"Add"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) ) //what if the dyRow element has an id of myRow and not row? WE SHOULD ALLOW THE USER TO ENTER ADD ROW OR ADD SEAT
     {
         NSLog(@"grrh");
+        NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
         // The default if 'add row' text found
-        actionsStringToReturn = @"data-bind=\"click: addRow\"";
+        actionsStringToReturn = [NSString stringWithFormat: @"data-bind=\"click: %@\"", methodName];
         
         // Now check if any 'max' or 'min' exists in the string entered
-        NSString *substring = @"addRow";
+        //NSString *substring = @"addRow";
         NSMutableString *copy = [NSMutableString stringWithString:ele.actionStringEntered];
         [copy deleteCharactersInRange:NSMakeRange(0, 7)]; //The word Total has 7 characters in it including the space.
         
@@ -369,7 +395,7 @@
                         visibilityCodeString = [NSString stringWithFormat:@"%@, ", ele.visibilityActionStringEntered];
                     }
                     
-                    actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: %@, enable: %@().length %@ %@%@\"", substring, tagForRow, mathSign, lastWord, visibilityCodeString];
+                    actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: %@, enable: %@().length %@ %@%@\"", methodName, tagForRow, mathSign, lastWord, visibilityCodeString];
                 }                
                 
             }
@@ -575,7 +601,7 @@
         {
             if ([header isEqualToString:ele.dataSourceStringEntered]) {
                 NSLog(@"Gotcha!");
-                return [dict objectForKey:@"Name"]; // This is a string that was entered by the user into the Name field of the DataSource window.
+                return [NSString stringWithFormat:@"%@[%li]",[dict objectForKey:@"Name"], (unsigned long)[headerTitles indexOfObject:header]]; // This is a string that was entered by the user into the Name field of the DataSource window.
             }
         }
     }

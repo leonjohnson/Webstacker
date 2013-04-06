@@ -143,15 +143,15 @@
 		582D6793157A431500014338 /* StageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StageTextView.m; sourceTree = "<group>"; };
 		5840F57815618D32004C69D9 /* documentBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = documentBar.h; sourceTree = "<group>"; };
 		5840F57915618D32004C69D9 /* documentBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = documentBar.m; sourceTree = "<group>"; };
-		5877F011155588AA005FF829 /* designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = designer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5877F011155588AA005FF829 /* Webstacker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Webstacker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5877F015155588AA005FF829 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5877F018155588AA005FF829 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5877F019155588AA005FF829 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		5877F01A155588AA005FF829 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		5877F01D155588AA005FF829 /* designer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "designer-Info.plist"; sourceTree = "<group>"; };
+		5877F01D155588AA005FF829 /* webstacker-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "webstacker-Info.plist"; sourceTree = "<group>"; };
 		5877F01F155588AA005FF829 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5877F021155588AA005FF829 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		5877F023155588AA005FF829 /* designer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "designer-Prefix.pch"; sourceTree = "<group>"; };
+		5877F023155588AA005FF829 /* webstacker-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "webstacker-Prefix.pch"; sourceTree = "<group>"; };
 		5877F025155588AA005FF829 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		5877F03C155589B7005FF829 /* DrawShapeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = DrawShapeDelegate.h; sourceTree = "<group>"; };
 		5877F03D155589B7005FF829 /* GalleryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = GalleryView.h; sourceTree = "<group>"; };
@@ -360,7 +360,7 @@
 		5877F012155588AA005FF829 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5877F011155588AA005FF829 /* designer.app */,
+				5877F011155588AA005FF829 /* Webstacker.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -394,7 +394,6 @@
 				F70AF48B16302EA700912A6F /* NSDocument items */,
 				F73C3F1B1617A3120081C459 /* Popovers */,
 				58E9C91C157E30EB00CBA5E9 /* categories */,
-				580D7A3F15E05096004C9E3F /* CustomUI */,
 				5877F0AE15569B7F005FF829 /* Panels */,
 				5877F0A815569AB5005FF829 /* Singleton */,
 				5877F03515558916005FF829 /* Stage */,
@@ -410,10 +409,10 @@
 		5877F01C155588AA005FF829 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				5877F01D155588AA005FF829 /* designer-Info.plist */,
+				5877F01D155588AA005FF829 /* webstacker-Info.plist */,
 				5877F01E155588AA005FF829 /* InfoPlist.strings */,
 				5877F021155588AA005FF829 /* main.m */,
-				5877F023155588AA005FF829 /* designer-Prefix.pch */,
+				5877F023155588AA005FF829 /* webstacker-Prefix.pch */,
 				5877F024155588AA005FF829 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
@@ -661,6 +660,7 @@
 		F74A1742170104500057BF06 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				580D7A3F15E05096004C9E3F /* CustomUI */,
 				F7B3116E1684B60E0047BC57 /* NSWindow subclass */,
 				5877F0BD1556F8F7005FF829 /* MainMenu.xib */,
 				F74A173C16FF958D0057BF06 /* Builder.xib */,
@@ -721,9 +721,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5877F010155588AA005FF829 /* designer */ = {
+		5877F010155588AA005FF829 /* Webstacker */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5877F02F155588AA005FF829 /* Build configuration list for PBXNativeTarget "designer" */;
+			buildConfigurationList = 5877F02F155588AA005FF829 /* Build configuration list for PBXNativeTarget "Webstacker" */;
 			buildPhases = (
 				5877F00D155588AA005FF829 /* Sources */,
 				5877F00E155588AA005FF829 /* Frameworks */,
@@ -733,9 +733,9 @@
 			);
 			dependencies = (
 			);
-			name = designer;
+			name = Webstacker;
 			productName = paper;
-			productReference = 5877F011155588AA005FF829 /* designer.app */;
+			productReference = 5877F011155588AA005FF829 /* Webstacker.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -758,7 +758,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5877F010155588AA005FF829 /* designer */,
+				5877F010155588AA005FF829 /* Webstacker */,
 			);
 		};
 /* End PBXProject section */
@@ -925,7 +925,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
@@ -947,7 +947,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 			};
@@ -964,10 +964,10 @@
 				);
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "paper/designer-Prefix.pch";
-				INFOPLIST_FILE = "paper/designer-Info.plist";
+				GCC_PREFIX_HEADER = "paper/webstacker-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/paper/webstacker-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = designer;
+				PRODUCT_NAME = Webstacker;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
@@ -984,11 +984,11 @@
 				);
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "paper/designer-Prefix.pch";
+				GCC_PREFIX_HEADER = "paper/webstacker-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = NS_BLOCK_ASSERTIONS;
-				INFOPLIST_FILE = "paper/designer-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/paper/webstacker-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = designer;
+				PRODUCT_NAME = Webstacker;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1006,7 +1006,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5877F02F155588AA005FF829 /* Build configuration list for PBXNativeTarget "designer" */ = {
+		5877F02F155588AA005FF829 /* Build configuration list for PBXNativeTarget "Webstacker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5877F030155588AA005FF829 /* Debug */,

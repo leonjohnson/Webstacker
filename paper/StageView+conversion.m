@@ -851,13 +851,22 @@
 -(BOOL)isClosestObjectToMyLeftAnElement: (NSDictionary *)elementBeingTested
 {
     //This method is used to determine whether or not
+    NSLog(@"isClosestObjectToMyLeftAnElement just got %@", elementBeingTested);
     BOOL overlap,isElementClosest;
     NSMutableArray *overlappingItems = [NSMutableArray array];
     GroupingBox *grb = [self whichGroupingBoxIsElementIn:elementBeingTested];
+    /*
     NSRect rectToTest = NSMakeRect([[elementBeingTested objectForKey:xcoordinate]floatValue],
                                    [[elementBeingTested objectForKey:ycoordinate]floatValue],
-                                   (grb.bounds.origin.x - [[elementBeingTested objectForKey:xcoordinate]floatValue]),
+                                   ([[elementBeingTested objectForKey:xcoordinate]floatValue] - grb.bounds.origin.x),
                                    [[elementBeingTested objectForKey:@"height"]floatValue]);
+    */
+    NSRect rectToTest = NSMakeRect(
+                                   grb.bounds.origin.x,
+                                   [[elementBeingTested objectForKey:ycoordinate]floatValue],
+                                   ([[elementBeingTested objectForKey:xcoordinate]floatValue] - grb.bounds.origin.x),
+                                   [[elementBeingTested objectForKey:@"height"]floatValue]);
+    NSLog(@"isClosestObjectToMyLeftAnElement Returning rect : %@", NSStringFromRect(rectToTest));
     for (NSDictionary *dc in grb.insideTheBox)
     {
         NSRect dcRect = NSMakeRect(
@@ -865,7 +874,7 @@
                                    [[dc objectForKey:ycoordinate]floatValue],
                                    [[dc objectForKey:@"width"]floatValue],
                                    [[dc objectForKey:@"height"]floatValue]);
-        overlap = CGRectContainsRect(rectToTest, dcRect);
+        overlap = CGRectIntersectsRect(rectToTest, dcRect);
         if (overlap) {
             [overlappingItems addObject:dc];
         }
@@ -883,10 +892,13 @@
     {
         isElementClosest = NO;
     }
-    
+    NSLog(@"isClosestObjectToMyLeftAnElement returning value of %i", isElementClosest);
     return isElementClosest;
     
 }
+
+
+
 
 -(NSMutableDictionary *)nearestElementDirectlyAboveMeInMyRow: (NSDictionary *)elementBeingTested
 {
@@ -1693,6 +1705,13 @@ BOOL hasLeadingNumberInString(NSString* s)
         tagType = nil;
         tagContent = nil;
         
+        //Set the JS_ID tag just in case
+        if (hasLeadingNumberInString(ele.elementid)) //if the id starts with a number
+            ele.jsid = [NSString stringWithFormat:@"element%@", ele.elementid];
+        else
+            ele.jsid = ele.elementid;
+        
+        
         //Get the span - for Twitter Bootstrap
         span = ((int)ceil(ele.rtFrame.size.width/60));
         
@@ -2008,7 +2027,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                                         [self hsla:ele.colorAttributes], @"backgroundColor",
                                         [self dataSourceBindingCode:ele], @"dataSourceCode",
                                         [self actionCodeString:ele], @"actionCode",
-                                        [self dataSourceNameContainingKey:ele], @"associatedModel",
+                                        [self dataSourceNameContainingKey:ele], ASSOCIATED_MODEL,
                                         ele.dataSourceStringEntered, DATA_SOURCE_STRING_ENTERED,
                                         //[[ele valueForKeyPath:@"opacity"] valueForKey:@"body"], @"opacity",
                                         //Also get the NSColor as a hex value
@@ -4855,14 +4874,23 @@ BOOL hasLeadingNumberInString(NSString* s)
         }
     }
     
+    NSString *koScriptTag, *jQueryScriptTag = @"";
+    if (self.jsCode2)
+        koScriptTag = @"<script src=\"http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js\"></script>\n";
+        jQueryScriptTag = @"<script src=\"http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js\"></script>\n";
+    
+    if (!self.pageTitle)
+        [self.pageTitle stringByAppendingString: @"You ought to change the title!"];
+    
+
     NSString *imgMaxWidth = [NSString stringWithFormat:@"%d%%", 100];
-    start = [NSMutableString stringWithFormat: @"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<title>%@</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"\"><meta name=\"author\" content=\"\">\n<!-- Le styles --><link href=\"bootstrap.css\" rel=\"stylesheet\"><style type=\"text/css\">\n <script>%@</script>\nbody { \n  font-size: 0.75em;\n  background-color: %@;\n} \n.groupBox {\n  height: auto;\n  padding: none;\n} \nimg {\n  max-width: %@;\n}  \n", self.pageTitle, self.jsCode2, backgroundColourAsString, imgMaxWidth];
+    start = [NSMutableString stringWithFormat: @"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<title>%@</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"\"><meta name=\"author\" content=\"\">\n<!-- Le styles --><link href=\"bootstrap.css\" rel=\"stylesheet\"><style type=\"text/css\">\n %@%@ body { \n  font-size: 0.75em;\n  background-color: %@;\n} \n.groupBox {\n  height: auto;\n  padding: none;\n} \nimg {\n  max-width: %@;\n}  \n", self.pageTitle, koScriptTag, jQueryScriptTag, backgroundColourAsString, imgMaxWidth];
     //[start stringByAppendingString:backgroundColourAsString];
     //[start stringByAppendingString:@""];
     
-    middle = [NSMutableString stringWithString: @"\n</style></head>\n  <body>\n    "];
+    middle = [NSMutableString stringWithString: @"\n</style>\n</head>\n  <body>\n    "];
     
-    end = [NSMutableString stringWithString:@"\n</body>\n</html>"];
+    end = [NSMutableString stringWithString:[NSString stringWithFormat:@"\n<script>%@</script> \n</body>\n</html>", self.jsCode2]];
     
     doc = [NSMutableString stringWithString:
            [[[[start stringByAppendingString:css] stringByAppendingString:middle] stringByAppendingString:html] stringByAppendingString:end]];

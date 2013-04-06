@@ -28,7 +28,7 @@
 	<key>CFBundleIconFile</key>
 	<string>designer</string>
 	<key>CFBundleIdentifier</key>
-	<string>io.designer.designer</string>
+	<string>com.webstacker</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -46,7 +46,7 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2013 Designer.io. All rights reserved.</string>
+	<string>Copyright © 2013 Webstacker. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
