@@ -165,12 +165,13 @@
 @property(assign) IBOutlet NSPanel *buttonPanel;
 
 
+
 @property (assign, nonatomic) NSMutableDictionary *masterDataSource;
 
 // for Data Source Window
 @property(assign) NSMutableArray *arrayDataSource;
 
-
+@property (assign, nonatomic) NSMutableArray *actionsArray;
 //@property (assign, nonatomic) NSPopUpButton *layoutType;
 
 //@property (assign, nonatomic) NSNumber *kerningValue;
@@ -198,7 +199,6 @@
 
 - (BOOL)windowShouldClose:(id)sender;
 -(IBAction)showColorPanel:(id)sender;
--(void)showButtonPanel;
 
 
 -(void)clearKerningAndLeadingFields;

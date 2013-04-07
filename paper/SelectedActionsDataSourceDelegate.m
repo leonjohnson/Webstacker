@@ -1,5 +1,6 @@
 #import "SelectedActionsDataSourceDelegate.h"
 #import "BuilderWindowController.h"
+#import "Common.h"
 
 @implementation SelectedActionsDataSourceDelegate
 @synthesize SA_tableview;
@@ -48,10 +49,13 @@
     
 }
 
-
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    return [((BuilderWindowController*)self.delegate).ds objectAtIndex:row];
+    NSLog(@"Looks like: %@", [((BuilderWindowController*)self.delegate).ds objectAtIndex:row]);
+    
+    NSTableCellView *result = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
+    result.textField.stringValue = [((BuilderWindowController*)self.delegate).ds objectAtIndex:row];
+    return result;
 }
 
 

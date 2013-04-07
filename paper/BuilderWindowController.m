@@ -5,6 +5,7 @@
 #import "SelectedActionsDataSourceDelegate.h"
 #import "AppDelegate.h"
 #import "Common.h"
+#import "Document.h"
 
 #define builderScreenTitle_1   @"1. Enter a name for this action"
 #define builderScreenTitle_2   @"2. Select a trigger"
@@ -173,7 +174,8 @@
 
 -(IBAction)pressSaveButton:(id)sender
 {
-    Singleton *sg = [[Singleton alloc]init];
+    Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+    NSMutableSet *elementsInvolved = [curDoc elementsReferedToInBuilderScripts];
     // save the data
     /*
      'name': NSString of the actions name
@@ -188,17 +190,49 @@
     {
         // check if dictionary eqists that already has a key of 'name' equal to what we're about to save
     }
-    NSDictionary *actionDictionaryToSave = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [actionName stringValue], @"name",
-                                            sg.currentElement, @"element",
-                                            @"who knows", @"trigger",
-                                            ds, @"recipe",
-                                            @"None.", @"documentation",
-                                            @"None.", @"designation",
-                                            @"None.", @"customOrAdapated",
-                                            nil];
-    [[[NSApp delegate] actionsArray] addObject:actionDictionaryToSave];
+    NSLog(@"ds =  %@", ds);
+    NSLog(@"trigger = %@", ((TriggersDataSourceDelegate*)triggerTableView.dataSource).selectedTrigger);
+    NSLog(@"action = %@", elementsInvolved);
     
+    NSMutableDictionary *actionDictionaryToSave = [NSMutableDictionary dictionary];
+    
+    
+    
+    if ([actionName stringValue] == nil)
+        [actionDictionaryToSave setObject:[NSNull null] forKey:@"name"];
+    else
+        [actionDictionaryToSave setObject:[actionName stringValue] forKey:@"name"];
+    
+    
+    
+    
+    if (elementsInvolved == nil)
+        [actionDictionaryToSave setObject:[NSNull null] forKey:@"elementsInvolved"];
+    else
+        [actionDictionaryToSave setObject:elementsInvolved forKey:@"elementsInvolved"];
+    
+    
+    
+    if (ds == nil)
+        [actionDictionaryToSave setObject:[NSNull null] forKey:@"recipe"];
+    else
+        [actionDictionaryToSave setObject:ds forKey:@"recipe"];
+    
+    
+    
+    if (((TriggersDataSourceDelegate*)triggerTableView.dataSource).selectedTrigger == nil)
+        [NSNull null];
+    else
+        [actionDictionaryToSave setObject:((TriggersDataSourceDelegate*)triggerTableView.dataSource).selectedTrigger forKey:@"trigger"];
+    
+    [actionDictionaryToSave setObject:[NSNull null] forKey:@"documentation"];
+    [actionDictionaryToSave setObject:[NSNull null] forKey:@"designation"];
+    [actionDictionaryToSave setObject:[NSNull null] forKey:@"customOrAdapated"];
+    
+    
+    NSLog(@"want to save: %@", actionDictionaryToSave);
+    [[[NSApp delegate] actionsArray] addObject:actionDictionaryToSave];
+    NSLog(@"Saved: %@", [[NSApp delegate] actionsArray] );
     //Close the window
     
     

@@ -213,6 +213,7 @@ typedef NSInteger		ShapeCutCopyType;
 @property (assign) IBOutlet NSTextField *kerningLabel; //
 @property (assign) IBOutlet NSTextField *leadingLabel; //
 @property (assign) IBOutlet NSTextField *fontcolourWellLabel; //
+@property (assign) IBOutlet NSTextField *buttonTextLabel;
 
 // Fields
 
@@ -223,6 +224,7 @@ typedef NSInteger		ShapeCutCopyType;
 @property (assign) IBOutlet NSTextField *leadingField; //
 @property (assign, nonatomic) NSColorWell *fontColorWell; 
 @property (assign, nonatomic) NSSegmentedControl *fontTraitControl;
+@property (assign, nonatomic) NSTextField *buttonTextField;
 
 
 // Stepper
@@ -266,6 +268,8 @@ typedef NSInteger		ShapeCutCopyType;
 -(BOOL)isElementIDUnique: (NSMutableString *)string;
 
 
+//Button
+-(IBAction)labelButton:(id)sender;
 
 
 //Drawing methods

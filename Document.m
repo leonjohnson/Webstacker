@@ -34,7 +34,7 @@
 		// If an error occurs here, return nil.
 		scale = 100;
     }
-    
+    self.elementsReferedToInBuilderScripts = [NSMutableSet new];
     
 
     return self;

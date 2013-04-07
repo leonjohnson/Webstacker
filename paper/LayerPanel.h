@@ -1,21 +1,14 @@
-//
-//  LayerPanel.h
-//  DrawShap
-//
-//  Created by Bai Jin on 12/6/12.
-//  Copyright (c) 2012 Cosmo Software. All rights reserved.
-//
-
 #import <Cocoa/Cocoa.h>
 #import "SetLayerOrderDelegate.h"
 #import "BasePanel.h"
+#import "Element.h"
 
 @interface LayerPanel : BasePanel
 <NSTableViewDataSource, NSTableViewDelegate, SetLayerOrderDelegate>
 {
 	IBOutlet NSTableView						*_tableViewLayer;
 }
-
+@property (assign) Element *ele;
 /*
  @function:			OnVisible
  @purpose:			This function called when the user click the visible check box of layer table.

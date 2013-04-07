@@ -140,6 +140,8 @@
     /*for (NSDocument *doc in [[NSDocumentController sharedDocumentController] documents]) {
 		[((Document *)doc).stageView createContainerElement:1024];
 	}*/
+    
+    self.actionsArray = [NSMutableArray array];
 	
     [NSColorPanel setPickerMask:NSColorPanelWheelModeMask];
     
@@ -218,7 +220,7 @@
     
     //Bind buttonURLField
     [buttonURLField bind:@"value" toObject:self withKeyPath:@"sg.currentElement.imgName" options:nil];
-    [buttonLabel bind:@"value" toObject:self withKeyPath:@"sg.currentElement.buttonText" options:nil];
+    
     
     //Bind the font dropdowns to the text selected.
     [kerningStepper bind:@"value" toObject:self withKeyPath:@"kerningValue" options:nil]; // setKerningValue //
@@ -977,11 +979,6 @@
 		}
         
         
-        if ([[menuItem title] isEqualToString:@"Button"])
-        {
-			[menuItem setState:((buttonPanelVisible)? NSOnState: NSOffState)];
-		}
-        
         
         if ([[menuItem title] isEqualToString:@"Delete"])
         {
@@ -1068,53 +1065,16 @@
         
     }
     
-
-    
-    if ([caller isEqualToString:@"Font"]) 
-    {
-        fontPanelVisible = ~fontPanelVisible;
-        
-        if (fontPanelVisible) {
-            [fontPanel setIsVisible:YES];
-            NSLog(@"now visible");
-        } else {
-            [fontPanel setIsVisible:NO];
-            NSLog(@"Not visible");
-        }
-        
-    }
-    
-    
-    if ([caller isEqualToString:@"Button"])
-    {
-        NSLog(@"In the button part after close");
-        buttonPanelVisible = ~buttonPanelVisible;
-        
-        if (buttonPanelVisible) {
-            [buttonPanel setIsVisible:YES];
-            NSLog(@"now visible");
-        } else {
-            [buttonPanel setIsVisible:NO];
-            NSLog(@"Not visible");
-        }
-        
-    }
     
         
 }
 
--(void)showButtonPanel
-{
-    [buttonPanel setIsVisible:YES];
-    
-}
 
 - (void)InsertImageToStage:(id)sender
 {
     [stageView InsertImageToStage:self];
     Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
 	[[curDoc stageView] InsertImageToStage:nil];
-    NSLog(@"app to doc to stage to insert");
 }
 
 /*

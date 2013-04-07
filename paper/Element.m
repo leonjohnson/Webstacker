@@ -128,7 +128,6 @@
         case SHAPE_BUTTON:
 			shape = [[Button alloc] init];
             [[curDoc stageView] setElementBeenDroppedToStage:YES];
-            [[NSApp delegate] showButtonPanel];
             break;
             
         case SHAPE_IMAGE:

@@ -146,7 +146,7 @@ typedef NSInteger LayoutTag;
     
     NSMutableArray *elementsAboveMe;
     
-    NSMutableString *buttonText;
+    NSString *buttonText;
     
     NSString *layoutType;
     
@@ -205,7 +205,7 @@ typedef NSInteger LayoutTag;
 
 @property (assign, nonatomic) NSMutableArray *elementsAboveMe;
 
-@property (assign) NSMutableString *buttonText;
+@property (assign) NSString *buttonText;
 
 @property (assign, nonatomic) NSString *actionStringEntered;
 @property (assign, nonatomic) NSString *dataSourceStringEntered;

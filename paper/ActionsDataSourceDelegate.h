@@ -19,5 +19,4 @@
 @property (assign, nonatomic) NSTableView *selectedActionsTableview;
 @property (retain) id<ChangeBuilderWindowElementsAttributes>	delegate;
 @property (retain) NSMutableArray *arrayToCheck;
-
 @end

@@ -44,6 +44,8 @@
 @property (assign, nonatomic) Singleton *sg;
 @property (nonatomic, assign) DarkTitleViewButtons *darkButtons;
 
+@property (assign, nonatomic) NSMutableSet *elementsReferedToInBuilderScripts;
+@property (assign, nonatomic) NSString *builderScriptName;
 
 
 //  Window Delegate

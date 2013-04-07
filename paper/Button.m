@@ -300,6 +300,7 @@ CGMutablePathRef createRoundedRectForRect(CGRect rect, CGFloat topleft, CGFloat 
 
 -(void)setButtonText:(NSMutableString *)b
 {
+    NSLog(@"called buttony");
     [super setButtonText:b];
     [super postNotificationToRedraw];
 }

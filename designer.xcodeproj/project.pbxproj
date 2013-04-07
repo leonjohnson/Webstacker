@@ -85,6 +85,7 @@
 		F74A174116FFA2380057BF06 /* NSString+shortcuts.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A173516FF92790057BF06 /* NSString+shortcuts.m */; };
 		F74A17431703C1E60057BF06 /* BuilderWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A173216FF92520057BF06 /* BuilderWindowController.m */; };
 		F74A17461708BFD60057BF06 /* StageView+backgroundAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A17451708BFD60057BF06 /* StageView+backgroundAppearance.m */; };
+		F759CB6D1711A7C9004F2B9C /* NSMutableArray+addBuilderScreenOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = F759CB6C1711A7C9004F2B9C /* NSMutableArray+addBuilderScreenOptions.m */; };
 		F7631AF116F6177B00C8A011 /* StageView+conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = F7631AF016F6177B00C8A011 /* StageView+conversion.m */; };
 		F79D93F816024E3300AE661E /* TextInputField.m in Sources */ = {isa = PBXBuildFile; fileRef = F79D93F716024E3300AE661E /* TextInputField.m */; };
 		F7B311851687A7930047BC57 /* DropDown.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B311841687A7930047BC57 /* DropDown.m */; };
@@ -245,6 +246,8 @@
 		F74A173E16FF9AAB0057BF06 /* CustomTableCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomTableCellView.h; sourceTree = "<group>"; };
 		F74A173F16FF9AAB0057BF06 /* CustomTableCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomTableCellView.m; sourceTree = "<group>"; };
 		F74A17451708BFD60057BF06 /* StageView+backgroundAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StageView+backgroundAppearance.m"; sourceTree = "<group>"; };
+		F759CB6B1711A7C9004F2B9C /* NSMutableArray+addBuilderScreenOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+addBuilderScreenOptions.h"; sourceTree = "<group>"; };
+		F759CB6C1711A7C9004F2B9C /* NSMutableArray+addBuilderScreenOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+addBuilderScreenOptions.m"; sourceTree = "<group>"; };
 		F7631AF016F6177B00C8A011 /* StageView+conversion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StageView+conversion.m"; sourceTree = "<group>"; };
 		F79D93F616024E3300AE661E /* TextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextInputField.h; sourceTree = "<group>"; };
 		F79D93F716024E3300AE661E /* TextInputField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextInputField.m; sourceTree = "<group>"; };
@@ -259,8 +262,8 @@
 		F7DB1C5A162C7D7000CD72D4 /* Document.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Document.m; path = ../Document.m; sourceTree = "<group>"; };
 		F7DB1C5E162C87A300CD72D4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Document.xib; sourceTree = "<group>"; };
 		F7DB1C63162CC78900CD72D4 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
-		F7DB3ED0163FF8F600D98CA5 /* designer.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; path = designer.iconset; sourceTree = "<group>"; };
-		F7DB3ED216400E5F00D98CA5 /* designer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = designer.entitlements; sourceTree = "<group>"; };
+		F7DB3ED0163FF8F600D98CA5 /* designer.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; name = designer.iconset; path = ../designer.iconset; sourceTree = "<group>"; };
+		F7DB3ED216400E5F00D98CA5 /* designer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = designer.entitlements; path = ../designer.entitlements; sourceTree = "<group>"; };
 		F7DB3EE21640945C00D98CA5 /* element_3_rectangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = element_3_rectangle.png; sourceTree = "<group>"; };
 		F7DB3EE31640945C00D98CA5 /* element_4_textbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = element_4_textbox.png; sourceTree = "<group>"; };
 		F7DB3EE41640945C00D98CA5 /* element_5_textfield.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = element_5_textfield.png; sourceTree = "<group>"; };
@@ -348,8 +351,8 @@
 		5877F006155588A9005FF829 = {
 			isa = PBXGroup;
 			children = (
-				F7DB3ED216400E5F00D98CA5 /* designer.entitlements */,
-				F7DB3ED0163FF8F600D98CA5 /* designer.iconset */,
+				F759CB6B1711A7C9004F2B9C /* NSMutableArray+addBuilderScreenOptions.h */,
+				F759CB6C1711A7C9004F2B9C /* NSMutableArray+addBuilderScreenOptions.m */,
 				F7DB1C63162CC78900CD72D4 /* Common.h */,
 				5877F01B155588AA005FF829 /* App */,
 				5877F014155588AA005FF829 /* Frameworks */,
@@ -414,6 +417,8 @@
 				5877F021155588AA005FF829 /* main.m */,
 				5877F023155588AA005FF829 /* webstacker-Prefix.pch */,
 				5877F024155588AA005FF829 /* Credits.rtf */,
+				F7DB3ED216400E5F00D98CA5 /* designer.entitlements */,
+				F7DB3ED0163FF8F600D98CA5 /* designer.iconset */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -662,11 +667,11 @@
 			children = (
 				580D7A3F15E05096004C9E3F /* CustomUI */,
 				F7B3116E1684B60E0047BC57 /* NSWindow subclass */,
-				5877F0BD1556F8F7005FF829 /* MainMenu.xib */,
 				F74A173C16FF958D0057BF06 /* Builder.xib */,
-				3FEF2DED16D930EC005A05B9 /* NewContainerWindowController.xib */,
-				F7DB1C5F162C87A300CD72D4 /* Document.xib */,
 				3F1CEAEB16D55BED009246C2 /* DataSourceWindowController.xib */,
+				F7DB1C5F162C87A300CD72D4 /* Document.xib */,
+				5877F0BD1556F8F7005FF829 /* MainMenu.xib */,
+				3FEF2DED16D930EC005A05B9 /* NewContainerWindowController.xib */,
 				3FC1BC4616EA511400C350C9 /* CustomButton.h */,
 				3FC1BC4716EA511400C350C9 /* CustomButton.m */,
 			);
@@ -870,6 +875,7 @@
 				F71E3DA016F5F31D0081B0E4 /* StageView+colorsShadowsGradients.m in Sources */,
 				F74A172616FE30EF0057BF06 /* StageView+knockout.m in Sources */,
 				F74A17461708BFD60057BF06 /* StageView+backgroundAppearance.m in Sources */,
+				F759CB6D1711A7C9004F2B9C /* NSMutableArray+addBuilderScreenOptions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

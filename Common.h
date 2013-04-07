@@ -11,6 +11,10 @@
 #ifndef DrawShape_Common_h
 #define DrawShape_Common_h
 
+#define STATEMENT                               @"statement"
+#define DOCUMENTATION                           @"documentation"
+#define ICON                                    @"icon"
+
 #define TEXT_FIELD_PADDING_TOP                  @"4"
 #define TEXT_FIELD_PADDING_BOTTOM               @"4"
 #define TEXT_FIELD_PADDING_LEFT                 @"4"
@@ -52,7 +56,7 @@
 #define LAST                                    @"last"
 
 #define CONTAINER_ID                            @"containerID"
-#define ELEMENT_ID                              @"elementID"
+#define ELEMENT_ID                              @"elementid"
 #define RT_FRAME                                @"rtframe"
 
 #define TRIGGER                                 @"trigger"

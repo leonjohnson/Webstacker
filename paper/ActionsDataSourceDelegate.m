@@ -12,6 +12,7 @@
 #import "Container.h"
 #import "NSString+shortcuts.h"
 #import "CustomTableCellView.h"
+#import "NSMutableArray+addBuilderScreenOptions.h"
 
 @implementation ActionsDataSourceDelegate
 @synthesize actionsLabel;
@@ -35,14 +36,23 @@
     
     if ([actionsTableView selectedRow] > -1 )
     {
+        Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+        NSArray *elementsIDArray = [[[curDoc stageView] elementArray] valueForKeyPath:ELEMENT_ID];
+        NSString *eleID = [[self.commandsAndActions objectAtIndex:selRow] objectForKey:ELEMENT_ID];
+        NSLog(@"stage has : %@", elementsIDArray);
+        NSLog(@"tHIS OBJECT HAS KEY OF: %@", eleID);
         //Add the selected row to the datasource for the selected actions tbl
         //Add the selected row to the final actions list - should this not be done at publish time?
-        id objectToAdd = [self.commandsAndActions objectAtIndex:selRow];
+        //Add just the text, so [0] in next line.
+        id objectToAdd = [[self.commandsAndActions objectAtIndex:selRow]objectForKey:STATEMENT];
         if ([[((BuilderWindowController*)self.delegate) ds] containsObject:objectToAdd])
         {
             //WARNING: Throw a warning that this action is already in your actions List.
             NSLog(@"Throw a a warning.");
         }
+        
+        if ([elementsIDArray containsObject:eleID])
+            [[curDoc elementsReferedToInBuilderScripts] addObject:eleID];
         
         [((BuilderWindowController*)self.delegate).ds addObject:objectToAdd];
         
@@ -72,6 +82,10 @@
     //Singleton *sg = [[Singleton alloc]init];
     //ElementType type = sg.currentElement.uType;
     
+    // [0] = The action statement
+    // [1] = The icon
+    // [2] = ElementID if applicable
+    // [3] = Documentation
     
     NSMutableArray *arrayOfStatements = [NSMutableArray array];
     NSMutableArray *statements = [NSMutableArray array];
@@ -99,7 +113,7 @@
                 
                 for (NSString *statement in statements)
                 {
-                    NSArray *array = [NSArray arrayWithObjects:statement, [ele imageWithSubviews], @"", nil];
+                    NSDictionary *array = [NSDictionary addStatement:statement icon:ele.imageWithSubviews elementid:ele.elementid documentation:nil];
                     [arrayOfStatements addObject:array];
                 }
             }
@@ -113,7 +127,7 @@
                 
                 for (NSString *statement in statements)
                 {
-                    NSArray *array = [NSArray arrayWithObjects:statement, [ele imageWithSubviews], @"", nil];
+                    NSDictionary *array = [NSDictionary addStatement:statement icon:ele.imageWithSubviews elementid:ele.elementid documentation:nil];
                     [arrayOfStatements addObject:array];
                 }
             }
@@ -127,7 +141,8 @@
                     for (NSString *key in [dataSource objectAtIndex:0]) // every row in the array has the same dictionary structure so the first will do.
                     {
                         NSString *myString = [NSString stringWithFormat:@"Get the %@ for the selected %@", key, ele.elementid];
-                        NSArray *dropDownArray = [NSArray arrayWithObjects:myString, [ele imageWithSubviews], @"", nil];
+                        //NSArray *dropDownArray = [NSArray arrayWithObjects:myString, [ele imageWithSubviews], ele.elementid , @"", nil];
+                        NSDictionary *dropDownArray = [NSDictionary addStatement:myString icon:ele.imageWithSubviews elementid:ele.elementid documentation:nil];
                         [arrayOfStatements addObject:dropDownArray];
                     }
             }
@@ -142,13 +157,16 @@
             */
             //Generic statements for all elements
             NSString *showElement = [NSString stringWithFormat:@"show element with tag %@", ele.elementid];
-            NSArray *showElementArray = [NSArray arrayWithObjects:showElement, [ele imageWithSubviews], @"", nil];
+            //NSArray *showElementArray = [NSArray arrayWithObjects:showElement, [ele imageWithSubviews], @"", nil];
+            NSDictionary *showElementArray = [NSDictionary addStatement:showElement icon:ele.imageWithSubviews elementid:ele.elementid documentation:nil];
             
             NSString *hideElement = [NSString stringWithFormat:@"hide element with tag %@", ele.elementid];
-            NSArray *hideElementArray = [NSArray arrayWithObjects:hideElement, [ele imageWithSubviews], @"", nil];
+            //NSArray *hideElementArray = [NSArray arrayWithObjects:hideElement, [ele imageWithSubviews], @"", nil];
+            NSDictionary *hideElementArray = [NSDictionary addStatement:hideElement icon:ele.imageWithSubviews elementid:ele.elementid documentation:nil];
             
             NSString *elementIDString = [NSString stringWithFormat:@"%@", ele.elementid];
-            NSArray *eleArray = [NSArray arrayWithObjects:elementIDString, [ele imageWithSubviews], @"", nil];
+            //NSArray *eleArray = [NSArray arrayWithObjects:elementIDString, [ele imageWithSubviews], @"", nil];
+            NSDictionary *eleArray = [NSDictionary addStatement:elementIDString icon:ele.imageWithSubviews elementid:ele.elementid documentation:nil];
             
             [arrayOfStatements addObject:showElementArray];
             [arrayOfStatements addObject:hideElementArray];
@@ -161,39 +179,7 @@
     } // end of for loop
     
     
-   /*
-    // catch all generic statements that do not belong in a loop
-    NSArray *genericStatements = [NSArray arrayWithObjects:
-                               @"get Facebook photos posted by me",
-                               @"get Facebook photos posted by friends",
-                               @"get Facebook photos I've liked",
-                               @"get Facebook photos liked by friends", // which includes data on the likes and is ordered by time by default
-                               @"logged into Facebook",
-                               @"login to FB",
-                               @"get Facebook photos they've liked",
-                               @"show the login button",
-                               @"add row",
-                               @"delete row",
-                               nil];
-    NSImage *appIcon = [NSImage imageNamed:NSImageNameApplicationIcon];
-    NSArray *genericAction = nil;
-    
-    for (NSString *statement in genericStatements)
-    {
-        if ([statement containsString:@"facebook"])
-        {
-            NSRange rangeOfString = {0,0};
-            rangeOfString = [statement rangeOfString:@"facebook" options:NSCaseInsensitiveSearch];
-            //rangeOfString.length++; // get rid of the following space
-            
-            NSString *textBeforeIcon = [statement substringWithRange:NSMakeRange(0, rangeOfString.location)];
-            NSUInteger currentPoint = rangeOfString.location + rangeOfString.length;
-            NSString *textAfterIcon = [statement substringWithRange:NSMakeRange(currentPoint, statement.length - currentPoint)];
-            genericAction = [NSArray arrayWithObjects:textBeforeIcon, appIcon, textAfterIcon, nil];
-        }
-        [arrayOfStatements addObject:genericAction];
-    }
-    */
+
     return arrayOfStatements;
 }
 
@@ -214,7 +200,8 @@
                                        @"that contain",
                                        nil];
     for (NSString *each in gCommands) {
-        NSArray *thePair = [NSArray arrayWithObjects:each, appIcon, @"", nil];
+        NSDictionary *thePair = [NSDictionary addStatement:each icon:appIcon elementid:nil documentation:nil];
+        
         [arrayToReturn addObject:thePair];
     }
     
@@ -230,8 +217,7 @@
 
 -(id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index
 {
-    NSLog(@"Loading : %@", [[[self loadActions] objectAtIndex:index] objectAtIndex:0]);
-    return [[[self loadActions] objectAtIndex:index] objectAtIndex:0];
+    return [[[self loadActions] objectAtIndex:index] objectForKey:STATEMENT];
 }
 
 
@@ -255,9 +241,9 @@
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     NSTableCellView *result = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
-    NSArray *rowContentArray = [self.commandsAndActions objectAtIndex:row];
-    result.textField.stringValue = [NSString stringWithFormat:@"%@ %@", [rowContentArray objectAtIndex:0], [rowContentArray objectAtIndex:2]];
-    result.imageView.image = [rowContentArray objectAtIndex:1];
+    NSDictionary *rowContent = [self.commandsAndActions objectAtIndex:row];
+    result.textField.stringValue = [rowContent objectForKey:STATEMENT];
+    result.imageView.image = [rowContent objectForKey:ICON];
     return result;
     
 }
