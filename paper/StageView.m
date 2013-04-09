@@ -2179,7 +2179,8 @@ static NSImage *bottomImage;
 {
 	[self DeselectAllShaps];
 	[self DisableEditing];
-	
+	pt.y = ceil(pt.y);
+    pt.x = ceil(pt.x);
 	pt = [self convertPoint:pt fromView:nil];
 	//pt.y = self.frame.size.height - pt.y;
 	
@@ -2205,7 +2206,7 @@ static NSImage *bottomImage;
     int oldTag = [self elementCount];
     int newTag = oldTag+1;
     [shape setValue:[[NSNumber numberWithInt:newTag] stringValue] forKey:@"elementTag"];
-    [shape setValue:[[NSNumber numberWithInt:newTag] stringValue] forKey:@"elementid"];
+    [shape setValue:[NSString stringWithFormat:@"%i", newTag] forKey:@"elementid"];
 	
     self.elementCount = newTag;
     [self locateElementOnStage:shape];
@@ -2788,7 +2789,7 @@ static NSImage *bottomImage;
     int oldTag = [self elementCount];
     int newTag = oldTag+1;
     [element setValue:[[NSNumber numberWithInt:newTag] stringValue] forKey:@"tag"];
-    [element setValue:[[NSNumber numberWithInt:newTag] stringValue] forKey:@"elementid"];
+    [element setValue:[NSString stringWithFormat:@"%i", newTag] forKey:@"elementid"];
 	
     //Update the element count
     self.elementCount = newTag;

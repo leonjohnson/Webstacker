@@ -2230,10 +2230,13 @@ BOOL hasLeadingNumberInString(NSString* s)
                  */
                 
             }
+            //if (![[g objectForKey:@"tag"] isEqual: DYNAMIC_ROW_TAG])
+            //{
+                NSMutableArray *eachRow = [NSMutableArray arrayWithObject:g];
+                [eachRow addObjectsFromArray:filteredSortedArray];
+                [self.rows addObject:eachRow];
+            //}
             
-            NSMutableArray *eachRow = [NSMutableArray arrayWithObject:g];
-            [eachRow addObjectsFromArray:filteredSortedArray];
-            [self.rows addObject:eachRow];
         }
         else
         {
@@ -2322,7 +2325,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         NSMutableArray *classString = [NSMutableString string];
         NSMutableArray *functionArray = [NSMutableArray array];
         NSMutableArray *parametersList = [NSMutableArray array];
-        for (NSMutableDictionary *elementToCheck in self.sortedArray)
+        for (NSMutableDictionary *elementToCheck in [self.sortedArray copy]) // Use a copy of the array so I can mutate it whilst enumerating it
         {
             CGRect rect2 = CGRectMake(
                                       [[elementToCheck objectForKey:xcoordinate] floatValue],
@@ -3179,7 +3182,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSLog(@"SELF.ROWS = %@", self.rows);
     for (NSArray *row in self.rows)
     {
-        NSLog(@"In the loop.");
+        NSLog(@"In the loop with row : %@.", row);
         // get the highest item (top left) inside that row
         NSDictionary *highestElementInRow = [self highestElementInMyRow:[row objectAtIndex:0]];
         NSUInteger rowNumber = [self elementRow:highestElementInRow];
@@ -3192,6 +3195,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         {
             int largestYcoordinateInRowAbove = [self largestYcoordinateInMyRow:[[self.rows objectAtIndex:rowNumber-1]objectAtIndex:0]];
             NSLog(@"Lowest coordinate in the row above me is : %d", largestYcoordinateInRowAbove);
+            NSLog(@"Highest element in row : %@", highestElementInRow);
             calculatedMarginTop = [[highestElementInRow valueForKey:ycoordinate]intValue] - largestYcoordinateInRowAbove;
             NSLog(@"CALCULATED MARGINTOP IS : %d", calculatedMarginTop);
         }
@@ -3899,6 +3903,10 @@ BOOL hasLeadingNumberInString(NSString* s)
             [shadowArray addObject:@";"]; // and add the ending semi-colon to terminate the css statement.
             shadowCSS = [NSMutableString stringWithString:[shadowArray componentsJoinedByString:@""]];
             
+            if (shadowCSS == nil) {
+                [shadowCSS setString:@""];
+            }
+            
             /*
              The box-shadow property allows elements to have multiple shadows, specified by a comma seperated list.
              When more than one shadow is specified, the shadows are layered front to back, as in the following example.
@@ -3908,6 +3916,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         //2. DataSource, actions, and visibility
         NSString *actionCode = [block objectForKey:@"actionCode"];
         NSString *dataSourceCode = [block objectForKey:@"dataSourceCode"];
+        NSLog(@"ac = %@", actionCode);
         
         
         
@@ -4575,7 +4584,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSMutableArray *arrayI = [NSMutableArray arrayWithObjects:
                                       @"#",
                                       blockidAsString,
-                                      @"{margin:",
+                                      @"{margin: ",
                                       [NSNumber numberWithInt:CmarginTop],
                                       @"px ",
                                       [NSNumber numberWithInt:CmarginRight],
@@ -4584,7 +4593,8 @@ BOOL hasLeadingNumberInString(NSString* s)
                                       @"px ",
                                       [NSNumber numberWithInt:CmarginLeft],
                                       @"px; ",
-                                      @"width:",
+                                      @"\n",
+                                      @"width: ",
                                       widthAsANumber, // check above for the calculation...
                                       // 24 because the TextInputField class is inset of x8/y8, has a padding of 4+4, and Bootstrap has a padding of 4+4 see files, but minus the borderwidth - so 8+8+8
                                       elementLayoutType,
@@ -4592,12 +4602,16 @@ BOOL hasLeadingNumberInString(NSString* s)
                                       @"height: ",
                                       [NSNumber numberWithInt:CHeight-(([borderStrokeString intValue]*2) )],
                                       // 8 because the TextInputField class is inset of x1/y1, has a padding of 0+0, and Bootstrap has a padding of 4+4 see files, but minus the borderwidth - so 1+0+8 - BUT the 1 isn't needed for some reason.
-                                      @"px; height: ",
-                                      @"px; float:left; ",
+                                      @"px;",
                                       @"\n",
-                                      shadowCSS,
+                                      @"float: left; ",
                                       @"\n",
                                       nil];
+            if (shadowCSS)
+                // Make it neater so there are no extra gaps.
+                [arrayI insertObject:shadowCSS atIndex:arrayI.count-1];
+                [arrayI insertObject:@"\n" atIndex:arrayI.count-1];
+            
             NSLog(@"CHEIGHT : %d and borderStrokeString : %d", CHeight, [borderStrokeString intValue]);
             NSArray *borderStrokeArray = [NSArray arrayWithObjects:
                                           @"border: ",
@@ -4611,7 +4625,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 [arrayI addObjectsFromArray:borderStrokeArray];
             }
             
-            [arrayI addObject:@" }"];
+            [arrayI addObject:@" }\n"];
             
             Cstyle = [NSMutableString stringWithString:[Cstyle stringByAppendingString:[arrayI componentsJoinedByString:@""]]];
         }
@@ -4700,6 +4714,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                                           @"\n",
                                           @"  -moz-border-radius: ",
                                           borderRadiusString,
+                                          @"\n",
                                           @";",
                                           nil];
             NSArray *boxShadow = [NSArray arrayWithObject:@"-webkit-box-shadow: inset 0px 1px 0px 0px rgba(256,256,256,0.7);"];
@@ -4731,7 +4746,9 @@ BOOL hasLeadingNumberInString(NSString* s)
             }
             
             NSArray *arrayJ = [NSArray arrayWithObjects:
-                               @"<a id=\"",
+                               @"<a ",
+                               actionCode,
+                               @"id=\"",
                                blockidAsString,
                                @"\" class=\"btn btn-primary btn-large\">",
                                [block valueForKey:@"content"],
@@ -4884,7 +4901,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     
 
     NSString *imgMaxWidth = [NSString stringWithFormat:@"%d%%", 100];
-    start = [NSMutableString stringWithFormat: @"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<title>%@</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"\"><meta name=\"author\" content=\"\">\n<!-- Le styles --><link href=\"bootstrap.css\" rel=\"stylesheet\"><style type=\"text/css\">\n %@%@ body { \n  font-size: 0.75em;\n  background-color: %@;\n} \n.groupBox {\n  height: auto;\n  padding: none;\n} \nimg {\n  max-width: %@;\n}  \n", self.pageTitle, koScriptTag, jQueryScriptTag, backgroundColourAsString, imgMaxWidth];
+    start = [NSMutableString stringWithFormat: @"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<title>%@</title>\n%@%@\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<meta name=\"description\" content=\"\"><meta name=\"author\" content=\"\">\n<!-- Le styles --><link href=\"bootstrap.css\" rel=\"stylesheet\"><style type=\"text/css\">\n body { \n  font-size: 0.75em;\n  background-color: %@;\n} \n.groupBox {\n  height: auto;\n  padding: none;\n} \nimg {\n  max-width: %@;\n}  \n", self.pageTitle, koScriptTag, jQueryScriptTag, backgroundColourAsString, imgMaxWidth];
     //[start stringByAppendingString:backgroundColourAsString];
     //[start stringByAppendingString:@""];
     

@@ -12,6 +12,7 @@
 
 - (BOOL) containsString: (NSString*) substring
 {
+    NSLog(@"string received is : %@", substring);
     NSRange range = [self rangeOfString:substring options:NSCaseInsensitiveSearch];
     BOOL found = ( range.location != NSNotFound );
     return found;

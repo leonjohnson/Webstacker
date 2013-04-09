@@ -108,11 +108,13 @@
     {
         [elementsInsideMeIDs addObject:[ele objectForKey:JS_ID]];
         if ([ele isMemberOfClass:[TextInputField class] || [DropDown class]] )
+            NSLog(@"jsid ? %@", [ele objectForKey:JS_ID]);
             [parameterList addObject:[ele objectForKey:JS_ID]];
+            NSLog(@"parameterList being called");
         
     }
     if (parameterList) 
-        [parameterList insertObject:[dyRowDict objectForKey:JS_ID] atIndex:0];
+        NSLog(@"parameterList is : %@", parameterList);
         parameterString = [parameterList componentsJoinedByString:@", "];
     
     NSMutableString *openingString = [NSMutableString stringWithFormat:@"function %@(", [[dyRowDict objectForKey:JS_ID] capitalizedString]];
@@ -158,6 +160,8 @@
     //[openingString substringToIndex:[openingString length]-1]; // clean up, we remove the comma left over at the end
     [openingString appendString:parameterString];
     [openingString appendString:@") {\n"];
+    [openingString appendString:@"var self = this;"];
+    [openingString appendString:@"\n"];
     [classArray appendString:@"}\n"];
     [openingString appendString:classArray];
     [openingString appendString:@"\n\n\n"];
@@ -330,17 +334,18 @@
             dyRow = (DynamicRow*)e; // assuming there is just one dyRow in elementsArray.
         }
     }
-    NSString *dyRowID = [dyRow elementid];
+    NSString *dyRowID = [NSString stringWithString:dyRow.elementid];
     NSArray *words = [ele.actionStringEntered componentsSeparatedByString:@" "];
     NSString *firstWord = words[0];
     NSString *secondWord = words[1];
+    NSString *viewModelClassName = [NSString stringWithFormat:@"add%@", dyRow];
+    NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
     
     // Remove row
     if ([firstWord containsString:@"Remove"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) )
     {
         NSLog(@"ACTION STRING IS : %@", ele.actionStringEntered);
-        NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
-        actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: $root.%@\"", methodName];
+        actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: $root.%@\"", viewModelClassName];
         return actionsStringToReturn;
     }
     
@@ -348,13 +353,12 @@
     // Add row
     if ([firstWord containsString:@"Add"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) ) //what if the dyRow element has an id of myRow and not row? WE SHOULD ALLOW THE USER TO ENTER ADD ROW OR ADD SEAT
     {
-        NSLog(@"grrh");
-        NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
+             
         // The default if 'add row' text found
-        actionsStringToReturn = [NSString stringWithFormat: @"data-bind=\"click: %@\"", methodName];
+        NSLog(@"grrh");   
+        actionsStringToReturn = [NSString stringWithFormat: @"data-bind=\"click: %@\" ", viewModelClassName];
         
         // Now check if any 'max' or 'min' exists in the string entered
-        //NSString *substring = @"addRow";
         NSMutableString *copy = [NSMutableString stringWithString:ele.actionStringEntered];
         [copy deleteCharactersInRange:NSMakeRange(0, 7)]; //The word Total has 7 characters in it including the space.
         
@@ -400,7 +404,7 @@
                 
             }
         }
-        NSLog(@"Returning : %@", actionsStringToReturn);
+        NSLog(@"Returning actionsString add row: %@", actionsStringToReturn);
         return actionsStringToReturn;
     }
     
@@ -411,6 +415,7 @@
         // enter jQuery string here
         // if string starts with 'jquery' then the stageView should pass this straight to the jsCode string and not include this as part of the knockout inline html code. This element should have a class of 'js-element12'.
         actionsStringToReturn = @"jquery toogle";
+        NSLog(@"Returning actionsString toggle: %@", actionsStringToReturn);
         return actionsStringToReturn;
     }
     
@@ -504,7 +509,6 @@
                          
                          BOOL firstObject = NO;
                          BOOL lastObject = NO;
-                         NSLog(@"here4");
                          NSUInteger indexa = [headerTitles indexOfObject:title];
                          if (headerTitlesCount == indexa+1)
                          {
@@ -517,7 +521,6 @@
                              firstObject = YES;
                          }
                          
-                         NSLog(@"here5");
                          NSString *stringToInsert = [row objectAtIndex:indexa];
                          NSNumber *possibleNumber = [f numberFromString: stringToInsert];
                          NSMutableString *subRow = [NSMutableString new];
@@ -534,15 +537,11 @@
                              [subRow insertString:@"{" atIndex:0];
                          }
                          if (lastObject) {
-                             NSLog(@"IN HEREEE");
                              [subRow insertString:@"}" atIndex:[subRow length]-1];
-                             
                          }
-                         NSLog(@"here6 : %@", subRow);
                          [dataModelRow addObject:subRow];
                      }
                      NSString *dataModelRowString = [dataModelRow componentsJoinedByString:@","];
-                     NSLog(@"here7 : %@", dataModelRowString);
                      [dataModel appendString:dataModelRowString];
                      
                      NSUInteger thisIteration = [dataSourceArray indexOfObject:row]+1;
@@ -554,7 +553,7 @@
                  }
                  
              }
-             NSString *dataModelAsAString = [NSString stringWithFormat:@"self.%@ = [\n %@\n];", dataSourceName, dataModel];
+             NSString *dataModelAsAString = [NSString stringWithFormat:@"self.%@ = [\n%@\n];", dataSourceName, dataModel];
              NSLog(@"here10 : %@", dataModelAsAString);
              /* convert it to JSON for knockout
               if ([NSJSONSerialization isValidJSONObject:dataModel])
