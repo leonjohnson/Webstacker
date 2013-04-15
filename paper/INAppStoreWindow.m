@@ -198,6 +198,7 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
     INAppStoreWindow *window = (INAppStoreWindow *)[self window];
     BOOL drawsAsMainWindow = ([window isMainWindow] && [[NSApplication sharedApplication] isActive]);
     
+    
     NSRect drawingRect = [self bounds];
     if ( /*window.titleBarDrawingBlock*/YES ) {
         CGPathRef clippingPath = createClippingPathWithRectAndRadius(drawingRect, INCornerClipRadius);

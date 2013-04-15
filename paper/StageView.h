@@ -126,7 +126,6 @@ typedef NSInteger		ShapeCutCopyType;
     //document settings
     IBOutlet DocumentSettingsView *documentSettingsView;
     NSRect documentContainer; // change this to an element with a rect in it
-    NSColor *stageBackgroundColor;
     
     //IBOutlet NSPopUpButton *typeFaceName;
     //IBOutlet NSPopUpButton *typeFaceTrait;
@@ -249,6 +248,7 @@ typedef NSInteger		ShapeCutCopyType;
 @property (assign) IBOutlet NSSearchField	*searchField;
 @property (nonatomic) BOOL					isShowFontTab;
 
+@property (nonatomic) BOOL koObservableMapped;
 
 //Font based methods
 -(IBAction)setFontTrait:(id)sender;
@@ -506,6 +506,7 @@ BOOL hasLeadingNumberInString(NSString* s);
 
 @interface StageView (backgroundAppearance)
 -(IBAction)toggleGridlineVisibility:(id)sender;
+-(IBAction)changeStageBackgroundColor:(id)sender;
 @end
 
 

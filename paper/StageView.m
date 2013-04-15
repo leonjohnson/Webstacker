@@ -2143,7 +2143,7 @@ static NSImage *bottomImage;
             break;
             
         case SHAPE_DROPDOWN:
-            defaultSizeOfElement = NSMakeSize(218, 25);
+            defaultSizeOfElement = NSMakeSize(218, 26);
             break;
             
         case SHAPE_PLACEHOLDER_IMAGE:

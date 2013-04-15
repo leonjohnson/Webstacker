@@ -76,8 +76,11 @@
 #define DATA_SOURCE_STRING_ENTERED              @"dataSourceStringEntered"
 
 #define OBSERVABLE_NAME_ARRAY                   @"observableArrayName"
+#define OBSERVABLE_ELEMENT_IN_DATASOURCE        @"observableElementInDataSource"
 
-#define JS_ID                                    @"jsid"
+#define JS_ID                                   @"jsid"
+
+#define DATA_SOURCE_CODE                        @"dataSourceCode"
 
 //#define XCOORDINATE                             @"xcoordinate"
 //#define YCOORDINATE                             @"ycoordinate"

@@ -1999,9 +1999,6 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         
         NSLog(@"about to export");
-        NSLog(@"Got 1: %@", [self actionCodeString:ele]); 
-        NSLog(@"Got 2: %@", [self dataSourceBindingCode:ele]); 
-        NSLog(@"Got 3: %@", ele.dataSourceStringEntered);
         NSMutableDictionary * export = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithFloat:ele.rtFrame.origin.x], @"xcoordinate",
                                         [NSNumber numberWithFloat:ele.rtFrame.origin.y], @"ycoordinate",
@@ -3544,10 +3541,17 @@ BOOL hasLeadingNumberInString(NSString* s)
     // ASSUMPTION, YOU CAN ONLY HAVE ONE DYROW ON THE PAGE
     NSMutableArray *bucket = [NSMutableArray new];
     self.jsCode2 = [NSMutableString string];
-    for (NSMutableDictionary *element in self.sortedArray)
+    for (NSMutableDictionary *element in [self.sortedArray copy])
     {
         if ([[element objectForKey:@"tag"] isEqual:DYNAMIC_ROW_TAG]) {
             [bucket addObject:element];
+        }
+        
+        if ( [element objectForKey:DATA_SOURCE_CODE] == nil && [element objectForKey:DATA_SOURCE_STRING_ENTERED] != nil)
+        {
+            // This is called if the element has a dataSource string to be converted into code,
+            // but the element is positioned before the element that provides the reference to the ko.observeredArray (aMeal)
+            [element setObject: forKey:<#(id<NSCopying>)#>]
         }
     }
     
@@ -3565,6 +3569,9 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     NSLog(@"jscode2 = %@", self.jsCode2);
 }
+
+
+
 
 
 
@@ -3705,7 +3712,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSMutableDictionary *oneBefore = [self.sortedArray objectAtIndex:myIndex-1];
             if ([[oneBefore objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
             {
-                [groupBoxOpeningDiv appendFormat:@"data-bind=\"foreach: %@\" ", [oneBefore objectForKey:@"id"]];
+                [groupBoxOpeningDiv appendFormat:@"data-bind=\"foreach: %@s\"> \n <div  ", [oneBefore objectForKey:@"id"]]; //plural is the name of the ko.observable
             }
             [groupBoxOpeningDiv appendString:@"class=\"groupBox\" "];
             NSMutableDictionary *groupingBoxInQuestion = [NSMutableDictionary dictionary];
@@ -4714,8 +4721,8 @@ BOOL hasLeadingNumberInString(NSString* s)
                                           @"\n",
                                           @"  -moz-border-radius: ",
                                           borderRadiusString,
-                                          @"\n",
                                           @";",
+                                          @"\n",
                                           nil];
             NSArray *boxShadow = [NSArray arrayWithObject:@"-webkit-box-shadow: inset 0px 1px 0px 0px rgba(256,256,256,0.7);"];
             

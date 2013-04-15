@@ -2620,7 +2620,7 @@
 																<double key="NSSize">10</double>
 																<int key="NSfFlags">16</int>
 															</object>
-															<object class="NSNumberFormatter" key="NSFormatter" id="623542375">
+															<object class="NSNumberFormatter" key="NSFormatter" id="364254577">
 																<dictionary class="NSMutableDictionary" key="NS.attributes">
 																	<boolean value="YES" key="allowsFloats"/>
 																	<integer value="1040" key="formatterBehavior"/>
@@ -2644,7 +2644,7 @@
 																	<reference key="NSAttributes" ref="60495107"/>
 																</object>
 																<real value="0.0" key="NS.min"/>
-																<object class="NSDecimalNumberPlaceholder" key="NS.max" id="553784980">
+																<object class="NSDecimalNumberPlaceholder" key="NS.max" id="1045269304">
 																	<int key="NS.exponent">0</int>
 																	<int key="NS.length">0</int>
 																	<bool key="NS.negative">YES</bool>
@@ -2722,7 +2722,7 @@
 															<int key="NSCellFlags">-1804599231</int>
 															<int key="NSCellFlags2">272630784</int>
 															<reference key="NSSupport" ref="24"/>
-															<object class="NSNumberFormatter" key="NSFormatter" id="946324770">
+															<object class="NSNumberFormatter" key="NSFormatter" id="871099337">
 																<dictionary class="NSMutableDictionary" key="NS.attributes">
 																	<boolean value="YES" key="allowsFloats"/>
 																	<integer value="1040" key="formatterBehavior"/>
@@ -2746,7 +2746,7 @@
 																	<reference key="NSAttributes" ref="60495107"/>
 																</object>
 																<real value="0.0" key="NS.min"/>
-																<reference key="NS.max" ref="553784980"/>
+																<reference key="NS.max" ref="1045269304"/>
 																<object class="NSDecimalNumberHandler" key="NS.rounding">
 																	<int key="NS.roundingmode">3</int>
 																	<bool key="NS.raise.overflow">YES</bool>
@@ -3136,21 +3136,18 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 															<reference key="NSSupport" ref="1037896293"/>
 															<object class="NSNumberFormatter" key="NSFormatter" id="324595723">
 																<dictionary class="NSMutableDictionary" key="NS.attributes">
-																	<boolean value="NO" key="allowsFloats"/>
+																	<boolean value="YES" key="allowsFloats"/>
 																	<integer value="1040" key="formatterBehavior"/>
-																	<integer value="3" key="groupingSize"/>
-																	<reference key="locale" ref="933939748"/>
+																	<boolean value="NO" key="lenient"/>
 																	<real value="99" key="maximum"/>
-																	<integer value="99" key="maximumIntegerDigits"/>
 																	<real value="0.0" key="minimum"/>
-																	<real value="1" key="multiplier"/>
 																	<string key="negativeInfinitySymbol">-∞</string>
 																	<string key="nilSymbol"/>
+																	<integer value="0" key="numberStyle"/>
 																	<string key="positiveInfinitySymbol">+∞</string>
-																	<boolean value="YES" key="usesGroupingSeparator"/>
 																</dictionary>
-																<string key="NS.positiveformat">#,###</string>
-																<string key="NS.negativeformat">#,###</string>
+																<string key="NS.positiveformat">#</string>
+																<string key="NS.negativeformat">#</string>
 																<nil key="NS.positiveattrs"/>
 																<nil key="NS.negativeattrs"/>
 																<nil key="NS.zero"/>
@@ -3171,9 +3168,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																</object>
 																<string key="NS.decimal">.</string>
 																<string key="NS.thousand">,</string>
-																<bool key="NS.hasthousands">YES</bool>
-																<bool key="NS.localized">NO</bool>
-																<bool key="NS.allowsfloats">NO</bool>
+																<bool key="NS.hasthousands">NO</bool>
+																<bool key="NS.localized">YES</bool>
+																<bool key="NS.allowsfloats">YES</bool>
 															</object>
 															<reference key="NSControlView" ref="1017401892"/>
 															<bool key="NSDrawsBackground">YES</bool>
@@ -4781,7 +4778,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
 			<object class="NSWindowTemplate" id="327905075">
-				<int key="NSWindowStyleMask">8209</int>
+				<int key="NSWindowStyleMask">8211</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{196, 112}, {291, 343}}</string>
 				<int key="NSWTFlags">-1535638528</int>
@@ -8786,7 +8783,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<int key="objectID">2019</int>
 						<reference key="object" ref="456824928"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="946324770"/>
+							<reference ref="871099337"/>
 						</array>
 						<reference key="parent" ref="857877005"/>
 					</object>
@@ -8804,7 +8801,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<int key="objectID">2016</int>
 						<reference key="object" ref="545863352"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="623542375"/>
+							<reference ref="364254577"/>
 						</array>
 						<reference key="parent" ref="446631419"/>
 					</object>
@@ -9492,12 +9489,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2250</int>
-						<reference key="object" ref="623542375"/>
+						<reference key="object" ref="364254577"/>
 						<reference key="parent" ref="545863352"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2251</int>
-						<reference key="object" ref="946324770"/>
+						<reference key="object" ref="871099337"/>
 						<reference key="parent" ref="456824928"/>
 					</object>
 				</array>
@@ -9698,7 +9695,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string key="2009.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="201.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2010.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<integer value="1040" key="2011.IBNumberFormatterBehaviorMetadataKey"/>
+				<integer value="1041" key="2011.IBNumberFormatterBehaviorMetadataKey"/>
 				<boolean value="YES" key="2011.IBNumberFormatterLocalizesFormatMetadataKey"/>
 				<real value="3.1320000000000001" key="2011.IBNumberFormatterSampleNumberKey"/>
 				<string key="2011.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -9713,7 +9710,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string key="202.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2020.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2021.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<integer value="1040" key="2022.IBNumberFormatterBehaviorMetadataKey"/>
+				<integer value="1041" key="2022.IBNumberFormatterBehaviorMetadataKey"/>
 				<boolean value="YES" key="2022.IBNumberFormatterLocalizesFormatMetadataKey"/>
 				<string key="2022.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2023.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -10802,6 +10799,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string key="superclassName">NSView</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="InsertImageToStage:">id</string>
+						<string key="changeStageBackgroundColor:">id</string>
 						<string key="clearPopover:">id</string>
 						<string key="displayDocumentSettingsView:">id</string>
 						<string key="labelButton:">id</string>
@@ -10817,6 +10815,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="InsertImageToStage:">
 							<string key="name">InsertImageToStage:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="changeStageBackgroundColor:">
+							<string key="name">changeStageBackgroundColor:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="clearPopover:">

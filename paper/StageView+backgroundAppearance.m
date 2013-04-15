@@ -7,6 +7,7 @@
 //
 
 #import "StageView.h"
+#import "Document.h"
 
 
 
@@ -17,5 +18,31 @@
 {
     self.showGridlines = !self.showGridlines;
     [self setNeedsDisplay: YES];
+}
+
+- (IBAction)changeStageBackgroundColor:(id)sender
+{
+    NSLog(@"%@", [sender color]);
+    self.stageBackgroundColor = [[sender color] colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+    [self setNeedsDisplay:YES];
+}
+
+-(IBAction)saveDocumentSettings:(id)sender
+{
+    Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
+    NSWindowController *wc = [[curDoc windowControllers] objectAtIndex:0];
+    NSString *newTitle = [sender stringValue];
+    NSLog(@"New Title : %@", newTitle);
+    //[wc windowTitleForDocumentDisplayName:self.pageTitle.stringValue];
+    [[wc window] setTitle:newTitle];
+	[curDoc setDisplayName:[sender stringValue]];
+    //[wc synchronizeWindowTitleWithDocumentName];
+    
+    //close the popover
+    
+    //[[curDoc stageView] closeSettingsPopover];
+    
+    
+    
 }
 @end

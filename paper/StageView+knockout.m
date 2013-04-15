@@ -16,17 +16,20 @@
 -(NSString*)viewModelFrom:(NSMutableDictionary*)dyRow amongstElements:(NSArray*)sortedArray
 {
     NSMutableString *stringToReturn = nil;
+    NSString *dynamicRowName = [dyRow objectForKey:@"id"];
     if ([[dyRow objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
     {
         // The Model
-        // If you create a dataSource, you automatically get an observableArray, the ability to add a row, and delete a row. These are standard.
+        // If you create a dataSource, you automatically get functions to create an observableArray, the ability to add a row, and delete a row. These are standard.
         self.pageTitle = [NSMutableString stringWithString:@"reservations"];
         NSString *className = [NSString stringWithFormat:@"\nfunction %@ViewModel() {\n", self.pageTitle.capitalizedString];
         NSString *selfStatement = @"    var self = this;\n\n    // Non-editable catalog data\n    ";
         NSArray *datasource = [self dataSourceUsingHardcodedLocalValues];
+        
         if ([datasource count]  < 1) {
             return nil;
         }
+        
         NSString *model = [NSString stringWithFormat:@"%@", [[self dataSourceUsingHardcodedLocalValues] objectAtIndex:0]];
         
         // Editable data
@@ -37,9 +40,9 @@
         // Operations
         NSMutableDictionary *rtFrameDictionary = [NSMutableDictionary dictionaryWithObject:[dyRow objectForKey:RT_FRAME] forKey:RT_FRAME];
         NSString *classStructureAsString = [self classStructureOf:rtFrameDictionary amongstElements:sortedArray];
-        NSString *addRow1 = @"\n\n    // Operations\n self.addRow = function() {\n";
+        NSString *addRow1 = [NSString  stringWithFormat:@"\n\n    // Operations\n self.add%@ = function() {\n", dynamicRowName.capitalizedString];
         NSMutableString *addRow2 = [NSMutableString stringWithFormat:@"self.%@.push(new %@(%@));\n}", observableArrayName, [[dyRow objectForKey:JS_ID] capitalizedString], classStructureAsString];
-        NSMutableString *deleteRow = [NSString stringWithFormat:@"\n    self.removeRow = function(%@) { self.%@.remove(%@) }\n    }\n\n", [dyRow objectForKey:JS_ID], observableArrayName, [dyRow objectForKey:JS_ID]];
+        NSMutableString *deleteRow = [NSString stringWithFormat:@"\n    self.remove%@ = function(%@) { self.%@.remove(%@) }\n    }\n\n", dynamicRowName.capitalizedString,  [dyRow objectForKey:JS_ID], observableArrayName, [dyRow objectForKey:JS_ID]];
         
         
         // Total function : Total numberic values of a given parameter in a class e.g. Total Surchage.
@@ -184,16 +187,17 @@
     NSMutableArray *array = [NSMutableArray array];
     NSString *parameter = [NSString string];
     for (NSDictionary*ele in elementsInsideRow) {
-        if ([[ele objectForKey:@"tag"] isEqual:TEXT_INPUT_FIELD_TAG])
+        if ([[ele objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG])
         {
             parameter = @"\"\"";
         }
-        if ([[ele objectForKey:@"tag"] isEqual:DROP_DOWN_MENU_TAG])
+        if ( [[ele objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG] || [[ele objectForKey:@"tag"] isEqualToString:TEXT_BOX_TAG])
         {
             NSString *associatedModel = [ele objectForKey:ASSOCIATED_MODEL];
             NSString *dataSourceRef = [NSString stringWithFormat:@"self.%@", associatedModel];
             parameter = dataSourceRef;
         }
+
         [array addObject:parameter];
     }
     NSString *classStructureAsString = [array componentsJoinedByString:@", "];
@@ -209,7 +213,7 @@
 
 
 
-// PURPOSE: Generate each line of the Model.
+// PURPOSE: Generate each line of the Model Class.
 -(NSString*)dataSourceStringForElement:(NSMutableDictionary*)ele sittingAmongstElementIDs: (NSArray*)elementsIDs
 {
     // TODO: Once up and running check the validation tab to ensure this method generates code that considers the validation rules entered by the user.
@@ -222,22 +226,30 @@
     if ([[ele objectForKey:@"tag"] isEqualTo:DROP_DOWN_MENU_TAG])
     {
         NSLog(@"DROP DOWN WITH KO");
+        [ele setObject:@"" forKey:OBSERVABLE_ELEMENT_IN_DATASOURCE];
+        self.koObservableMapped = YES;
         return [NSString stringWithFormat:@"self.%@ = ko.observable(%@);\n", [ele objectForKey:JS_ID], [ele objectForKey:JS_ID]];
     }
     
-    else if ( [[ele objectForKey:@"tag"] isEqualTo:TEXT_INPUT_FIELD_TAG] )
+    else if ( [[ele objectForKey:@"tag"] isEqualTo:TEXT_BOX_TAG] )
     {
+        
         NSArray *wordsSeperatedBySpaces = [[ele objectForKey:DATA_SOURCE_STRING_ENTERED] componentsSeparatedByString:@" "];
         NSString *firstWord = [wordsSeperatedBySpaces objectAtIndex:0];
-        NSString *secondWord = [wordsSeperatedBySpaces objectAtIndex:1];
+        NSString *secondWord = [wordsSeperatedBySpaces lastObject]; // this needs to be validated against the DatSource headers. Get a method to do this.
         
-        for (NSString *anID in elementsIDs)
-        {
-            if ([firstWord isEqualToString:anID])// FIRST WORD IS EQUAL TO A eleid OF AN ELEMENT IN THIS DY ROW e.g. 'meal2 price'
-            {
+        //for (NSString *anID in elementsIDs)
+        //{
+            //if ([firstWord isEqualToString:anID])// FIRST WORD IS EQUAL TO A eleid OF AN ELEMENT IN THIS DY ROW e.g. 'meal2 price'
+            //{
                 //THEN TAKE THE SECOND WORD 'PRICE' AND CREATE THE STRING AS PER MONEY3.html
-                codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var %@ = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], secondWord, firstWord, secondWord, secondWord, secondWord];
-                return codeStringToReturn;
+                // DESIGN DECISION: the JS_ID for this field (Ele) will probably have the word price in it or something appropriate so no need to append the word price to self.
+        if ([[ele objectForKey:DATA_SOURCE_STRING_ENTERED] containsString:@"price"])
+        {
+            codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], firstWord, secondWord, secondWord, secondWord];
+            return codeStringToReturn;
+        }
+                
                 
                 /*
                  
@@ -247,8 +259,8 @@
                  });
                  
                  */
-            }
-        }
+            //}
+        //}
         
         NSLog(@"Got to the bootom of dataSourceStringElement");
         codeStringToReturn = [NSString stringWithFormat:@"self.%@ = %@;\n", [ele objectForKey:JS_ID], [ele objectForKey:JS_ID]];
@@ -267,47 +279,66 @@
     NSLog(@"being called ??");
     NSString *dataSourceCodeStringToReturn = [NSMutableString string];
     
-    // The generic response
-    NSString *startOfDataSourceCode = @"data-bind=\"text: ";
-    dataSourceCodeStringToReturn = [NSString stringWithFormat:@"%@%@ \"", startOfDataSourceCode, ele.dataSourceStringEntered];
-    
-    
-    // Overwrite with the following specific cases if relevant...
-    
-    // Total numberic values of a given parameter in a class e.g. Total Surchage.
-    if ([ele.dataSourceStringEntered hasPrefix:@"Total"]) //TODO: make this upper or lowercase // Could be Totalsurcharge
+    if (ele.dataSourceStringEntered)
     {
-        NSString *substring = @"total";
-        NSMutableString *copy = [NSMutableString stringWithString:ele.dataSourceStringEntered];
-        [copy deleteCharactersInRange:NSMakeRange(0, 5)]; //The word Total has 5 characters in it.
-        [copy capitalizedStringWithLocale:[NSLocale currentLocale]]; // TODO: Trim whitespace around this string.
+        // The generic response
+        NSString *startOfDataSourceCode = @"data-bind=\"text: ";
+        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"%@%@ \"", startOfDataSourceCode, ele.dataSourceStringEntered];
         
-        //Join the two words together
-        NSMutableString *stringToReturn = [NSMutableString string];
-        [stringToReturn appendString:substring]; // 'total'
-        [stringToReturn appendString:copy]; //'Surchage' for example
         
-        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"%@%@().toFixed(2) \"", startOfDataSourceCode, stringToReturn];
+        // Overwrite with the following specific cases if relevant...
+        
+        // Total numberic values of a given parameter in a class e.g. Total Surchage.
+        if ([ele.dataSourceStringEntered hasPrefix:@"Total"]) //TODO: make this upper or lowercase // Could be Totalsurcharge
+        {
+            NSString *substring = @"total";
+            NSMutableString *copy = [NSMutableString stringWithString:ele.dataSourceStringEntered];
+            [copy deleteCharactersInRange:NSMakeRange(0, 5)]; //The word Total has 5 characters in it.
+            [copy capitalizedStringWithLocale:[NSLocale currentLocale]]; // TODO: Trim whitespace around this string.
+            
+            //Join the two words together
+            NSMutableString *stringToReturn = [NSMutableString string];
+            [stringToReturn appendString:substring]; // 'total'
+            [stringToReturn appendString:copy]; //'Surchage' for example
+            
+            dataSourceCodeStringToReturn = [NSString stringWithFormat:@"%@%@().toFixed(2) \"", startOfDataSourceCode, stringToReturn];
+            
+            return dataSourceCodeStringToReturn;
+        }
+        
+        
+        
+        NSString *visibilityCodeString = @"";
+        if (ele.visibilityActionStringEntered != nil)
+        {
+            visibilityCodeString = [NSString stringWithFormat:@"%@, ", ele.visibilityActionStringEntered];
+        }
+        
+        
+        
+        // DROP DOWN MENU
+        if ([ele isMemberOfClass:[DropDown class]])
+        {
+            //PURPOSE: THIS GENERATES THE DATA BINDNIG STRING THAT WILL SIT IN THE HTML
+            //so firstly, I need to find the dataSource created that has '[block valueForKey:@"dataSource"]' as one of its keys.
+            // Within each app, each key must be unique
+            
+            NSString *dataSourceName = [self dataSourceNameWithoutIndexContainingKey:ele];
+            dataSourceCodeStringToReturn = [NSString stringWithFormat: @"data-bind=\"options: $root.%@, optionsText: \'%@\', value: %@\"",
+                                            dataSourceName,
+                                            ele.dataSourceStringEntered,
+                                            ele.jsid]; // the last choice was 'ele.elementid'but to make sure viewModel method can set the matching name, I've just used a static string.
+            
+        }
+        
+        
+    if ([ele.dataSourceStringEntered containsString:@"price"])
+    {
+        dataSourceCodeStringToReturn = @"data-bind=\"text: formattedPrice\"";
+        return dataSourceCodeStringToReturn;
     }
-    
-    NSString *visibilityCodeString = @"";
-    if (ele.visibilityActionStringEntered != nil)
-    {
-        visibilityCodeString = [NSString stringWithFormat:@"%@, ", ele.visibilityActionStringEntered];
-    }
-    
-    // DROP DOWN MENU
-    if ([ele isMemberOfClass:[DropDown class]])
-    {
-        //PURPOSE: THIS GOES AND GETS THE DATASOURCE STRING TO BE APPENDED TO THE DROPDOWN MENU.
-        //so firstly, I need to find the dataSource created that has '[block valueForKey:@"dataSource"]' as one of its keys.
-        // Within each app, each key must be unique
         
-        NSString *dataSourceName = [self dataSourceNameContainingKey:ele];
-        dataSourceCodeStringToReturn = [NSString stringWithFormat: @"data-bind=\"options: $root.%@, optionsText: \'%@\', value: %@\"",
-                                        dataSourceName,
-                                        ele.dataSourceStringEntered,
-                                        ele.jsid]; // the last choice was 'ele.elementid'but to make sure viewModel method can set the matching name, I've just used a static string.
+    
         
     }
     
@@ -330,82 +361,87 @@
     Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
     NSArray *elementsOnStage = [[curDoc stageView] elementArray];
     for (Element *e in elementsOnStage) {
-        if ([e isMemberOfClass:[dyRow class]]) {
+        if ([e isMemberOfClass:[DynamicRow class]]) {
             dyRow = (DynamicRow*)e; // assuming there is just one dyRow in elementsArray.
         }
     }
-    NSString *dyRowID = [NSString stringWithString:dyRow.elementid];
-    NSArray *words = [ele.actionStringEntered componentsSeparatedByString:@" "];
-    NSString *firstWord = words[0];
-    NSString *secondWord = words[1];
-    NSString *viewModelClassName = [NSString stringWithFormat:@"add%@", dyRow];
-    NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
-    
-    // Remove row
-    if ([firstWord containsString:@"Remove"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) )
+    NSLog(@"dyRow = %@", dyRow);
+    if (dyRow)
     {
-        NSLog(@"ACTION STRING IS : %@", ele.actionStringEntered);
-        actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: $root.%@\"", viewModelClassName];
-        return actionsStringToReturn;
-    }
-    
-    
-    // Add row
-    if ([firstWord containsString:@"Add"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) ) //what if the dyRow element has an id of myRow and not row? WE SHOULD ALLOW THE USER TO ENTER ADD ROW OR ADD SEAT
-    {
-             
-        // The default if 'add row' text found
-        NSLog(@"grrh");   
-        actionsStringToReturn = [NSString stringWithFormat: @"data-bind=\"click: %@\" ", viewModelClassName];
+        NSString *dyRowID = [NSString stringWithString:dyRow.elementid];
+        NSArray *words = [ele.actionStringEntered componentsSeparatedByString:@" "];
+        NSString *firstWord = words[0];
+        NSString *secondWord = words[1];
+        NSString *viewModelClassName = [NSString stringWithFormat:@"add%@", dyRow.elementid];
+        NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
         
-        // Now check if any 'max' or 'min' exists in the string entered
-        NSMutableString *copy = [NSMutableString stringWithString:ele.actionStringEntered];
-        [copy deleteCharactersInRange:NSMakeRange(0, 7)]; //The word Total has 7 characters in it including the space.
-        
-        NSPredicate *endsNumerically = [NSPredicate predicateWithFormat:@"SELF matches %@", @"\\d+$"];
-        
-        if ([endsNumerically evaluateWithObject:copy]) // returns TRUE if predicate succeeds
+        // Remove row
+        if ([firstWord containsString:@"Remove"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) )
         {
-            //get the last word in NSString
-            __block NSString *lastWord = nil;
-            [copy enumerateSubstringsInRange:NSMakeRange(0, [copy length]) options:NSStringEnumerationByWords | NSStringEnumerationReverse usingBlock:^(NSString *substring, NSRange subrange, NSRange enclosingRange, BOOL *stop) {
-                lastWord = substring;
-                *stop = YES;
-            }];
+            NSLog(@"ACTION STRING IS : %@", ele.actionStringEntered);
+            actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: $root.%@\"", viewModelClassName];
+            return actionsStringToReturn;
+        }
+        
+        
+        // Add row
+        if ([firstWord containsString:@"Add"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) ) //what if the dyRow element has an id of myRow and not row? WE SHOULD ALLOW THE USER TO ENTER ADD ROW OR ADD SEAT
+        {
             
+            // The default if 'add row' text found
+            NSLog(@"grrh");
+            actionsStringToReturn = [NSString stringWithFormat: @"data-bind=\"click: %@\" ", viewModelClassName];
             
-            if ( ([copy hasPrefix:@"min"] || [copy hasPrefix:@"max"] ) && [endsNumerically evaluateWithObject:copy] )
+            // Now check if any 'max' or 'min' exists in the string entered
+            NSMutableString *copy = [NSMutableString stringWithString:ele.actionStringEntered];
+            [copy deleteCharactersInRange:NSMakeRange(0, 7)]; //The word Total has 7 characters in it including the space.
+            
+            NSPredicate *endsNumerically = [NSPredicate predicateWithFormat:@"SELF matches %@", @"\\d+$"];
+            
+            if ([endsNumerically evaluateWithObject:copy]) // returns TRUE if predicate succeeds
             {
-                NSString *mathSign = @"";
-                if ([copy hasPrefix:@"min"])
-                {
-                    mathSign = @">";
-                }
-                if ([copy hasPrefix:@"max"])
-                {
-                    mathSign = @"<";
-                }
+                //get the last word in NSString
+                __block NSString *lastWord = nil;
+                [copy enumerateSubstringsInRange:NSMakeRange(0, [copy length]) options:NSStringEnumerationByWords | NSStringEnumerationReverse usingBlock:^(NSString *substring, NSRange subrange, NSRange enclosingRange, BOOL *stop) {
+                    lastWord = substring;
+                    *stop = YES;
+                }];
                 
-                // 'enable: xxx' - the xxx represents the variable that represents the row - in this case self.seats()
-                DynamicRow *rowImIn = [self dynamicRowForElement:ele];
                 
-                if (rowImIn != nil)
+                if ( ([copy hasPrefix:@"min"] || [copy hasPrefix:@"max"] ) && [endsNumerically evaluateWithObject:copy] )
                 {
-                    NSString *tagForRow = [rowImIn elementid];
-                    
-                    NSString *visibilityCodeString = @"";
-                    if (ele.visibilityActionStringEntered != nil)
+                    NSString *mathSign = @"";
+                    if ([copy hasPrefix:@"min"])
                     {
-                        visibilityCodeString = [NSString stringWithFormat:@"%@, ", ele.visibilityActionStringEntered];
+                        mathSign = @">";
+                    }
+                    if ([copy hasPrefix:@"max"])
+                    {
+                        mathSign = @"<";
                     }
                     
-                    actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: %@, enable: %@().length %@ %@%@\"", methodName, tagForRow, mathSign, lastWord, visibilityCodeString];
-                }                
-                
+                    // 'enable: xxx' - the xxx represents the variable that represents the row - in this case self.seats()
+                    DynamicRow *rowImIn = [self dynamicRowForElement:ele];
+                    
+                    if (rowImIn != nil)
+                    {
+                        NSString *tagForRow = [rowImIn elementid];
+                        
+                        NSString *visibilityCodeString = @"";
+                        if (ele.visibilityActionStringEntered != nil)
+                        {
+                            visibilityCodeString = [NSString stringWithFormat:@"%@, ", ele.visibilityActionStringEntered];
+                        }
+                        
+                        actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: %@, enable: %@().length %@ %@%@\"", methodName, tagForRow, mathSign, lastWord, visibilityCodeString];
+                    }                
+                    
+                }
             }
+            NSLog(@"Returning actionsString add row: %@", actionsStringToReturn);
+            return actionsStringToReturn;
         }
-        NSLog(@"Returning actionsString add row: %@", actionsStringToReturn);
-        return actionsStringToReturn;
+
     }
     
     
@@ -609,6 +645,33 @@
     return stringToReturn;
 }
 
+
+
+-(NSString*)dataSourceNameWithoutIndexContainingKey: (Element*)ele
+{
+    NSString *stringToReturn = [NSString new];
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    for (NSDictionary *dict in appDelegate.arrayDataSource)
+    {
+        // each dataSource is made up of arrays
+        //NSString *nameOfDataSource = [dict objectForKey:@"Name"];
+        NSLog(@"here13");
+        NSArray *dataSourceArray = [dict objectForKey:@"DataSource"];
+        NSLog(@"here14");
+        NSArray *headerTitles = [dataSourceArray objectAtIndex:0]; // This is the header information.
+        NSLog(@"here15");
+        for (NSString *header in headerTitles)
+        {
+            if ([header isEqualToString:ele.dataSourceStringEntered]) {
+                NSLog(@"Gotcha!");
+                return [dict objectForKey:@"Name"]; // This is a string that was entered by the user into the Name field of the DataSource window.
+            }
+        }
+    }
+	
+	NSLog(@"here16");
+    return stringToReturn;
+}
 /*
 -(NSString*)modelNameContainingAttribute: (NSString *) attribute
 {

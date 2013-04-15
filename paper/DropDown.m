@@ -18,9 +18,11 @@
 
 - (void)setBoundRect:(NSRect)rt
 {
-    rtFrame = CGRectStandardize(rt);
-    [self setFrame:CGRectMake(rtFrame.origin.x - 2, rtFrame.origin.y - 2, rtFrame.size.width + 8, rtFrame.size.height + 8)];
-	[self setNeedsDisplay:YES];
+    //rtFrame = CGRectStandardize(rt);
+    //[self setFrame:CGRectMake(rtFrame.origin.x - 2, rtFrame.origin.y - 2, rtFrame.size.width + 8, rtFrame.size.height + 8)];
+	//[self setNeedsDisplay:YES];
+    
+    [super setBoundRect:rt];
 }
 
 - (void)drawElement:(CGContextRef)context
@@ -52,7 +54,7 @@
     
     
     //// Rounded Rectangle Drawing
-    NSBezierPath* roundedRectanglePath = [NSBezierPath bezierPathWithRoundedRect: NSMakeRect(1, 1, 216, 21) xRadius: 6 yRadius: 6];
+    NSBezierPath* roundedRectanglePath = [NSBezierPath bezierPathWithRoundedRect: NSMakeRect(3, 3, 218, 25) xRadius: 6 yRadius: 6];
     [NSGraphicsContext saveGraphicsState];
     [shadow set];
     CGContextBeginTransparencyLayer(context, NULL);

@@ -7,7 +7,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
-        [self setBorderWidth:[NSNumber numberWithInt:1]];
+        [self setBorderWidth:[NSNumber numberWithInt:0]];
         [self setColorAttributes:[NSColor colorWithCalibratedRed: 0.975 green: 0.975 blue: 0.975 alpha: 1]];
         [self setBorderRadius:[NSNumber numberWithInt:4]];
         self.bottomRightBorderRadius = self.bottomLeftBorderRadius = self.topLeftBorderRadius = self.topRightBorderRadius = YES;
