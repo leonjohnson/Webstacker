@@ -2022,7 +2022,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                                         ele.borderRadius, @"borderRadius",
                                         [borderRadiiOn componentsJoinedByString:@" "], @"borderRadiusAsString", //the string containing four radii mesurements
                                         [self hsla:ele.colorAttributes], @"backgroundColor",
-                                        [self dataSourceBindingCode:ele], @"dataSourceCode",
+                                        [self dataSourceBindingCode:ele], DATA_SOURCE_CODE,
                                         [self actionCodeString:ele], @"actionCode",
                                         [self dataSourceNameContainingKey:ele], ASSOCIATED_MODEL,
                                         ele.dataSourceStringEntered, DATA_SOURCE_STRING_ENTERED,
@@ -3550,8 +3550,12 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ( [element objectForKey:DATA_SOURCE_CODE] == nil && [element objectForKey:DATA_SOURCE_STRING_ENTERED] != nil)
         {
             // This is called if the element has a dataSource string to be converted into code,
-            // but the element is positioned before the element that provides the reference to the ko.observeredArray (aMeal)
-            [element setObject: forKey:<#(id<NSCopying>)#>]
+            
+            // but the element is positioned before the element that provides the reference to the ko.observeredArray (aMeal) - aka koObservableMapped
+            
+            Element * e = [self elementWithID:[element objectForKey:@"id"]];
+            NSString *dataSourceString = [self dataSourceBindingCode:e];
+            [element setObject:dataSourceString forKey:DATA_SOURCE_CODE];
         }
     }
     
@@ -3922,7 +3926,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         //2. DataSource, actions, and visibility
         NSString *actionCode = [block objectForKey:@"actionCode"];
-        NSString *dataSourceCode = [block objectForKey:@"dataSourceCode"];
+        NSString *dataSourceCode = [block objectForKey:DATA_SOURCE_CODE];
         NSLog(@"ac = %@", actionCode);
         
         
@@ -4205,7 +4209,10 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSArray *arrayF = [NSArray arrayWithObjects:
                                @"<p id=\"",
                                blockidAsString,
-                               @"\">",
+                               @"\" ",
+                               dataSourceCode,
+                               actionCode,
+                               @">",
                                @"\n",
                                s,
                                @"</p>",

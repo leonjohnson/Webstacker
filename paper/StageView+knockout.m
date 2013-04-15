@@ -334,6 +334,7 @@
         
     if ([ele.dataSourceStringEntered containsString:@"price"])
     {
+        NSLog(@"price ds called");
         dataSourceCodeStringToReturn = @"data-bind=\"text: formattedPrice\"";
         return dataSourceCodeStringToReturn;
     }

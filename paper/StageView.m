@@ -499,6 +499,20 @@ static NSImage *bottomImage;
     return YES;
 }
 
+
+#pragma mark - GET ELEMENT BY ID
+
+-(Element*)elementWithID: (NSMutableString *)stringID
+{
+    for (Element *e in elementArray)
+    {
+        if ([stringID isEqualToString:e.elementid])
+            return e;
+    }
+    return nil;
+}
+
+
 #pragma mark - FONT METHODS
 -(void)convertFont:(NSDictionary*)fontAttributeToChange
 {

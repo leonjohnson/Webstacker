@@ -267,6 +267,8 @@ typedef NSInteger		ShapeCutCopyType;
 //VALIDATION OF ELEMENTS EDITED
 -(BOOL)isElementIDUnique: (NSMutableString *)string;
 
+//GET ELEMENT BY ID
+-(Element*)elementWithID: (NSMutableString *)stringID;
 
 //Button
 -(IBAction)labelButton:(id)sender;
