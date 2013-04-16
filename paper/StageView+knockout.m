@@ -107,13 +107,17 @@
     NSMutableArray *elementsInsideMeIDs = [NSMutableArray array];
     NSMutableArray *parameterList = [NSMutableArray array];
     NSString *parameterString = @"";
+    NSLog(@"Elements inside me are : %@", elementsInsideMe);
     for (NSDictionary *ele in elementsInsideMe)
     {
         [elementsInsideMeIDs addObject:[ele objectForKey:JS_ID]];
-        if ([ele isMemberOfClass:[TextInputField class] || [DropDown class]] )
+        if ( [[ele objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG ] || [[ele objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG ] )
+        {
             NSLog(@"jsid ? %@", [ele objectForKey:JS_ID]);
             [parameterList addObject:[ele objectForKey:JS_ID]];
             NSLog(@"parameterList being called");
+        }
+            
         
     }
     if (parameterList) 
@@ -135,7 +139,7 @@
         
         if ([ele objectForKey: DATA_SOURCE_STRING_ENTERED] == nil)
         {
-            if ( [[ele objectForKey:@"tag"] isEqualTo:[TextBox class]] )
+            if ( [[ele objectForKey:@"tag"] isEqualTo:TEXT_BOX_TAG] )
             {
                 // the crap we don't want. These are text labels etc.
             }
@@ -184,7 +188,7 @@
 -(NSString*)classStructureOf:(NSMutableDictionary*)dyRow amongstElements:(NSArray*)sortedArray
 {
     NSArray *elementsInsideRow = [self elementsInside:dyRow usingElements:sortedArray];
-    NSMutableArray *array = [NSMutableArray array];
+    NSMutableSet *set = [NSMutableSet new];
     NSString *parameter = [NSString string];
     for (NSDictionary*ele in elementsInsideRow) {
         if ([[ele objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG])
@@ -198,8 +202,9 @@
             parameter = dataSourceRef;
         }
 
-        [array addObject:parameter];
+        [set addObject:parameter];
     }
+    NSArray *array = [NSArray arrayWithArray:[set allObjects]];
     NSString *classStructureAsString = [array componentsJoinedByString:@", "];
     classStructureAsString = [classStructureAsString substringFromIndex:2];
     NSLog(@"CLASS STRUCTURE IS : %@", classStructureAsString);
@@ -222,31 +227,32 @@
     
     // All we know is that the element has a dataSource.
     NSMutableString *codeStringToReturn = [NSMutableString string];
-    NSLog(@"SEE WHAT ELE IS : %@", ele);
-    if ([[ele objectForKey:@"tag"] isEqualTo:DROP_DOWN_MENU_TAG])
+    NSLog(@"SEE WHAT TAG ELE IS : %@", ele[@"tag"]);
+    if ([[ele objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG])
     {
         NSLog(@"DROP DOWN WITH KO");
         [ele setObject:@"" forKey:OBSERVABLE_ELEMENT_IN_DATASOURCE];
         self.koObservableMapped = YES;
+        self.koObservable = ele[@"id"]; // literal format
+        NSLog(@"About to return");
         return [NSString stringWithFormat:@"self.%@ = ko.observable(%@);\n", [ele objectForKey:JS_ID], [ele objectForKey:JS_ID]];
     }
     
-    else if ( [[ele objectForKey:@"tag"] isEqualTo:TEXT_BOX_TAG] )
+    if ( [[ele objectForKey:@"tag"] isEqualToString:PARAGRAPH_TAG] )
     {
         
         NSArray *wordsSeperatedBySpaces = [[ele objectForKey:DATA_SOURCE_STRING_ENTERED] componentsSeparatedByString:@" "];
-        NSString *firstWord = [wordsSeperatedBySpaces objectAtIndex:0];
-        NSString *secondWord = [wordsSeperatedBySpaces lastObject]; // this needs to be validated against the DatSource headers. Get a method to do this.
-        
+        NSString *firstWord = [wordsSeperatedBySpaces objectAtIndex:0]; // this needs to be validated against the DatSource headers. Get a method to do this.
+        NSLog(@"firstWord = %@", firstWord);
         //for (NSString *anID in elementsIDs)
         //{
             //if ([firstWord isEqualToString:anID])// FIRST WORD IS EQUAL TO A eleid OF AN ELEMENT IN THIS DY ROW e.g. 'meal2 price'
             //{
                 //THEN TAKE THE SECOND WORD 'PRICE' AND CREATE THE STRING AS PER MONEY3.html
                 // DESIGN DECISION: the JS_ID for this field (Ele) will probably have the word price in it or something appropriate so no need to append the word price to self.
-        if ([[ele objectForKey:DATA_SOURCE_STRING_ENTERED] containsString:@"price"])
+        if ([[ele objectForKey:DATA_SOURCE_STRING_ENTERED] containsString:@"price"] && firstWord)
         {
-            codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], firstWord, secondWord, secondWord, secondWord];
+            codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@-formatted = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], self.koObservable, firstWord, firstWord, firstWord];
             return codeStringToReturn;
         }
                 
@@ -264,6 +270,7 @@
         
         NSLog(@"Got to the bootom of dataSourceStringElement");
         codeStringToReturn = [NSString stringWithFormat:@"self.%@ = %@;\n", [ele objectForKey:JS_ID], [ele objectForKey:JS_ID]];
+        return codeStringToReturn;
     }
     
     return codeStringToReturn;
@@ -335,7 +342,7 @@
     if ([ele.dataSourceStringEntered containsString:@"price"])
     {
         NSLog(@"price ds called");
-        dataSourceCodeStringToReturn = @"data-bind=\"text: formattedPrice\"";
+        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"data-bind=\"text: %@-formatted\"", ele.dataSourceStringEntered ];
         return dataSourceCodeStringToReturn;
     }
         
@@ -373,7 +380,7 @@
         NSArray *words = [ele.actionStringEntered componentsSeparatedByString:@" "];
         NSString *firstWord = words[0];
         NSString *secondWord = words[1];
-        NSString *viewModelClassName = [NSString stringWithFormat:@"add%@", dyRow.elementid];
+        NSString *viewModelClassName = [NSString stringWithFormat:@"add%@", dyRow.elementid.capitalizedString];
         NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
         
         // Remove row
@@ -642,7 +649,7 @@
         }
     }
 	
-	NSLog(@"here16");
+	NSLog(@"NO dataSourceNameContainingKey.");
     return stringToReturn;
 }
 
@@ -670,7 +677,7 @@
         }
     }
 	
-	NSLog(@"here16");
+	NSLog(@"here16A");
     return stringToReturn;
 }
 /*

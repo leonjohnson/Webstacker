@@ -249,6 +249,7 @@ typedef NSInteger		ShapeCutCopyType;
 @property (nonatomic) BOOL					isShowFontTab;
 
 @property (nonatomic) BOOL koObservableMapped;
+@property (assign, nonatomic) NSString *koObservable;
 
 //Font based methods
 -(IBAction)setFontTrait:(id)sender;

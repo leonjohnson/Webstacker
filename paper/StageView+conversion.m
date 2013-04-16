@@ -1770,7 +1770,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         if (([ele isMemberOfClass:[TextBox class]]))
         {
             tagContent = ((TextBox *)ele).contentText.string;
-            tagType = @"paragraph";
+            tagType = PARAGRAPH_TAG;
             
             
             NSRange rangeOfString = NSMakeRange(0, [[ele contentText] length]);
@@ -2339,7 +2339,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             
             BOOL condition2 = ([[elem objectForKey:@"tag"] isEqualToString:@"div"]) || ([[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG])  || ([[elem objectForKey:@"tag"] isEqualToString:CONTAINER_TAG]);
             
-            BOOL condition3 = [[elementToCheck objectForKey:@"tag"] isEqualToString:@"paragraph"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"image"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DYNAMIC_IMAGE_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_BOX_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:BUTTON_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"div"];
+            BOOL condition3 = [[elementToCheck objectForKey:@"tag"] isEqualToString:PARAGRAPH_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"image"] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DYNAMIC_IMAGE_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:TEXT_BOX_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:BUTTON_TAG] || [[elementToCheck objectForKey:@"tag"] isEqualToString:@"div"];
             
             BOOL condition4 = CGRectContainsRect(rect1, rect2);
             
@@ -4072,7 +4072,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         
         // PARAGRAPH CODE
-        if ([[block valueForKey:@"tag"] isEqualToString:@"paragraph"])
+        if ([[block valueForKey:@"tag"] isEqualToString:PARAGRAPH_TAG])
         {
             NSLog(@"in para");
             NSLog(@"%@", self.textStyles);
