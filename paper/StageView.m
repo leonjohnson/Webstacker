@@ -213,6 +213,7 @@ static NSImage *bottomImage;
     [leadingStepper bind:@"value" toObject:self withKeyPath:@"leadingValue" options:nil];
     [leadingField bind:@"value" toObject:self withKeyPath:@"leadingValue" options:nil];
     [fontSizeTextField2 bind:@"value" toObject:self withKeyPath:@"textboxView.fontSize" options:nil];
+    //[_stageBackgroundColorAsHex bind:@"value" toObject:self withKeyPath:@"hexValueForStageColor" options:nil];
     //[_buttonTextField bind:@"value" toObject:self withKeyPath:@"buttonTextField" options:nil];
 	
 	self.isShowFontTab = NO;
@@ -376,6 +377,7 @@ static NSImage *bottomImage;
         {
             [_buttonTextLabel setHidden:NO];
             [_buttonTextField setHidden:NO];
+            
         }
     }
     
@@ -451,7 +453,7 @@ static NSImage *bottomImage;
     Singleton *sg = [[Singleton alloc]init];
     if (sg.currentElement.uType == SHAPE_BUTTON)
         [sg.currentElement setButtonText: [sender stringValue]];
-        NSLog(@"sender: %@", sender);
+    NSLog(@"sender: %@", sender);
 }
 
 

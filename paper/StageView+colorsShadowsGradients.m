@@ -31,6 +31,7 @@
 
 -(NSString *)hsla:(NSColor *)color
 {
+    NSLog(@"about to call");
     NSString *hexValue = [color hexadecimalValueOfAnNSColor];
     if (hexValue == nil)
     {

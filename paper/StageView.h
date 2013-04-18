@@ -224,6 +224,7 @@ typedef NSInteger		ShapeCutCopyType;
 @property (assign, nonatomic) NSColorWell *fontColorWell; 
 @property (assign, nonatomic) NSSegmentedControl *fontTraitControl;
 @property (assign, nonatomic) NSTextField *buttonTextField;
+@property (assign, nonatomic) IBOutlet NSTextField *stageBackgroundColorAsHex;
 
 
 // Stepper
@@ -510,6 +511,8 @@ BOOL hasLeadingNumberInString(NSString* s);
 @interface StageView (backgroundAppearance)
 -(IBAction)toggleGridlineVisibility:(id)sender;
 -(IBAction)changeStageBackgroundColor:(id)sender;
+-(void)hexValueForStageColor;
+-(IBAction)updateStageViewBackgroundColorWithHex:(id)sender;
 @end
 
 

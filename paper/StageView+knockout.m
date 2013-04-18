@@ -46,24 +46,32 @@
         
         
         // Total function : Total numberic values of a given parameter in a class e.g. Total Surchage.
+        // Total =  indicates that this is a numeric field that needs totalling.
+        // Price = indicates the class object that needs to be totalled.
         NSMutableString *totalAnyNumericSetOfValuesInAModel = [NSMutableString string];
-        if ([[dyRow objectForKey:DATA_SOURCE_STRING_ENTERED] hasPrefix:@"Total"]) //TODO: make this upper or lowercase // Could be Totalsurcharge
+        for (NSMutableDictionary *elementDictionary in sortedArray)
         {
-            // Take the first word, and the second word (assumption: there are just two words)
-            NSString *substring = @"total";
-            NSMutableString *copy = [NSMutableString stringWithString:[dyRow objectForKey:DATA_SOURCE_STRING_ENTERED]];
-            [copy deleteCharactersInRange:NSMakeRange(0, 5)]; //The word Total has 5 characters in it.
-            [copy capitalizedStringWithLocale:[NSLocale currentLocale]]; // TODO: Trim whitespace around this string.
-            
-            //Join the two words together
-            NSMutableString *nameOfTotal = [NSMutableString string];
-            [nameOfTotal appendString:substring]; // 'total'
-            [nameOfTotal appendString:copy]; //'Surchage' for example
-            
-            // Function to compute numeric totals
-            totalAnyNumericSetOfValuesInAModel = [NSMutableString stringWithFormat:@"    // Computed data \n    self.%@ = ko.computed(function() { \n var total = 0; \n for (var i = 0; i < self.%@().length; i++) \n // meal2 is the id of the dropdown menu \n total += self.%@()[i].%@().%@; \n return total; \n});\n \n", nameOfTotal, observableArrayName, observableArrayName, @"chosenOption", copy];
-            
+            if ([[elementDictionary objectForKey:DATA_SOURCE_STRING_ENTERED] containsString:@"total"]) //TODO: make this upper or lowercase // Could be Totalsurcharge
+            {
+                NSLog(@"We've got: %@", elementDictionary);
+                // Take the first word, and the second word (assumption: there are just two words)
+                NSString *substring = @"total";
+                NSMutableString *copy = [NSMutableString stringWithString:[elementDictionary objectForKey:DATA_SOURCE_STRING_ENTERED]];
+                [copy deleteCharactersInRange:NSMakeRange(0, 5)]; //The word Total has 5 characters in it.
+                copy = [NSMutableString stringWithString:[copy stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+                [copy capitalizedStringWithLocale:[NSLocale currentLocale]];
+                
+                //Join the two words together
+                NSMutableString *nameOfTotal = [NSMutableString string];
+                [nameOfTotal appendString:substring]; // 'total'
+                [nameOfTotal appendString:copy]; //'Surchage' for example
+                
+                // Function to compute numeric totals
+                totalAnyNumericSetOfValuesInAModel = [NSMutableString stringWithFormat:@"    // Computed data \n    self.%@ = ko.computed(function() { \n var total = 0; \n for (var i = 0; i < self.%@().length; i++) \n // meal2 is the id of the dropdown menu \n total += self.%@()[i].%@().%@; \n return total; \n});\n \n", nameOfTotal, observableArrayName, observableArrayName, self.koObservable, copy];
+                
+            }
         }
+        
         
         
         // Put the string together
@@ -252,7 +260,7 @@
                 // DESIGN DECISION: the JS_ID for this field (Ele) will probably have the word price in it or something appropriate so no need to append the word price to self.
         if ([[ele objectForKey:DATA_SOURCE_STRING_ENTERED] containsString:@"price"] && firstWord)
         {
-            codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@-formatted = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], self.koObservable, firstWord, firstWord, firstWord];
+            codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], self.koObservable, firstWord, firstWord, firstWord];
             return codeStringToReturn;
         }
                 
@@ -342,7 +350,7 @@
     if ([ele.dataSourceStringEntered containsString:@"price"])
     {
         NSLog(@"price ds called");
-        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"data-bind=\"text: %@-formatted\"", ele.dataSourceStringEntered ];
+        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"data-bind=\"text: %@\"", [ele.elementid stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] ];
         return dataSourceCodeStringToReturn;
     }
         
