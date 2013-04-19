@@ -42,7 +42,7 @@
         NSString *classStructureAsString = [self classStructureOf:rtFrameDictionary amongstElements:sortedArray];
         NSString *addRow1 = [NSString  stringWithFormat:@"\n\n    // Operations\n self.add%@ = function() {\n", dynamicRowName.capitalizedString];
         NSMutableString *addRow2 = [NSMutableString stringWithFormat:@"self.%@.push(new %@(%@));\n}", observableArrayName, [[dyRow objectForKey:JS_ID] capitalizedString], classStructureAsString];
-        NSMutableString *deleteRow = [NSString stringWithFormat:@"\n    self.remove%@ = function(%@) { self.%@.remove(%@) }\n    }\n\n", dynamicRowName.capitalizedString,  [dyRow objectForKey:JS_ID], observableArrayName, [dyRow objectForKey:JS_ID]];
+        NSMutableString *deleteRow = [NSString stringWithFormat:@"\n    self.remove%@ = function(%@) { self.%@.remove(%@) }\n ", dynamicRowName.capitalizedString,  [dyRow objectForKey:JS_ID], observableArrayName, [dyRow objectForKey:JS_ID]];
         
         
         // Total function : Total numberic values of a given parameter in a class e.g. Total Surchage.
@@ -66,11 +66,17 @@
                 [nameOfTotal appendString:substring]; // 'total'
                 [nameOfTotal appendString:copy]; //'Surchage' for example
                 
+                NSLog(@"1. name of total is: %@", nameOfTotal);
+                NSString *theName = [elementDictionary[ELEMENT_ID] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                //nameOfTotal = [NSMutableString stringWithString: [elementDictionary[DATA_SOURCE_STRING_ENTERED] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+               // NSLog(@"2. name of total is: %@", nameOfTotal);
+                
                 // Function to compute numeric totals
-                totalAnyNumericSetOfValuesInAModel = [NSMutableString stringWithFormat:@"    // Computed data \n    self.%@ = ko.computed(function() { \n var total = 0; \n for (var i = 0; i < self.%@().length; i++) \n // meal2 is the id of the dropdown menu \n total += self.%@()[i].%@().%@; \n return total; \n});\n \n", nameOfTotal, observableArrayName, observableArrayName, self.koObservable, copy];
+                totalAnyNumericSetOfValuesInAModel = [NSMutableString stringWithFormat:@"    // Computed data \n    self.%@ = ko.computed(function() { \n var total = 0; \n for (var i = 0; i < self.%@().length; i++) \n // meal2 is the id of the dropdown menu \n total += self.%@()[i].%@().%@; \n return total; \n});\n \n", theName, observableArrayName, observableArrayName, self.koObservable, copy];
                 
             }
         }
+        
         
         
         
@@ -84,6 +90,7 @@
         [stringToReturn appendString:addRow2];
         [stringToReturn appendString:deleteRow];
         [stringToReturn appendString:totalAnyNumericSetOfValuesInAModel];
+        [stringToReturn appendString:@" }\n\n"];
         /*
          // Class to represent a row in the seat reservations grid
          function Seat(name, initialMeal, passportNumber, numberOfBags) {
@@ -241,8 +248,8 @@
         NSLog(@"DROP DOWN WITH KO");
         [ele setObject:@"" forKey:OBSERVABLE_ELEMENT_IN_DATASOURCE];
         self.koObservableMapped = YES;
-        self.koObservable = ele[@"id"]; // literal format
-        NSLog(@"About to return");
+        self.koObservable = [NSString stringWithString: ele[@"id"]]; // literal format
+        NSLog(@"About to return after setting ko of : %@", self.koObservable);
         return [NSString stringWithFormat:@"self.%@ = ko.observable(%@);\n", [ele objectForKey:JS_ID], [ele objectForKey:JS_ID]];
     }
     
@@ -260,7 +267,7 @@
                 // DESIGN DECISION: the JS_ID for this field (Ele) will probably have the word price in it or something appropriate so no need to append the word price to self.
         if ([[ele objectForKey:DATA_SOURCE_STRING_ENTERED] containsString:@"price"] && firstWord)
         {
-            codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], self.koObservable, firstWord, firstWord, firstWord];
+            codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [[ele objectForKey:JS_ID] lowercaseStringWithLocale:[NSLocale currentLocale]], self.koObservable, firstWord, firstWord, firstWord];
             return codeStringToReturn;
         }
                 

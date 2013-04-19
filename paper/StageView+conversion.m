@@ -3563,11 +3563,12 @@ BOOL hasLeadingNumberInString(NSString* s)
     {
         NSString *viewModel = [self viewModelFrom:[bucket objectAtIndex:0] amongstElements:self.sortedArray];
         NSString *theClass = [self generateClassFromDynamicRow:[bucket objectAtIndex:0] withElementsOnStage:self.sortedArray];
-        if (viewModel != nil) {
-            [self.jsCode2 appendString:viewModel];
-        }
+        
         if (theClass != nil) {
             [self.jsCode2 appendString:theClass];
+        }
+        if (viewModel != nil) {
+            [self.jsCode2 appendString:viewModel];
         }
     }
     

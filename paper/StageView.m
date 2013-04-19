@@ -2151,7 +2151,7 @@ static NSImage *bottomImage;
             break;
         
         case SHAPE_TEXTBOX:
-            defaultSizeOfElement = NSMakeSize(200, 50);
+            defaultSizeOfElement = NSMakeSize(200, 25);
             break;
             
         case SHAPE_TEXTFIELD:
