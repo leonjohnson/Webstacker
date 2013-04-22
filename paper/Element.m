@@ -24,7 +24,6 @@
 @synthesize borderWidth;
 @synthesize border;
 @synthesize borderRadius;
-@synthesize opacity;
 @synthesize opacityTypeSelected;
 @synthesize spanGrouping;
 @synthesize imgName;

@@ -82,6 +82,13 @@
 
 #define DATA_SOURCE_CODE                        @"dataSourceCode"
 
+#define CLASS_OR_ID_SYMBOL                      @"classOrIdSymbol"
+#define CLASS_OR_ID_WORD                        @"classOrIdWord"
+#define CLASS_SYMBOL                            @"."
+#define ID_SYMBOL                               @"#"
+#define CLASS_KEYWORD                           @"class"
+#define ID_KEYWORD                              @"id"
+
 //#define XCOORDINATE                             @"xcoordinate"
 //#define YCOORDINATE                             @"ycoordinate"
 

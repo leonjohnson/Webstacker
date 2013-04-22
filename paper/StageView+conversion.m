@@ -726,6 +726,7 @@
             
             if (sideToTest == RIGHT)
             {
+                NSLog(@"Testing against object to the right : %@", [elementsInPath objectAtIndex:0]);
                 nearest = [[[elementsInPath objectAtIndex:0]objectForKey:xcoordinate]intValue] - [[element objectForKey:FAR_RIGHT_X]intValue];
             }
             
@@ -1522,7 +1523,7 @@
 }
 
 
-
+/*
 -(NSString *)hsla:(NSColor *)color
 {
     NSString *hexValue = [color hexadecimalValueOfAnNSColor];
@@ -1533,6 +1534,7 @@
     return hexValue;
     
 }
+ */
 
 -(NSArray*)elementsInside: (NSMutableDictionary *)elementBeingTested usingElements: (NSArray*) sortedArrayOnStage
 {
@@ -1707,11 +1709,13 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         //Set the JS_ID tag just in case
         if (hasLeadingNumberInString(ele.elementid)) //if the id starts with a number
-            ele.jsid = [NSString stringWithFormat:@"element%@", ele.elementid];
+            ele.jsid= [NSString stringWithFormat:@"element%@", ele.elementid];
         else
             ele.jsid = ele.elementid;
         
-        
+        [ele.jsid lowercaseStringWithLocale:[NSLocale currentLocale]];
+        [ele.jsid stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+         
         //Get the span - for Twitter Bootstrap
         span = ((int)ceil(ele.rtFrame.size.width/60));
         
@@ -2381,6 +2385,9 @@ BOOL hasLeadingNumberInString(NSString* s)
                     NSLog(@"Crashed 4");
                 }
                 
+                // if it's in a dyRow then give it a tag so we know to convert elementid to class
+                
+                
                 //[elementToCheck setObject:[elem objectForKey:@"id"] forKey:@"parentID"];
                 [elementsToGoInGroupingBox addObject:elementToCheck];
                 [elem setObject:[NSNumber numberWithBool:YES] forKey:@"convertToGroupingbox"];
@@ -2460,14 +2467,14 @@ BOOL hasLeadingNumberInString(NSString* s)
 
 -(void)generateAttr
 {
+    if (self.pageTitle == nil)
+        [self.pageTitle stringByAppendingString: @"You ought to change the title!"];
+    
     NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:@"ycoordinate" ascending:NO];
-    NSSortDescriptor *vertically2 = [[NSSortDescriptor alloc] initWithKey:@"ycoordinate" ascending:YES];
     NSSortDescriptor *horizontally = [[NSSortDescriptor alloc] initWithKey:@"xcoordinate" ascending:YES];
-    NSSortDescriptor *horizontallyFarRight = [[NSSortDescriptor alloc] initWithKey:@"farRight" ascending:YES];
     
     NSArray *horizontalSortDescriptor = [NSArray arrayWithObject: horizontally];
     NSArray *verticalSortDescriptor = [NSArray arrayWithObject: vertically];
-    NSArray *verticalSortDescriptor2 = [NSArray arrayWithObject: vertically2];
     
     
     /// CALCLULATE TOP (AND BOTTOM MARGINS WHEN NEEDED) FOR EACH OBJECT ON THE PAGE
@@ -3382,7 +3389,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     BOOL allElementsAreFlexible = YES;
     // Set flexible margins - for elements with % and - widths if inside a gb; any margin lefts; and any margin rights for
-    for (NSMutableDictionary *dc in self.sortedArray)
+    for (NSMutableDictionary *dc in [self.sortedArray copy])
     {
         if ([[dc objectForKey:LAYOUT_KEY] isEqualToString:@"%"])
         {
@@ -3503,6 +3510,18 @@ BOOL hasLeadingNumberInString(NSString* s)
             
         }
         
+        NSString *myKeyPath = [NSString stringWithFormat:@"%@.%@", PARENT_ID, DYNAMIC_ROW_TAG];
+        if ([dc valueForKeyPath:myKeyPath] != nil)
+        {
+            [dc setObject:CLASS_SYMBOL forKey:CLASS_OR_ID_SYMBOL];
+            [dc setObject:@"class" forKey:CLASS_OR_ID_WORD];
+        }
+        else
+        {
+            [dc setObject:ID_SYMBOL forKey:CLASS_OR_ID_SYMBOL];
+            [dc setObject:@"id" forKey:CLASS_OR_ID_WORD];
+        }
+        
     }
     
     if (allElementsAreFlexible)
@@ -3561,8 +3580,9 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     if ([bucket count] > 0)
     {
-        NSString *viewModel = [self viewModelFrom:[bucket objectAtIndex:0] amongstElements:self.sortedArray];
         NSString *theClass = [self generateClassFromDynamicRow:[bucket objectAtIndex:0] withElementsOnStage:self.sortedArray];
+        NSString *viewModel = [self viewModelFrom:[bucket objectAtIndex:0] amongstElements:self.sortedArray];
+        
         
         if (theClass != nil) {
             [self.jsCode2 appendString:theClass];
@@ -3658,8 +3678,21 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSString *blockid = [NSString string];
     
     
-    for (NSMutableDictionary *block in self.sortedArray)
+    for (NSMutableDictionary *block in [self.sortedArray copy])
     {
+        s = [NSMutableString string];
+        NSUInteger indexOfLastObject = nil;
+        NSUInteger indexOfNextObject = nil;
+        if ([self.sortedArray indexOfObject:block] != 0)
+        {
+            indexOfLastObject = [self.sortedArray indexOfObject:block]-1;
+            indexOfNextObject = [self.sortedArray indexOfObject:block]+1;
+        }
+        
+        
+        
+        NSLog(@"THE LAST INDEX WAS : %lu", indexOfLastObject);
+        
         for (NSArray *array in groupings)
         {
             [firstObjectsInGroups addObject: [[array objectAtIndex:0] valueForKey:@"firstObject"]];
@@ -3712,14 +3745,14 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ([firstObjectsInGroups containsObject:blockid])
         {
             NSLog(@"Inside firsts..");
-            groupBoxOpeningDiv = [NSMutableString stringWithString: @"\n    <div "];
+            groupBoxOpeningDiv = [NSMutableString stringWithString: @"\n    <div"];
             NSUInteger myIndex = [self.sortedArray indexOfObject:block];
             NSMutableDictionary *oneBefore = [self.sortedArray objectAtIndex:myIndex-1];
             if ([[oneBefore objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
             {
                 [groupBoxOpeningDiv appendFormat:@"data-bind=\"foreach: %@s\"> \n <div  ", [oneBefore objectForKey:@"id"]]; //plural is the name of the ko.observable
             }
-            [groupBoxOpeningDiv appendString:@"class=\"groupBox\" "];
+            //[groupBoxOpeningDiv appendString:@"class=\"groupBox\" "];
             NSMutableDictionary *groupingBoxInQuestion = [NSMutableDictionary dictionary];
             for (NSArray *each in groupings)
             {
@@ -3817,7 +3850,6 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSLog(@"TEST 4. Which is %@", groupBoxIDCode);
             Cstyle = [NSMutableString stringWithString:[Cstyle stringByAppendingString:groupBoxIDCode]];
             NSLog(@"CSTYLE AT THIS POINT SHOULD CONTAIN GB1 : %@",Cstyle);
-            //Cstyle = groupBoxID;
         }
         
         //  Set the end of the GrouupBox code
@@ -3826,7 +3858,6 @@ BOOL hasLeadingNumberInString(NSString* s)
             postCode = [NSMutableString stringWithString:@"\n</div><!-- Closes the GroupBox -->"];
             if ([[block objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
             {
-                NSString *name = [block objectForKey:OBSERVABLE_NAME_ARRAY];
                 [postCode appendString:@"\n    </div><!-- Closes the dyRow -->"];
             }
         }
@@ -3841,7 +3872,8 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ([endRows containsObject:blockid])
         {
             endRowCode = [NSMutableString stringWithString:@"\n</div><!-- Closes the row -->"];
-            if ([block objectForKey:LAST_IN_ROW_AND_CONTAINER]) {
+            if ([block objectForKey:LAST_IN_ROW_AND_CONTAINER])
+            {
                 NSString *containerEndCode = @"\n</div><!-- Closes the container -->";
                 endRowCode = [NSMutableString stringWithString:[endRowCode stringByAppendingString:containerEndCode]];
             }
@@ -3929,6 +3961,31 @@ BOOL hasLeadingNumberInString(NSString* s)
         NSString *actionCode = [block objectForKey:@"actionCode"];
         NSString *dataSourceCode = [block objectForKey:DATA_SOURCE_CODE];
         NSLog(@"ac = %@", actionCode);
+        
+        //3. if the last object was in dyRow but this element is not then
+        NSString *closeTheLoop = @"";
+        NSMutableDictionary *theNextObject = nil;
+        NSString *theNextObjectInDyRow = nil;
+        NSString *thisObjectInDyRow = nil;
+        
+        if ([self.sortedArray indexOfObject:block] != [self.sortedArray count]-1)
+        {
+            theNextObject = [self.sortedArray objectAtIndex:indexOfNextObject];
+            theNextObjectInDyRow = [[theNextObject objectForKey:PARENT_ID] objectForKey:DYNAMIC_ROW_TAG];
+            thisObjectInDyRow = [[block objectForKey:PARENT_ID] objectForKey:DYNAMIC_ROW_TAG];
+            
+            NSLog(@"nextObjectInDyRow IS %@", theNextObject);
+            NSLog(@"nextObjectInDyRow IS %@", theNextObject[PARENT_ID]);
+            NSLog(@"nextObjectInDyRow = %@ AND thisObjectInDyRow = %@", theNextObjectInDyRow, thisObjectInDyRow);
+        }
+        
+        
+        
+        if ( thisObjectInDyRow && theNextObjectInDyRow == nil )
+        {
+            NSLog(@"CLOSING THE LOOP...");
+            closeTheLoop =  @"\n</div><!--Closes the loop-->\n";
+        }
         
         
         
@@ -4075,6 +4132,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         // PARAGRAPH CODE
         if ([[block valueForKey:@"tag"] isEqualToString:PARAGRAPH_TAG])
         {
+            
             NSLog(@"in para");
             NSLog(@"%@", self.textStyles);
             //if "marginTop" in block:
@@ -4156,8 +4214,8 @@ BOOL hasLeadingNumberInString(NSString* s)
                                    @"        <span id=\"",
                                    [style valueForKey:@"styleid"],
                                    @"\"",
-                                   actionCode,
-                                   dataSourceCode,
+                                   //actionCode,
+                                   //dataSourceCode,
                                    @">",
                                    a,
                                    @"</span>",
@@ -4204,24 +4262,57 @@ BOOL hasLeadingNumberInString(NSString* s)
                 CtextStyles = [CtextStyles stringByAppendingString:endBit];
                 styleString = [styleString stringByAppendingString:CtextStyles];
                 
+                
             }
             //s = [NSMutableString stringWithString:[s stringByReplacingOccurrencesOfString:@"\n" withString:@"<br />"]];
             
-            NSArray *arrayF = [NSArray arrayWithObjects:
-                               @"<p id=\"",
-                               blockidAsString,
-                               @"\" ",
-                               dataSourceCode,
-                               actionCode,
-                               @">",
-                               @"\n",
-                               s,
-                               @"</p>",
-                               @"\n",
-                               nil];
+            NSArray *arrayF = [NSArray array];
+            /*
+            if ([block valueForKey:@"textStyles"]== nil && actionCode!=nil)
+            {
+                arrayF = [NSArray arrayWithObjects:
+                          @"<a href=\"#\" ",
+                          @"class=\"",
+                          blockidAsString,
+                          @"\" ",
+                          dataSourceCode,
+                          actionCode,
+                          @">",
+                          s,
+                          @"</a>",
+                          @"\n",
+                          nil];
+            }
+            else
+             
+            {
+             */
+            NSLog(@"Trying to show : %@", [block objectForKey:CLASS_OR_ID_WORD]);
+            
+            
+                arrayF = [NSArray arrayWithObjects:
+                          @"<p ",
+                          [block objectForKey:CLASS_OR_ID_WORD],
+                          @"=\"",
+                          blockidAsString,
+                          @"\" ",
+                          dataSourceCode,
+                          actionCode,
+                          @">",
+                          @"\n",
+                          s,
+                          @"</p>",
+                          @"\n",
+                          nil];
+            //}
+            
+            NSLog(@"p completed : %@", arrayF);
+            NSLog(@"block class or id : %@", [block objectForKey:CLASS_OR_ID_WORD]);
+            NSLog(@"S STRING IS : %@", s);
             
             code = [NSMutableString stringWithString:[arrayF componentsJoinedByString:@""]];
             
+            NSLog(@"after concatenating : %@", code);
             //width
             NSNumber *widthAsANumber = nil;
             if ([block objectForKey:@"widthAsPercentage"])
@@ -4247,9 +4338,9 @@ BOOL hasLeadingNumberInString(NSString* s)
                 heightAsAString = @"auto";
             }
             
-            NSLog(@"At step : 10");
+            NSLog(@"At step : 10 with classorid as : %@", [block objectForKey:CLASS_OR_ID_WORD]);
             NSArray *arrayG = [NSArray arrayWithObjects:
-                               @"#",
+                               [block objectForKey:CLASS_OR_ID_SYMBOL],
                                blockidAsString,
                                @" {",
                                @"  margin: ",
@@ -4285,6 +4376,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ( ([[block valueForKey:@"tag"] isEqualToString: @"div"]) || ([[block valueForKey:@"tag"] isEqualToString: DYNAMIC_ROW_TAG ])  || ([[block valueForKey:@"tag"] isEqualToString: CONTAINER_TAG ]) )
         {
             NSMutableArray *arrayH = [NSMutableArray array];
+             NSString *floatType = @"left";
             if ([block objectForKey:@"convertToGroupingbox"] == nil)
             {
                 if ([[block objectForKey:@"tag"] isEqual:CONTAINER_TAG])
@@ -4299,10 +4391,19 @@ BOOL hasLeadingNumberInString(NSString* s)
                     //NSString *containerStartCode = [NSString stringWithFormat:@"\n      <div class=\"container\" id=\"%@\">", previousElementId];
                     //startRowCode = [NSMutableString stringWithString:[containerStartCode stringByAppendingString:startRowCode]];
                 }
+                
+               
+                if ([[block objectForKey:@"tag"] isEqual:DYNAMIC_ROW_TAG])
+                {
+                    floatType = @"none";
+                }
+                
                 else
                 {
                     arrayH = [NSArray arrayWithObjects:
-                              @"<div id=\"",
+                              @"<div ",
+                              [block objectForKey:CLASS_OR_ID_WORD],
+                              @"=\"",
                               blockidAsString,
                               @"\">",
                               [block valueForKey:@"content"],
@@ -4374,7 +4475,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             
             backgroundColor = [block valueForKey:@"backgroundColor"];
             NSMutableArray *arrayI = [NSMutableArray arrayWithObjects:
-                                      @"#",
+                                      [block objectForKey:CLASS_OR_ID_SYMBOL],
                                       blockidAsString,
                                       @"{",
                                       @"\n",
@@ -4403,7 +4504,9 @@ BOOL hasLeadingNumberInString(NSString* s)
                                       heightAsAString,
                                       @"px;",
                                       @"\n",
-                                      @"  float:left; ",
+                                      @"  float:",
+                                      floatType,
+                                      @"; ",
                                       @"\n",
                                       shadowCSS,
                                       @"\n",
@@ -4442,14 +4545,15 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         
         
-        /* drop down code*/
         
         // DROPDOWN CODE
         if ( ([[block valueForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG])  )
         {
             
             NSArray *arrayH = [NSArray arrayWithObjects:
-                               @"\n      <select id=\"",
+                               @"\n      <select ",
+                               [block objectForKey:CLASS_OR_ID_WORD],
+                               @"=\"",
                                blockidAsString,
                                @"\" ",
                                dataSourceCode,
@@ -4521,7 +4625,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             
             backgroundColor = [block valueForKey:@"backgroundColor"];
             NSMutableArray *arrayI = [NSMutableArray arrayWithObjects:
-                                      @"#",
+                                      [block objectForKey:CLASS_OR_ID_SYMBOL],
                                       blockidAsString,
                                       @"{",
                                       @"\n",
@@ -4558,8 +4662,6 @@ BOOL hasLeadingNumberInString(NSString* s)
         }
         
         
-        /* end of dropdown code*/
-        
         
         
         
@@ -4568,9 +4670,11 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ([[block valueForKey:@"tag"] isEqual: @"textInputField"])
         {
             NSArray *arrayH = [NSArray arrayWithObjects:
-                               @"<input type=\"text\" id=\"",
+                               @"<input type=\"text\" ",
+                               [block objectForKey:CLASS_OR_ID_WORD],
+                               @"=\"",
                                blockidAsString,
-                               @"\"",
+                               @"\" ",
                                @"placeholder=\"",
                                [block valueForKey:@"content"],
                                @"\">",
@@ -4597,7 +4701,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             CmarginRight = [[block valueForKey:@"marginRight"]intValue];
             backgroundColor = [block valueForKey:@"backgroundColor"];
             NSMutableArray *arrayI = [NSMutableArray arrayWithObjects:
-                                      @"#",
+                                      [block objectForKey:CLASS_OR_ID_SYMBOL],
                                       blockidAsString,
                                       @"{margin: ",
                                       [NSNumber numberWithInt:CmarginTop],
@@ -4818,15 +4922,18 @@ BOOL hasLeadingNumberInString(NSString* s)
             //[Cstyle appendString:[NSMutableString stringWithString:[arrayK componentsJoinedByString:@""]]];
         }
         
-        
+        // if the code just generated code from the last element in a dyRow then close the loop.
+        NSLog(@"just about to add closetheloop code: %@", closeTheLoop);
+        [code appendString:closeTheLoop];
         
         
         //  # This code will only be fired for the first element in each Grouping box.
         NSLog(@"THE VALUE IS : %@", groupBoxOpeningDiv); //INTERESTING... DOES THIS PRINT ALL GROUPINGBOXES CODE...
         if (groupBoxOpeningDiv != nil)
         {
-            groupBoxOpeningDiv = [NSMutableString stringWithString:
-                                  [[[[groupBoxOpeningDiv stringByAppendingString:@"id=\""] stringByAppendingString:groupBoxID] stringByAppendingString: @"\">"] stringByAppendingString:code]];
+            //groupBoxOpeningDiv = [NSMutableString stringWithString:
+                                  //[[[[groupBoxOpeningDiv stringByAppendingString:@"id=\""] stringByAppendingString:groupBoxID] stringByAppendingString: @"\">"] stringByAppendingString:code]];
+            groupBoxOpeningDiv = [NSString stringWithFormat:@"%@%@%@%@%@%@", groupBoxOpeningDiv, [block objectForKey:CLASS_OR_ID_WORD], @"=\"", groupBoxID, @"\">", code];
             code = groupBoxOpeningDiv;
         }
         
@@ -4911,8 +5018,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         koScriptTag = @"<script src=\"http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js\"></script>\n";
         jQueryScriptTag = @"<script src=\"http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js\"></script>\n";
     
-    if (!self.pageTitle)
-        [self.pageTitle stringByAppendingString: @"You ought to change the title!"];
+    
     
 
     NSString *imgMaxWidth = [NSString stringWithFormat:@"%d%%", 100];

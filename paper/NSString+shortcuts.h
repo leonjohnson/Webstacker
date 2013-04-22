@@ -14,4 +14,5 @@
 - (NSFont*) standardFont;
 - (NSSize) sizeOfStandardString;
 - (NSSize) sizeOfString: (NSDictionary*)withAttributes;
+- (NSString*) camelCase;
 @end

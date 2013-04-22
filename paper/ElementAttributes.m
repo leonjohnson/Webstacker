@@ -332,5 +332,5 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 -(void)setElementSize:(NSSize *)size{};
 -(void)setdisplayType:(NSString *)displayType{};
 -(void)setlinkAttributes:(NSMutableDictionary *)link{};
--(void)setRtFrame:(NSRect)rtFrame{};
+//-(void)setRtFrame:(NSRect)rtFrame{};
 @end

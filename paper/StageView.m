@@ -21,9 +21,6 @@
 
 
 
-
-//#import "documentSettingsViewController.h"
-
 @implementation StageView
 
 @synthesize sortedArray;
@@ -39,7 +36,6 @@
 @synthesize documentSettingsPopover;
 @synthesize documentSettingsView;
 @synthesize documentContainer;
-@synthesize containerWidth, containerHeight;
 @synthesize stageBackgroundColor;
 @synthesize textPopover;
 
@@ -132,8 +128,7 @@ static NSImage *bottomImage;
 - (void)awakeFromNib
 {
 	//[self setTranslatesAutoresizingMaskIntoConstraints:NO];
-    self.containerWidth = 300;
-    self.containerHeight = 600;
+    self.pageTitle = [NSMutableString stringWithString: @"You should update this"];
     NSColorSpace *colorSpace = [NSColorSpace genericRGBColorSpace];
     self.stageBackgroundColor = [[NSColor whiteColor] colorUsingColorSpace:colorSpace];
     
@@ -863,6 +858,8 @@ static NSImage *bottomImage;
     NSLog(@"Called from THE STAGE textDidChangeSelection");
      
 }
+
+
 
 
 -(void)updateCustomFontMenu:(NSDictionary*)attributes //called when the text selection is changed, from the stageView

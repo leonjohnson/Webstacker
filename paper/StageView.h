@@ -178,9 +178,6 @@ typedef NSInteger		ShapeCutCopyType;
 
 
 
-@property (nonatomic, assign) int containerWidth;
-@property (nonatomic, assign) int containerHeight;
-
 @property (nonatomic, assign) Element *currentElement;
 @property (assign) id<SetAttributeDelegate>		attributeDelegate;
 @property (assign) id<SetLayerOrderDelegate>		layerDelegate;

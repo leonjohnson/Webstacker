@@ -52,5 +52,10 @@
 }
 
 
-
+-(NSString*)camelCase
+{
+    [self lowercaseStringWithLocale:[NSLocale currentLocale]];
+    return self;
+    
+}
 @end

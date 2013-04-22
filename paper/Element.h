@@ -156,7 +156,7 @@ typedef NSInteger LayoutTag;
     //Actions - this array contains other arrays, each one is a list of actions created by the user or the system.
     NSString *actionStringEntered;
     NSString *dataSourceStringEntered;  // stores the string the user entered into the dataSource textField
-    NSString *visibilityActionStringEntered;
+    
     NSString *prefixText; // enter any text you want to appear before the output
 	
 	NSMutableArray			*arrayShadows;
@@ -167,7 +167,7 @@ typedef NSInteger LayoutTag;
 
 
 @property (assign, nonatomic) ElementType				uType;
-@property (assign, nonatomic) NSMutableString *elementid;
+@property (readonly, assign, nonatomic) NSMutableString *elementid;
 @property (nonatomic) BOOL							 isSelected;
 @property (nonatomic) BOOL                           isUnderneathOtherElement;
 @property (nonatomic) NSRect						rtFrame;
@@ -189,10 +189,9 @@ typedef NSInteger LayoutTag;
 @property (assign, nonatomic) NSNumber *borderRadius;
 
 @property (readonly, nonatomic) NSDictionary *color;
-@property (retain, nonatomic) NSColor *colorAttributes;
+@property (readonly, retain, nonatomic) NSColor *colorAttributes;
 @property (assign, nonatomic) NSMutableDictionary *border;
 
-@property (assign, nonatomic) NSMutableDictionary *opacity;
 @property (assign, nonatomic) NSNumber *opacityTypeSelected;
 
 
@@ -209,13 +208,14 @@ typedef NSInteger LayoutTag;
 
 @property (assign, nonatomic) NSString *actionStringEntered;
 @property (assign, nonatomic) NSString *dataSourceStringEntered;
-@property (assign, nonatomic) NSString *visibilityActionStringEntered; //
+@property (readonly, assign, nonatomic) NSString *visibilityActionStringEntered; //
 @property (assign, nonatomic) NSString *prefixText;
 
 @property (nonatomic) BOOL							isPtInElement;
 @property (assign) NSMutableArray					*arrayShadows;
 
 @property (assign, nonatomic) NSString *jsid;
+
 
 - (void)dealloc;
 
@@ -376,7 +376,6 @@ typedef NSInteger LayoutTag;
 -(void)setBackgroundAttributes:(NSDictionary *)backgroundAttributes;
 -(void)setFloatAttribute:(NSString *)floatAttribute;
 //-(void)setColor:(NSDictionary *)colorDictionary;
--(void)setColorAttributes:(id)sender;
 -(void)setColorAttributesWithHexString:(id)sender;
 -(void)setElementSize:(NSSize *)size;
 -(void)setdisplayType:(NSString *)displayType;
@@ -384,6 +383,7 @@ typedef NSInteger LayoutTag;
 -(void)setRtFrame:(NSRect)rtFrame;
 -(void)postNotificationToRedraw;
 - (NSImage *)imageWithSubviews;
+-(void)setColorAttributes:(id)sender;
 @end
 
 

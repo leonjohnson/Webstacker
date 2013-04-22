@@ -9,7 +9,8 @@
     if (self) {
         // Initialization code here.
         [self setBorderWidth:[NSNumber numberWithInt:1]];
-        self.colorAttributes = [NSColor colorWithCalibratedRed:1. green:1. blue:1. alpha:1.];
+        [self setColorAttributes: [NSColor colorWithCalibratedRed:1. green:1. blue:1. alpha:1.]];
+        
     }
     
     return self;
@@ -18,7 +19,7 @@
 - (void)setBoundRect:(NSRect)rt
 {
 	
-    rtFrame = CGRectStandardize(NSMakeRect(rt.origin.x, rt.origin.y, 210 , 20 ));
+    rtFrame = CGRectStandardize(NSMakeRect(rt.origin.x, rt.origin.y, rt.size.width, rt.size.height ));
     //  4+4 for padding, 4+4 for inset
     //  NOTE  //
     //        //

@@ -215,6 +215,7 @@
 - (void)SetShapeAttributeByStepper:(NSSize)offset HitTest:(NSInteger)hitTest;
 {
 	//[changeAttributeDelegate ChangeAttribueOfElement:offset HitTest:hitTest];
+    NSLog(@"passing through");
     Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
 	[curDoc ChangeAttribueOfElement:offset HitTest:hitTest];
 }

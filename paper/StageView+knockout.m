@@ -67,7 +67,7 @@
                 [nameOfTotal appendString:copy]; //'Surchage' for example
                 
                 NSLog(@"1. name of total is: %@", nameOfTotal);
-                NSString *theName = [elementDictionary[ELEMENT_ID] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                NSString *theName = [elementDictionary[@"id"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 //nameOfTotal = [NSMutableString stringWithString: [elementDictionary[DATA_SOURCE_STRING_ENTERED] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
                // NSLog(@"2. name of total is: %@", nameOfTotal);
                 
@@ -117,7 +117,8 @@
 -(NSString*)generateClassFromDynamicRow: (NSMutableDictionary*)dyRowDict withElementsOnStage: (NSArray*)sortedArrayOnStage
 {
     NSLog(@"starting class generation");
-    //NSString *stringContainingClass = [NSString string];
+    NSLog(@"Page layout is: %@", self.pageTitle);
+    
     NSArray *elementsInsideMe = [self elementsInside:dyRowDict usingElements:sortedArrayOnStage];
     NSMutableArray *elementsInsideMeIDs = [NSMutableArray array];
     NSMutableArray *parameterList = [NSMutableArray array];
@@ -267,7 +268,7 @@
                 // DESIGN DECISION: the JS_ID for this field (Ele) will probably have the word price in it or something appropriate so no need to append the word price to self.
         if ([[ele objectForKey:DATA_SOURCE_STRING_ENTERED] containsString:@"price"] && firstWord)
         {
-            codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [[ele objectForKey:JS_ID] lowercaseStringWithLocale:[NSLocale currentLocale]], self.koObservable, firstWord, firstWord, firstWord];
+            codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], self.koObservable, firstWord, firstWord, firstWord];
             return codeStringToReturn;
         }
                 
@@ -357,7 +358,7 @@
     if ([ele.dataSourceStringEntered containsString:@"price"])
     {
         NSLog(@"price ds called");
-        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"data-bind=\"text: %@\"", [ele.elementid stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] ];
+        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"data-bind=\"text: %@\"", ele.jsid];
         return dataSourceCodeStringToReturn;
     }
         

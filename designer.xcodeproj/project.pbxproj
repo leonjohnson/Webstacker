@@ -76,7 +76,6 @@
 		F73C3F221618861F0081C459 /* DocumentSettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F73C3F211618861F0081C459 /* DocumentSettingsView.m */; };
 		F74A171F16F627840057BF06 /* bootstrap.css in Resources */ = {isa = PBXBuildFile; fileRef = F74A171E16F627840057BF06 /* bootstrap.css */; };
 		F74A172616FE30EF0057BF06 /* StageView+knockout.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A172516FE30EF0057BF06 /* StageView+knockout.m */; };
-		F74A173816FF95060057BF06 /* TriggersDataSourceDelegate.h in Sources */ = {isa = PBXBuildFile; fileRef = F74A173616FF95050057BF06 /* TriggersDataSourceDelegate.h */; };
 		F74A173916FF95060057BF06 /* TriggersDataSourceDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A173716FF95050057BF06 /* TriggersDataSourceDelegate.m */; };
 		F74A173A16FF953F0057BF06 /* ActionsDataSourceDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A172C16FF92390057BF06 /* ActionsDataSourceDelegate.m */; };
 		F74A173B16FF953F0057BF06 /* SelectedActionsDataSourceDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A172E16FF92390057BF06 /* SelectedActionsDataSourceDelegate.m */; };
@@ -818,7 +817,6 @@
 				F74A174016FF9ABF0057BF06 /* CustomTableCellView.m in Sources */,
 				F74A173A16FF953F0057BF06 /* ActionsDataSourceDelegate.m in Sources */,
 				F74A173B16FF953F0057BF06 /* SelectedActionsDataSourceDelegate.m in Sources */,
-				F74A173816FF95060057BF06 /* TriggersDataSourceDelegate.h in Sources */,
 				F74A173916FF95060057BF06 /* TriggersDataSourceDelegate.m in Sources */,
 				F7631AF116F6177B00C8A011 /* StageView+conversion.m in Sources */,
 				F7E9E46A16F616A80023CB48 /* Element+ActionsAndDataSources.m in Sources */,
