@@ -92,6 +92,10 @@
 //#define XCOORDINATE                             @"xcoordinate"
 //#define YCOORDINATE                             @"ycoordinate"
 
+// MAIN MENU TITLES
+#define SHOW_ALIGNMENT_PANEL                    @"Show Alignment Panel"
+#define SHOW_ATTRIBUTES_PANEL                   @"Show Attributes Panel"
+
 
 
 #define IN_RUNNING_LION (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6)

@@ -128,7 +128,7 @@ static NSImage *bottomImage;
 - (void)awakeFromNib
 {
 	//[self setTranslatesAutoresizingMaskIntoConstraints:NO];
-    self.pageTitle = [NSMutableString stringWithString: @"You should update this"];
+    self.pageTitle = [NSMutableString stringWithString: @"Reservations"];
     NSColorSpace *colorSpace = [NSColorSpace genericRGBColorSpace];
     self.stageBackgroundColor = [[NSColor whiteColor] colorUsingColorSpace:colorSpace];
     
@@ -2152,7 +2152,7 @@ static NSImage *bottomImage;
             break;
             
         case SHAPE_TEXTFIELD:
-            defaultSizeOfElement = NSMakeSize(150, 18);
+            defaultSizeOfElement = NSMakeSize(200, 30);
             break;
             
         case SHAPE_DROPDOWN:

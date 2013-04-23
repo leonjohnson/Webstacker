@@ -2470,6 +2470,8 @@ BOOL hasLeadingNumberInString(NSString* s)
     if (self.pageTitle == nil)
         [self.pageTitle stringByAppendingString: @"You ought to change the title!"];
     
+    NSLog(@"page title is : %@", self.pageTitle);
+    
     NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:@"ycoordinate" ascending:NO];
     NSSortDescriptor *horizontally = [[NSSortDescriptor alloc] initWithKey:@"xcoordinate" ascending:YES];
     
@@ -3511,7 +3513,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         }
         
         NSString *myKeyPath = [NSString stringWithFormat:@"%@.%@", PARENT_ID, DYNAMIC_ROW_TAG];
-        if ([dc valueForKeyPath:myKeyPath] != nil)
+        if ([dc valueForKeyPath:myKeyPath] != nil || [[dc valueForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG]) // if my parent is a dyRow or I'm a dyRow...
         {
             [dc setObject:CLASS_SYMBOL forKey:CLASS_OR_ID_SYMBOL];
             [dc setObject:@"class" forKey:CLASS_OR_ID_WORD];

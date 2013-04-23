@@ -133,7 +133,7 @@ typedef NSInteger		ShapeCutCopyType;
     //Font panel bits
     IBOutlet NSColorWell *fontColorWell;
     
-    IBOutlet NSTextField                *sizeTextField;
+    //IBOutlet NSTextField                *sizeTextField;
     IBOutlet NSStepper                  *kerningStepper;
     IBOutlet NSTextField                *kerningTextField;
     IBOutlet NSStepper                  *leadingStepper;
@@ -234,7 +234,7 @@ typedef NSInteger		ShapeCutCopyType;
 
 
 @property (nonatomic, assign) IBOutlet NSPopover *textPopover;//NSPopover *textPopover;
-@property (assign) NSTextField *sizeTextField;
+//@property (assign) NSTextField *sizeTextField;
 
 
 

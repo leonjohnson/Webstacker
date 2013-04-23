@@ -1028,7 +1028,8 @@
 {
 	
     NSString *caller = [[NSString alloc]initWithString:[sender title]];
-    if ([caller isEqualToString:@"Alignment"]) 
+    NSLog(@"caller is : %@", caller);
+    if ([caller isEqualToString:SHOW_ALIGNMENT_PANEL])
     {
         NSLog(@"Before was: %d", alignmentPanelVisible);
         alignmentPanelVisible = ~alignmentPanelVisible;
@@ -1042,7 +1043,7 @@
 
     }
     
-    if ([caller isEqualToString:@"Attributes"]) 
+    if ([caller isEqualToString:SHOW_ATTRIBUTES_PANEL])
     {
         NSLog(@"Before was: %d", attributePanelVisible);
         if (attributePanelVisible)

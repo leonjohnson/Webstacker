@@ -1,4 +1,5 @@
 #import "DynamicRow.h"
+#import "NSColor+colorToHex.h"
 
 @implementation DynamicRow
 
@@ -8,8 +9,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
-        [self setBorderWidth:[NSNumber numberWithInt:2]];
-        [self setColorAttributes:[NSColor cyanColor]];
+        [self setBorderWidth:[NSNumber numberWithInt:1]];
+        [self setColorAttributes:[NSColor colorWithHex:@"#FFF"]];
+        [self setBorderRadius:[NSNumber numberWithInt:0]];
     }
     
     return self;

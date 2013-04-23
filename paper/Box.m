@@ -65,38 +65,6 @@
 
 - (void)DrawShape:(CGContextRef)context
 {
-    /*
-     CGContextSaveGState(context);
-     
-     CGContextSetRGBFillColor(context, 0.0, 1.0, 0.0, 1.0);
-     CGContextFillRect(context, rtFrame);
-     
-     CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);
-     
-     
-     //CGContextSetRGBFillColor(context, 0.482, 0.62, 0.871, 1.0);
-     //CGContextSetLineWidth(context, 13.0);
-     //CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);
-     //CGContextDrawPath(context, kCGPathFillStroke);
-     
-     
-     SPECIAL
-     CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0);
-     CGContextSetLineWidth(context, [[[border objectForKey:@"all"] objectForKey:@"width"] floatValue]);
-     CGContextStrokeRect(context, rtFrame);
-     
-     
-     CGContextRestoreGState(context);
-     
-     if (isSelected == YES) 
-     {
-     NSLog(@"I'm selecetd");
-     [self DrawBorderFrame:context];
-     }
-     [self setNeedsDisplay:YES];
-     
-     
-     */
     
     //  Other option is to bind each checkbox to an individal ivar and call one method whenever a button is clicked.
     /*
@@ -180,9 +148,10 @@
     [rectanglePath fill];
     [rectanglePath setLineWidth:[borderWidth floatValue]];
 	
+    
 	if (self.isPtInElement == YES) { // highlight shape when the mouse is over the shape.
 		[[NSColor colorWithCalibratedRed:0.34 green:0.4 blue:0.9 alpha:1.0] set];
-		
+		NSLog(@"inside object");
 		if ([borderWidth floatValue] == 0) {
 			[rectanglePath setLineWidth:1.0f];
 			[rectanglePath stroke];
