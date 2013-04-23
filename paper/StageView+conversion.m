@@ -3747,7 +3747,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ([firstObjectsInGroups containsObject:blockid])
         {
             NSLog(@"Inside firsts..");
-            groupBoxOpeningDiv = [NSMutableString stringWithString: @"\n    <div"];
+            groupBoxOpeningDiv = [NSMutableString stringWithString: @"\n    <div "];
             NSUInteger myIndex = [self.sortedArray indexOfObject:block];
             NSMutableDictionary *oneBefore = [self.sortedArray objectAtIndex:myIndex-1];
             if ([[oneBefore objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
