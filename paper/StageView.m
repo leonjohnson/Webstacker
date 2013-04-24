@@ -451,6 +451,14 @@ static NSImage *bottomImage;
     NSLog(@"sender: %@", sender);
 }
 
+-(IBAction)setTopMarginForRow:(id)TextField;
+{
+    Singleton *sg = [[Singleton alloc]init];
+    if (sg.currentElement.uType == SHAPE_DYNAMIC_ROW)
+        [sg.currentElement setTopMarginForRow:[TextField stringValue]];
+    NSLog(@"sender: %@", TextField);
+}
+
 
 -(void)closeSettingsPopover
 {
@@ -3256,7 +3264,8 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
 
 - (void)showFontTab
 {
-	[(AppDelegate *)[[NSApplication sharedApplication] delegate] showDinamicFontTab:self.fontView];
+	/*
+    [(AppDelegate *)[[NSApplication sharedApplication] delegate] showDinamicFontTab:self.fontView];
 	self.isShowFontTab = YES;
 	
 	// set font tab
@@ -3269,30 +3278,17 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
 	fontFaceArray = [[NSMutableArray alloc] initWithArray:typeFaceFamilies];
 	
 	[fontTableView reloadData];
+     */
 	
-	// select current font
-	/* start comm
-    NSRange totalRange;
-	totalRange.location = 0;
-	totalRange.length = [[self textboxView].string length];
-    if (totalRange.length > 0)
-    {
-        //Get the old font
-		NSMutableDictionary *allAttributes = [NSMutableDictionary dictionaryWithDictionary: [[[self textboxView] textStorage] attributesAtIndex:totalRange.location effectiveRange:nil]];
-		NSFont *theFont = [allAttributes objectForKey:NSFontAttributeName];
-	
-		//UPDATE THE FONT FAMILY
-		NSString *selectedTypeFace = [theFont familyName];
-		[self selectFontofCurrentTextBox:selectedTypeFace];
-	}
-    */
 }
 
 - (void)hideFontTab
 {
-	[self.fontView removeFromSuperview];
+	/*
+    [self.fontView removeFromSuperview];
 	[(AppDelegate *)[[NSApplication sharedApplication] delegate] hideDinamicFontTab];
 	self.isShowFontTab = NO;
+     */
 }
 
 

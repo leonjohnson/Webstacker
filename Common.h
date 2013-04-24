@@ -79,6 +79,7 @@
 #define OBSERVABLE_ELEMENT_IN_DATASOURCE        @"observableElementInDataSource"
 
 #define JS_ID                                   @"jsid"
+#define TOP_MARGIN_FOR_ROW                      @"topMarginForRow"
 
 #define DATA_SOURCE_CODE                        @"dataSourceCode"
 

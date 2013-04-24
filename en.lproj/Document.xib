@@ -114,7 +114,6 @@
 																	<string key="NSFrameSize">{208, 93}</string>
 																	<reference key="NSSuperview" ref="610265007"/>
 																	<reference key="NSWindow"/>
-																	<reference key="NSNextKeyView"/>
 																	<object class="NSTextContainer" key="NSTextContainer" id="52758967">
 																		<object class="NSLayoutManager" key="NSLayoutManager">
 																			<object class="NSTextStorage" key="NSTextStorage">
@@ -965,6 +964,26 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							</object>
 							<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 						</object>
+						<object class="NSTextField" id="1028584276">
+							<reference key="NSNextResponder" ref="1073034890"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{669, 700}, {107, 17}}</string>
+							<reference key="NSSuperview" ref="1073034890"/>
+							<reference key="NSWindow"/>
+							<string key="NSReuseIdentifierKey">_NS:1535</string>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSTextFieldCell" key="NSCell" id="641481373">
+								<int key="NSCellFlags">68157504</int>
+								<int key="NSCellFlags2">272630784</int>
+								<string key="NSContents">Space above each row</string>
+								<reference key="NSSupport" ref="438349567"/>
+								<string key="NSCellIdentifier">_NS:1535</string>
+								<reference key="NSControlView" ref="1028584276"/>
+								<reference key="NSBackgroundColor" ref="317846355"/>
+								<reference key="NSTextColor" ref="985108676"/>
+							</object>
+							<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
+						</object>
 						<object class="NSTextField" id="490860298">
 							<reference key="NSNextResponder" ref="1073034890"/>
 							<int key="NSvFlags">268</int>
@@ -1008,6 +1027,27 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							</object>
 							<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 						</object>
+						<object class="NSTextField" id="1070747945">
+							<reference key="NSNextResponder" ref="1073034890"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{672, 674}, {85, 22}}</string>
+							<reference key="NSSuperview" ref="1073034890"/>
+							<reference key="NSWindow"/>
+							<string key="NSReuseIdentifierKey">_NS:9</string>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSTextFieldCell" key="NSCell" id="601345795">
+								<int key="NSCellFlags">-1804599231</int>
+								<int key="NSCellFlags2">272630784</int>
+								<string key="NSContents"/>
+								<reference key="NSSupport" ref="143622903"/>
+								<string key="NSCellIdentifier">_NS:9</string>
+								<reference key="NSControlView" ref="1070747945"/>
+								<bool key="NSDrawsBackground">YES</bool>
+								<reference key="NSBackgroundColor" ref="188554257"/>
+								<reference key="NSTextColor" ref="897843025"/>
+							</object>
+							<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
+						</object>
 					</array>
 					<string key="NSFrameSize">{1154, 728}</string>
 					<reference key="NSSuperview"/>
@@ -1041,7 +1081,6 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<string key="NSFrame">{{14, 26}, {249, 19}}</string>
 						<reference key="NSSuperview" ref="1017913685"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="129960918">
@@ -2258,6 +2297,22 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
+						<string key="label">setTopMarginForRow:</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="1070747945"/>
+					</object>
+					<int key="connectionID">2388</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">marginAboveEachRow</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="1070747945"/>
+					</object>
+					<int key="connectionID">2389</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
 						<string key="label">setStageBackgroundColor:</string>
 						<reference key="source" ref="868589893"/>
 						<reference key="destination" ref="442257612"/>
@@ -2423,6 +2478,8 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<reference ref="531720473"/>
 							<reference ref="490860298"/>
 							<reference ref="973471059"/>
+							<reference ref="1070747945"/>
+							<reference ref="1028584276"/>
 						</array>
 						<reference key="parent" ref="998575448"/>
 					</object>
@@ -3273,6 +3330,32 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<reference key="object" ref="937088287"/>
 						<reference key="parent" ref="531720473"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2384</int>
+						<reference key="object" ref="1070747945"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="601345795"/>
+						</array>
+						<reference key="parent" ref="1073034890"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2385</int>
+						<reference key="object" ref="601345795"/>
+						<reference key="parent" ref="1070747945"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2386</int>
+						<reference key="object" ref="1028584276"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="641481373"/>
+						</array>
+						<reference key="parent" ref="1073034890"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2387</int>
+						<reference key="object" ref="641481373"/>
+						<reference key="parent" ref="1028584276"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3350,6 +3433,10 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				<string key="23.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="230.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="231.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2384.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2385.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2386.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2387.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="244.CustomClassName">textPopoverViewController</string>
 				<string key="244.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3434,7 +3521,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">2383</int>
+			<int key="maxID">2389</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3618,13 +3705,21 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<string key="superclassName">NSView</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="InsertImageToStage:">id</string>
+						<string key="attributedStringToCSS:">id</string>
+						<string key="bringElementToFront:">id</string>
 						<string key="changeStageBackgroundColor:">id</string>
 						<string key="clearPopover:">id</string>
+						<string key="copy:">id</string>
+						<string key="delete:">id</string>
 						<string key="displayDocumentSettingsView:">id</string>
+						<string key="generateCode:">id</string>
+						<string key="groupElements:">id</string>
 						<string key="labelButton:">id</string>
+						<string key="saveDocumentSettings:">id</string>
 						<string key="setAlignmentOfText:">id</string>
 						<string key="setFontSize:">id</string>
 						<string key="setFontTrait:">id</string>
+						<string key="setTopMarginForRow:">id</string>
 						<string key="setTypeFaceFamily:">id</string>
 						<string key="setTypeStyle:">id</string>
 						<string key="toggleGridlineVisibility:">id</string>
@@ -3637,6 +3732,14 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="name">InsertImageToStage:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="attributedStringToCSS:">
+							<string key="name">attributedStringToCSS:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="bringElementToFront:">
+							<string key="name">bringElementToFront:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="changeStageBackgroundColor:">
 							<string key="name">changeStageBackgroundColor:</string>
 							<string key="candidateClassName">id</string>
@@ -3645,12 +3748,32 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="name">clearPopover:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="copy:">
+							<string key="name">copy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="delete:">
+							<string key="name">delete:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="displayDocumentSettingsView:">
 							<string key="name">displayDocumentSettingsView:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="generateCode:">
+							<string key="name">generateCode:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="groupElements:">
+							<string key="name">groupElements:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="labelButton:">
 							<string key="name">labelButton:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="saveDocumentSettings:">
+							<string key="name">saveDocumentSettings:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="setAlignmentOfText:">
@@ -3663,6 +3786,10 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						</object>
 						<object class="IBActionInfo" key="setFontTrait:">
 							<string key="name">setFontTrait:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="setTopMarginForRow:">
+							<string key="name">setTopMarginForRow:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="setTypeFaceFamily:">
@@ -3712,6 +3839,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<string key="leadingLabel">NSTextField</string>
 						<string key="leadingStepper">NSStepper</string>
 						<string key="leadingTextField">NSTextField</string>
+						<string key="marginAboveEachRow">NSTextField</string>
 						<string key="panel">NSPanel</string>
 						<string key="searchField">NSSearchField</string>
 						<string key="stageBackgroundColorAsHex">NSTextField</string>
@@ -3805,6 +3933,10 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						</object>
 						<object class="IBToOneOutletInfo" key="leadingTextField">
 							<string key="name">leadingTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="marginAboveEachRow">
+							<string key="name">marginAboveEachRow</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="panel">

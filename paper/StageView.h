@@ -249,6 +249,8 @@ typedef NSInteger		ShapeCutCopyType;
 @property (nonatomic) BOOL koObservableMapped;
 @property (assign, nonatomic) NSString *koObservable;
 
+@property (assign, nonatomic, readonly) IBOutlet NSTextField *marginAboveEachRow;
+
 //Font based methods
 -(IBAction)setFontTrait:(id)sender;
 -(IBAction)setFontSize:(id)sender;
@@ -260,7 +262,7 @@ typedef NSInteger		ShapeCutCopyType;
 -(void)updateCustomFontMenu:(NSDictionary*)attributes;
 
 
-
+-(IBAction)setTopMarginForRow:(id)TextField;
 
 
 //VALIDATION OF ELEMENTS EDITED

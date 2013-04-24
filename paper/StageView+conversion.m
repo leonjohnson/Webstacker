@@ -4447,6 +4447,10 @@ BOOL hasLeadingNumberInString(NSString* s)
             CmarginLeft = [[block valueForKey:@"marginLeft"]intValue];
             CmarginRight = [[block valueForKey:@"marginRight"]intValue];
             
+            if ([block objectForKey:TOP_MARGIN_FOR_ROW] != nil) {
+                CmarginTop = [[block objectForKey:TOP_MARGIN_FOR_ROW] integerValue] + CmarginTop;
+            }
+            
             //margin Left
             NSNumber *marginLeftAsANumber = [NSNumber numberWithInt:0];
             if ([block objectForKey:MARGIN_LEFT_AS_A_PERCENTAGE])

@@ -215,6 +215,7 @@ typedef NSInteger LayoutTag;
 @property (assign) NSMutableArray					*arrayShadows;
 
 @property (assign, nonatomic) NSString *jsid;
+@property (assign, nonatomic) NSString *topMarginForRow;
 
 
 - (void)dealloc;
