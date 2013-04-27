@@ -705,7 +705,7 @@
     if ([elementsInPath count] > 0)
     {
         NSLog(@"this far7");
-        [elementsInPath sortedArrayUsingDescriptors:horizontalSortDescriptor];
+        elementsInPath = [NSMutableArray arrayWithArray: [elementsInPath sortedArrayUsingDescriptors:horizontalSortDescriptor]];
         NSLog(@"this far8");
         if ([groubingBoxesInPath count] > 0)
         {
@@ -2027,7 +2027,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                                         [borderRadiiOn componentsJoinedByString:@" "], @"borderRadiusAsString", //the string containing four radii mesurements
                                         [self hsla:ele.colorAttributes], @"backgroundColor",
                                         [self dataSourceBindingCode:ele], DATA_SOURCE_CODE,
-                                        [self actionCodeString:ele], @"actionCode",
+                                        [self actionCodeString:ele], ACTION_CODE,
                                         [self dataSourceNameContainingKey:ele], ASSOCIATED_MODEL,
                                         ele.dataSourceStringEntered, DATA_SOURCE_STRING_ENTERED,
                                         //[[ele valueForKeyPath:@"opacity"] valueForKey:@"body"], @"opacity",
@@ -2051,12 +2051,18 @@ BOOL hasLeadingNumberInString(NSString* s)
             
             float paddingLeft = ((Button *)ele).buttonTextContainer.origin.x; // The distance between the button border and the inner textFrames left side. Draw box to see.
             paddingLeft = paddingLeft - 4; // I subtract 4 becuase the button is drawn with an inset of 2 on left and right because of the handle bars in Element.m
+            [export setObject:[NSNumber numberWithInt:paddingLeft] forKey:@"paddingLeft"];
             
+            /*
             if (ele.width_as_percentage)
             {
-                paddingLeft = (paddingLeft/self.frame.size.width)*100; //flexible padding
+                paddingLeft = (paddingLeft/ele.frame.size.width)*100; //flexible padding
+                [export setObject:[NSNumber numberWithInt:paddingLeft] forKey:@"flexiblePaddingLeft"];
+                
             }
-            [export setObject:[NSNumber numberWithInt:paddingLeft] forKey:@"paddingLeft"];
+             */
+            
+            
             NSLog(@"padding to buttons : %d and %f", paddingTop, paddingLeft);
         }
         
@@ -3131,7 +3137,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSLog(@"Path thus far : %@", self.outputFolderPath);
     
     
-    self.directoryURLToPlaceFiles = [NSURL fileURLWithPath:self.outputFolderPath isDirectory:YES];
+    self.directoryURLToPlaceFiles = [NSURL fileURLWithPath:self.outputFolderPath isDirectory:NO];
     
     
     
@@ -3398,6 +3404,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             // CHANGE THE MARGIN-LEFT AND MARGIN-RIGHT TO %
             NSNumber *marginLeft = [dc objectForKey:@"marginLeft"];
             NSNumber *marginRight = [dc objectForKey:@"marginRight"];
+            NSNumber *paddingLeft = [dc objectForKey:@"paddingLeft"];
             NSNumber *flexibleWidth = [dc objectForKey:WIDTH_AS_A_PERCENTAGE];
             
             if (marginLeft)
@@ -3438,6 +3445,10 @@ BOOL hasLeadingNumberInString(NSString* s)
                 }
                 CGFloat context = parent;
                 // (target/context)*100;
+                
+                NSLog(@"target is : %f", target);
+                NSLog(@"context is : %f", context);
+                
                 CGFloat flexibleMargin = [self convertTarget:target inContext:context];
                 [dc setObject:[NSNumber numberWithFloat:flexibleMargin] forKey:MARGIN_LEFT_AS_A_PERCENTAGE];
             }
@@ -3490,6 +3501,20 @@ BOOL hasLeadingNumberInString(NSString* s)
                 
             }
             
+            CGFloat parentWidth;
+            if (paddingLeft)
+            {
+                
+                NSDictionary *container = [self containerContaining:dc usingElements:self.sortedArray];
+                if (container == nil)
+                    parentWidth = self.frame.size.width;
+                else
+                    parentWidth = [[container objectForKey:@"width"] floatValue];
+                
+                NSLog(@"ParentWidth is: %f", parentWidth);
+                CGFloat flexiblePadding = [self convertTarget:[paddingLeft floatValue] inContext:parentWidth];
+                [dc setObject:[NSNumber numberWithFloat:flexiblePadding] forKey:FLEXIBLE_PADDING_LEFT];
+            }
             
             GroupingBox *imInAGroupingBox = [self whichGroupingBoxIsElementIn:dc];
             if (flexibleWidth && imInAGroupingBox)
@@ -3608,8 +3633,8 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     
     int CblockCount = 0;
-    int CmarginTop, CmarginRight, CmarginBottom, CmarginLeft, Ckerning, CHeight, CPaddingTop, CPaddingLeft = 0;
-    float CWidth;
+    int CmarginTop, CmarginBottom, Ckerning, CHeight, CPaddingTop = 0;
+    float CWidth, CPaddingLeft, CmarginLeft, CmarginRight;
     int Cleading = 1;
     float CfontSize = 12;
     
@@ -3959,10 +3984,12 @@ BOOL hasLeadingNumberInString(NSString* s)
              */
         }
         
-        //2. DataSource, actions, and visibility
-        NSString *actionCode = [block objectForKey:@"actionCode"];
+        //2. DataSource and actions -  visibility has been tacked on to the end of dataSource
+        NSString *actionCode = [block objectForKey:ACTION_CODE];
         NSString *dataSourceCode = [block objectForKey:DATA_SOURCE_CODE];
-        NSLog(@"ac = %@", actionCode);
+        NSLog(@"DATA SOURCE CODE = %@", dataSourceCode);
+        
+        
         
         //3. if the last object was in dyRow but this element is not then
         NSString *closeTheLoop = @"";
@@ -4765,6 +4792,20 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ([[block valueForKey:@"tag"] isEqual: @"button"])
         {
             
+            //width
+            NSNumber *widthAsANumber = nil;
+            if ([block objectForKey:WIDTH_AS_A_PERCENTAGE])
+            {
+                CWidth = [[block objectForKey:WIDTH_AS_A_PERCENTAGE]floatValue];
+                widthAsANumber = [NSNumber numberWithFloat:CWidth];
+            }
+            else
+            {
+                CWidth = [[block valueForKey:@"width"] intValue];
+                widthAsANumber =[NSNumber numberWithInt:CWidth];
+            }
+            
+            
             //if "marginTop" in block:
             if ([block valueForKey:@"marginTop"] != nil)
             {
@@ -4781,18 +4822,37 @@ BOOL hasLeadingNumberInString(NSString* s)
                 CmarginBottom = [[block valueForKey:@"marginBottom"]intValue];
             }
             
-            if ([block valueForKey:@"marginLeft"] != nil)
+            // Left margin
+            if ([block valueForKey:MARGIN_LEFT_AS_A_PERCENTAGE])
+            {
+                CmarginLeft = [[block valueForKey:MARGIN_LEFT_AS_A_PERCENTAGE] floatValue];
+                NSLog(@"flexi b :%f", CmarginLeft);
+            }
+            else
             {
                 CmarginLeft = [[block valueForKey:@"marginLeft"]intValue];
+                NSLog(@"flexi a :%f", CmarginLeft);
             }
+            
+            //Top paddings
             if ([block valueForKey:@"paddingTop"] != nil)
             {
                 CPaddingTop = [[block valueForKey:@"paddingTop"]intValue];
             }
-            if ([block valueForKey:@"paddingLeft"] != nil)
+            
+            // Side padding
+            if ([block valueForKey:FLEXIBLE_PADDING_LEFT] != nil)
+            {
+                CPaddingLeft = [[block valueForKey:FLEXIBLE_PADDING_LEFT] floatValue];
+                NSLog(@"cp = %f", CPaddingLeft);
+            }
+            else if ([block valueForKey:@"paddingLeft"] != nil)
             {
                 CPaddingLeft = [[block valueForKey:@"paddingLeft"] intValue];
+                NSLog(@"cp2 = %f", CPaddingLeft);
             }
+            
+            NSLog(@"cp3 = %f", CPaddingLeft);
             
             CHeight = [[block valueForKey:@"height"] intValue];
             NSMutableArray *styleArray = [NSMutableArray arrayWithObjects:
@@ -4801,7 +4861,10 @@ BOOL hasLeadingNumberInString(NSString* s)
                                           @" {",
                                           @"\n",
                                           @"\n",
-                                          @"  width: auto;",
+                                          @"  width: ",
+                                          widthAsANumber,
+                                          elementLayoutType,
+                                          @";",
                                           @"\n",
                                           @"  margin:",
                                           [NSNumber numberWithFloat:CmarginTop],
@@ -4820,11 +4883,10 @@ BOOL hasLeadingNumberInString(NSString* s)
                                           @"  padding: ",
                                           [NSNumber numberWithInt:CPaddingTop],
                                           @"px ",
-                                          //@"  padding-left: ",
-                                          [NSNumber numberWithFloat:CPaddingLeft],
-                                          elementLayoutType,
+                                          @"0",
                                           @";",
                                           @"\n",
+                                          @"text-align: center;",
                                           nil];
             NSArray *borderStrokeArray = [NSArray arrayWithObjects:
                                           @"  border: ",
@@ -4842,7 +4904,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                                           @";",
                                           @"\n",
                                           nil];
-            NSArray *boxShadow = [NSArray arrayWithObject:@"-webkit-box-shadow: inset 0px 1px 0px 0px rgba(256,256,256,0.7);"];
+            NSArray *boxShadow = [NSArray arrayWithObjects:@"  ", @"-webkit-box-shadow: inset 0px 1px 0px 0px rgba(256,256,256,0.7);", nil];
             
             if (borderStrokeString != nil)
             {

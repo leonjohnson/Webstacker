@@ -249,7 +249,10 @@ typedef NSInteger		ShapeCutCopyType;
 @property (nonatomic) BOOL koObservableMapped;
 @property (assign, nonatomic) NSString *koObservable;
 
-@property (assign, nonatomic, readonly) IBOutlet NSTextField *marginAboveEachRow;
+@property (assign, nonatomic) IBOutlet NSTextField *marginAboveEachRowLabel;
+@property (assign, nonatomic) IBOutlet NSTextField *marginAboveEachRow;
+
+@property (assign, nonatomic) NSMutableArray *idsInsideDyRow;
 
 //Font based methods
 -(IBAction)setFontTrait:(id)sender;
@@ -497,6 +500,7 @@ typedef NSInteger		ShapeCutCopyType;
 -(NSString*)classStructureOf:(NSMutableDictionary*)dyRow amongstElements:(NSArray*)sortedArray;
 -(NSString *)actionCodeString: (Element*)ele;
 -(NSString *)dataSourceBindingCode: (Element*)ele;
+-(NSString *)visibilityBindingCode: (Element*)ele;
 -(NSString*)dataSourceNameContainingKey: (Element*)ele;
 @end
 

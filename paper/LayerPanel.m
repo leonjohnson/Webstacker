@@ -178,7 +178,7 @@
 			default:
 				break;
 		}
-		
+		viewName.stringValue = [NSString stringWithFormat:@"%@ - %@", shape.elementid, viewName.stringValue];
 		return viewName;
 	} else if ([[tableColumn identifier] isEqualToString:@"Visibility"]) {
 		
@@ -197,6 +197,8 @@
 		[checkVisible setState:(shape.isHidden == YES)? NSOffState: NSOnState];
 		
 		[checkVisible setAction:@selector(OnVisible:)];
+        NSLog(@"set the action to onvisible");
+        
 		[checkVisible setTag:[curDoc.stageView.elementArray count] - row - 1];
 		
 		return checkVisible;
@@ -212,12 +214,14 @@
 
 - (IBAction)OnVisible:(id)sender
 {
-	NSInteger tag = [sender tag];
+	NSLog(@"messing with visi : %ld", (long)[sender state]);
+    NSInteger tag = [sender tag];
 	
 	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
 	Element *shape = [curDoc.stageView.elementArray objectAtIndex:tag];
 	
 	if ([sender state] == NSOnState) {
+        
 		[shape setHidden:NO];
 	} else {
 		[shape setHidden:YES];

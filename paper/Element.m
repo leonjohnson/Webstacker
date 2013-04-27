@@ -103,20 +103,17 @@
 	switch (type) {
 		case SHAPE_CIRCLE:
 			shape = [[Circle alloc] init];
-            NSLog(@"Creating a circle");
             [[curDoc stageView] setElementBeenDroppedToStage:YES];
 			break;
 			
 		case SHAPE_RECTANGLE:
 			shape = [[Box alloc] init];
             [[curDoc stageView] setElementBeenDroppedToStage:YES];
-            NSLog(@"Creating a rect");
 			break;
 			
 		case SHAPE_TRIANGLE:
 			shape = [[Triangle alloc] init];
             [[curDoc stageView] setElementBeenDroppedToStage:YES];
-            NSLog(@"Creating a triangle");
 			break;
 			
 		case SHAPE_TEXTBOX:
@@ -407,8 +404,6 @@
     switch (hitTest & SHT_HANDLESIZING)
     {
 		
-        NSLog(@"String : %ld", sg.currentElement.uType);
-        //if (sg.currentElement.uType != SHAPE_DROPDOWN) //Drop downs cannot be resized
         
         case SHT_SIZENE:
 			rtFrame = CGRectMake(rtFrame.origin.x + offset.width, rtFrame.origin.y + offset.height,
@@ -457,7 +452,6 @@
 			break;
 			
 		case SHT_RESIZE:
-            NSLog(@"DUNNO");
             // Called when I enter a value/place the mouse - inside any of the atributes field.
 			rtFrame = CGRectMake(rtFrame.origin.x, rtFrame.origin.y, offset.width, offset.height);
 			break;
@@ -482,7 +476,7 @@
         [self setWidth_as_percentage:w_h.width];
         [self setHeight_as_percentage:w_h.height];
         
-        NSLog(@"In Element. Width = %f. Height = %f.", w_h.width, w_h.height);
+        //NSLog(@"In Element. Width = %f. Height = %f.", w_h.width, w_h.height);
         
         
         
@@ -501,22 +495,7 @@
 - (void)mouseDown:(NSEvent *)theEvent
 {	
     
-    /*
-     Singleton *sg = [[Singleton alloc]init];
-     if ([insideOperationElement isInsideElement:self] == NO) 
-     {
-     isTouched = NO;
-     [[self superview] mouseDown:theEvent];
-     return;
-     }
-     
-    
-    [[self superview] mouseDown:theEvent];
-	ptStart = [theEvent locationInWindow];
-	ptEnd = ptStart;
-	//[insideOperationElement selectCurrentElement:self];
-	//isTouched = YES;
-    */
+
         if ([insideOperationElement isInsideElement:self] == NO)
         {
             isTouched = NO;

@@ -219,6 +219,9 @@
         }
 
         [set addObject:parameter];
+        [self.idsInsideDyRow addObject:[ele objectForKey:JS_ID]];
+        
+        // create a structure to hold all of the element ids that could be referenced inside and including the dyRow (particularly by visibility code)
     }
     NSArray *array = [NSArray arrayWithArray:[set allObjects]];
     NSString *classStructureAsString = [array componentsJoinedByString:@", "];
@@ -331,11 +334,6 @@
         
         
         
-        NSString *visibilityCodeString = @"";
-        if (ele.visibilityActionStringEntered != nil)
-        {
-            visibilityCodeString = [NSString stringWithFormat:@"%@, ", ele.visibilityActionStringEntered];
-        }
         
         
         
@@ -355,17 +353,20 @@
         }
         
         
-    if ([ele.dataSourceStringEntered containsString:@"price"])
+        if ([ele.dataSourceStringEntered containsString:@"price"])
+        {
+            NSLog(@"price ds called");
+            dataSourceCodeStringToReturn = [NSString stringWithFormat:@"data-bind=\"text: %@\"", ele.jsid];
+            return dataSourceCodeStringToReturn;
+        }
+        
+    
+    }
+    NSString *visiString = [self visibilityBindingCode:ele];
+    if (visiString != nil)
     {
-        NSLog(@"price ds called");
-        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"data-bind=\"text: %@\"", ele.jsid];
-        return dataSourceCodeStringToReturn;
+        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"%@, %@", dataSourceCodeStringToReturn, visiString];
     }
-        
-    
-        
-    }
-    
     
     return dataSourceCodeStringToReturn;
 }
@@ -379,6 +380,8 @@
 -(NSString *)actionCodeString: (Element*)ele
 {
     NSLog(@"starting point");
+    NSLog(@"We haave: %c", [@"timadd" containsString:@"Add"]);
+    
     NSString *actionsStringToReturn = [NSMutableString string];
     
     DynamicRow *dyRow = nil;
@@ -485,6 +488,37 @@
     
 }
 
+
+
+
+// PURPOSE: To generate code from the entered dataSource that sits inline with HTML tags.
+-(NSString *)visibilityBindingCode: (Element*)ele
+{
+    // TODO: validate that the string entered contains '>' and a number after it or a white space and then a number
+    NSArray *wordsEntered = [ele.visibilityActionStringEntered componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *numberEntered = [wordsEntered lastObject];
+    NSLog(@"SECOND CHARACTER IS : %@", numberEntered);
+    
+    NSString *objectsBeingTotalled = [wordsEntered[1] capitalizedString];
+    NSLog(@"Object being totalled: %@", objectsBeingTotalled);
+    
+    BOOL visibilityStringMatchesAtLeastOneIDinDyRow;
+    for (NSString *theid in self.idsInsideDyRow) {
+        if ([ele.visibilityActionStringEntered containsString:theid])
+        {
+            visibilityStringMatchesAtLeastOneIDinDyRow = YES;
+        }
+    }
+    
+    NSString *visibilityCodeString = @"";
+    // only show if more than x total price or x total seats
+    if (ele.visibilityActionStringEntered != nil && [ele.visibilityActionStringEntered containsString:@"total"] && visibilityStringMatchesAtLeastOneIDinDyRow)
+    {
+        visibilityCodeString = [NSString stringWithFormat:@"data-bind=\"visible: total%@() > %@, ", objectsBeingTotalled, numberEntered];
+    }
+    
+    return visibilityCodeString;
+}
 
 
 

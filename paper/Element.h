@@ -154,8 +154,8 @@ typedef NSInteger LayoutTag;
     float height_as_percentage;
     
     //Actions - this array contains other arrays, each one is a list of actions created by the user or the system.
-    NSString *actionStringEntered;
-    NSString *dataSourceStringEntered;  // stores the string the user entered into the dataSource textField
+    //NSString *actionStringEntered;
+    //NSString *dataSourceStringEntered;  // stores the string the user entered into the dataSource textField
     
     NSString *prefixText; // enter any text you want to appear before the output
 	
@@ -206,9 +206,10 @@ typedef NSInteger LayoutTag;
 
 @property (assign) NSString *buttonText;
 
-@property (assign, nonatomic) NSString *actionStringEntered;
-@property (assign, nonatomic) NSString *dataSourceStringEntered;
+@property (readonly, assign, nonatomic) NSString *actionStringEntered;
+@property (readonly, assign, nonatomic) NSString *dataSourceStringEntered;
 @property (readonly, assign, nonatomic) NSString *visibilityActionStringEntered; //
+
 @property (assign, nonatomic) NSString *prefixText;
 
 @property (nonatomic) BOOL							isPtInElement;
@@ -390,6 +391,9 @@ typedef NSInteger LayoutTag;
 
 @interface Element (ActionsAndDataSources)
 -(void)setVisibilityActionStringEntered:(NSString *)theVisibilityActionStringEntered;
+-(void)setActionStringEntered:(NSString *)theActionStringEntered;
+-(void)setDataSourceStringEntered:(NSString *)theDataSourceStringEntered;
+
 @end
 
 

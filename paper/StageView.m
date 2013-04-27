@@ -340,6 +340,9 @@ static NSImage *bottomImage;
     
     [_buttonTextLabel setHidden:YES];
     [_buttonTextField setHidden:YES];
+    
+    [_marginAboveEachRow setHidden:YES];
+    [_marginAboveEachRowLabel setHidden:YES];
 
 
     
@@ -374,6 +377,13 @@ static NSImage *bottomImage;
             [_buttonTextField setHidden:NO];
             
         }
+        
+        if ([selElementArray[0] isMemberOfClass:[DynamicRow class]])
+        {
+            [_marginAboveEachRow setHidden:NO];
+            [_marginAboveEachRowLabel setHidden:NO];
+        }
+        
     }
     
 	

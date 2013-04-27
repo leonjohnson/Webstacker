@@ -82,6 +82,8 @@
 #define TOP_MARGIN_FOR_ROW                      @"topMarginForRow"
 
 #define DATA_SOURCE_CODE                        @"dataSourceCode"
+#define VISIBILITY_CODE                         @"visibilityCode"
+#define ACTION_CODE                             @"actionCode"
 
 #define CLASS_OR_ID_SYMBOL                      @"classOrIdSymbol"
 #define CLASS_OR_ID_WORD                        @"classOrIdWord"
@@ -96,6 +98,11 @@
 // MAIN MENU TITLES
 #define SHOW_ALIGNMENT_PANEL                    @"Show Alignment Panel"
 #define SHOW_ATTRIBUTES_PANEL                   @"Show Attributes Panel"
+
+
+//WIDTHS, HEIGHTS, MARGINS, AND PADDINGS
+#define PADDING_LEFT                            @"paddingLeft"
+#define FLEXIBLE_PADDING_LEFT                   @"FlexiblePaddingLeft"
 
 
 

@@ -314,6 +314,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     //home free, the id label eneterd has passed all of the above tests so we can now save it :-)
     elementid = eleid;
+    
+    //Upldate the layers panel;
+    [[curDoc stageView] ResortLayer];
+    
+    
+    // and hide the warning label
     [[[NSApp delegate] labelWarningField]setHidden:YES];
     
 }
