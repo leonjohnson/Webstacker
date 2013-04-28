@@ -259,7 +259,7 @@ static NSImage *bottomImage;
  When the view is redraw, all shapes in shape array and current shape are draw.
  */
 - (void)drawRect:(NSRect)dirtyRect
-{
+{    
     NSGraphicsContext *gc = [NSGraphicsContext currentContext];
 	CGContextRef contextref = (CGContextRef) [gc graphicsPort];
     
