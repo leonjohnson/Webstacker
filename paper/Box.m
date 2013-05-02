@@ -65,7 +65,7 @@
 
 - (void)DrawShape:(CGContextRef)context
 {
-    
+        
     //  Other option is to bind each checkbox to an individal ivar and call one method whenever a button is clicked.
     /*
      NSLog(@"top left : %i", topLeftBorderRadius);
@@ -191,6 +191,8 @@
     NSGraphicsContext *tvarNSGraphicsContext = [NSGraphicsContext currentContext];
 	CGContextRef ctx = (CGContextRef) [tvarNSGraphicsContext graphicsPort];
     [self DrawShape:ctx];
+    
+    NSLog(@"is selected : %i", isSelected);
 }
 
 

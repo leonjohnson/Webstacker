@@ -2030,6 +2030,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                                         [self actionCodeString:ele], ACTION_CODE,
                                         [self dataSourceNameContainingKey:ele], ASSOCIATED_MODEL,
                                         ele.dataSourceStringEntered, DATA_SOURCE_STRING_ENTERED,
+                                        ele.visibilityActionStringEntered, VISIBILITY_CODE,
                                         //[[ele valueForKeyPath:@"opacity"] valueForKey:@"body"], @"opacity",
                                         //Also get the NSColor as a hex value
                                         nil];
@@ -2082,6 +2083,11 @@ BOOL hasLeadingNumberInString(NSString* s)
         else
         {
             [export setObject:ele.elementid forKey:JS_ID];
+        }
+        
+        if ([ele isMemberOfClass:[DynamicRow class]] && [ele topMarginForRow] != nil)
+        {
+            [export setObject:ele.topMarginForRow forKey:TOP_MARGIN_FOR_ROW];
         }
         
         [arrayOfElementDetails addObject:export];
@@ -2409,6 +2415,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 
             } // end of if tag to check if clean overlapping elements
             
+            
             if (functionArray.count > 0) {
                 
                 [functionArray removeLastObject]; //clean up the end of the last string
@@ -2447,7 +2454,19 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSLog(@"About to add: %@", convertedGroupingBox);
         }
         
+        // record the elements that are inside the dyRow
+        if ([[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG])
+        {
+            NSArray *elementsInsideRow = [self elementsInside:elem usingElements:self.sortedArray];
+            for (NSDictionary*ele in elementsInsideRow)
+            {
+                [self.idsInsideDyRow addObject:[ele objectForKey:JS_ID]];
+            }
+        
+        }
+        
     } //FINISHED OF SOLO LOOP
+    
     
     
     
@@ -4296,44 +4315,41 @@ BOOL hasLeadingNumberInString(NSString* s)
             //s = [NSMutableString stringWithString:[s stringByReplacingOccurrencesOfString:@"\n" withString:@"<br />"]];
             
             NSArray *arrayF = [NSArray array];
-            /*
-            if ([block valueForKey:@"textStyles"]== nil && actionCode!=nil)
-            {
-                arrayF = [NSArray arrayWithObjects:
-                          @"<a href=\"#\" ",
-                          @"class=\"",
-                          blockidAsString,
-                          @"\" ",
-                          dataSourceCode,
-                          actionCode,
-                          @">",
-                          s,
-                          @"</a>",
-                          @"\n",
-                          nil];
-            }
-            else
-             
-            {
-             */
+            
             NSLog(@"Trying to show : %@", [block objectForKey:CLASS_OR_ID_WORD]);
             
+            if ([[block objectForKey:CONTENTURL] isEqualToString:@"#"])
+            {
+            arrayF = [NSArray arrayWithObjects:
+                      @"<a href=\"#\" ",
+                      [block objectForKey:CLASS_OR_ID_WORD],
+                      @"=\"",
+                      blockidAsString,
+                      @"\" ",
+                      dataSourceCode,
+                      actionCode,
+                      @">",
+                      @"\n",
+                      s,
+                      @"</a>",
+                      @"\n",
+                      nil];
+            }
             
-                arrayF = [NSArray arrayWithObjects:
-                          @"<p ",
-                          [block objectForKey:CLASS_OR_ID_WORD],
-                          @"=\"",
-                          blockidAsString,
-                          @"\" ",
-                          dataSourceCode,
-                          actionCode,
-                          @">",
-                          @"\n",
-                          s,
-                          @"</p>",
-                          @"\n",
-                          nil];
-            //}
+            arrayF = [NSArray arrayWithObjects:
+                      @"<p ",
+                      [block objectForKey:CLASS_OR_ID_WORD],
+                      @"=\"",
+                      blockidAsString,
+                      @"\" ",
+                      dataSourceCode,
+                      actionCode,
+                      @">",
+                      @"\n",
+                      s,
+                      @"</p>",
+                      @"\n",
+                      nil];
             
             NSLog(@"p completed : %@", arrayF);
             NSLog(@"block class or id : %@", [block objectForKey:CLASS_OR_ID_WORD]);

@@ -1388,7 +1388,7 @@ static NSImage *bottomImage;
  */
 - (void)MoveSelectedElements:(NSSize)offset HitTest:(NSInteger)hitTest;
 {
-    //NSLog(@"MoveSelectedElements called");
+    NSLog(@"MoveSelectedElements called with : %@ andn %li", NSStringFromSize(offset), (long)hitTest);
 
     
 	for (Element *selElement in selElementArray)
@@ -2210,16 +2210,19 @@ static NSImage *bottomImage;
 {
 	[self DeselectAllShaps];
 	[self DisableEditing];
+    
+    NSLog(@"pt 1 : %@", NSStringFromPoint(pt));
 	pt.y = ceil(pt.y);
     pt.x = ceil(pt.x);
-	pt = [self convertPoint:pt fromView:nil];
+	pt = [self.superview convertPoint:pt fromView:nil];
 	//pt.y = self.frame.size.height - pt.y;
-	
+	NSLog(@"pt 2 : %@", NSStringFromPoint(pt));
+    
 	Element *shape = [Element createElement:type];
 	shape.insideOperationElement = self;
     NSSize defaultSizeOfElement = [self defaultSizeOfElement:type];
 	[shape setBoundRect:NSMakeRect(pt.x - defaultSizeOfElement.width / 2,
-                                   pt.y - defaultSizeOfElement.height / 2,
+                                   pt.y - defaultSizeOfElement.height / 2 + 160, // why does this only work with an extra 160??
                                    defaultSizeOfElement.width,
                                    defaultSizeOfElement.height)];
 	shape.isSelected = YES;

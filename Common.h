@@ -104,6 +104,7 @@
 #define PADDING_LEFT                            @"paddingLeft"
 #define FLEXIBLE_PADDING_LEFT                   @"FlexiblePaddingLeft"
 
+#define CONTENTURL                              @"URL"
 
 
 #define IN_RUNNING_LION (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6)

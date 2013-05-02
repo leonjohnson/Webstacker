@@ -50,8 +50,8 @@
     }
     else
     {
-        wp = (selElement.rtFrame.size.width/self.frame.size.width)*100;      //  width as a percentage
-        hp = (selElement.rtFrame.size.height/self.frame.size.height)*100;    //  height as a percentage
+        wp = (selElement.rtFrame.size.width/self.superview.frame.size.width)*100;      //  width as a percentage
+        hp = (selElement.rtFrame.size.height/self.superview.frame.size.height)*100;    //  height as a percentage
     }
     
     NSLog(@"made it back");
@@ -100,8 +100,8 @@
     }
     else
     {
-        containersWidth = (selElement.rtFrame.size.width/self.frame.size.width)*100;      //  width as a percentage
-        containersHeight = (selElement.rtFrame.size.height/self.frame.size.height)*100;    //  height as a percentage
+        containersWidth = (selElement.rtFrame.size.width/self.superview.frame.size.width)*100;      //  width as a percentage
+        containersHeight = (selElement.rtFrame.size.height/self.superview.frame.size.height)*100;    //  height as a percentage
     }
     
     
@@ -156,6 +156,28 @@
     return elementsSize;
 }
 
+
+-(void)updateSizeInPixelsWhenScrollViewSizeChangess:(Element*)selElement
+{
+    
+    // The business
+    if ([selElement.layoutType isEqualToString:PERCENTAGE_BASED_LAYOUT])
+    {
+        
+        CGFloat newPixelWidth = ((selElement.width_as_percentage * 0.01) * self.superview.frame.size.width);
+        NSRect newRect = NSMakeRect(selElement.frame.origin.x, selElement.frame.origin.y, newPixelWidth, selElement.frame.size.height);
+        [selElement setRtFrame:newRect];
+        
+        NSLog(@"New pixel width is : %f", newPixelWidth);
+        
+        
+        
+        
+        
+        
+        
+    }
+}
 
 @end
 

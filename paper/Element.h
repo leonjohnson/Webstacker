@@ -206,9 +206,9 @@ typedef NSInteger LayoutTag;
 
 @property (assign) NSString *buttonText;
 
-@property (readonly, assign, nonatomic) NSString *actionStringEntered;
-@property (readonly, assign, nonatomic) NSString *dataSourceStringEntered;
-@property (readonly, assign, nonatomic) NSString *visibilityActionStringEntered; //
+@property (assign, nonatomic) NSString *actionStringEntered;
+@property (assign, nonatomic) NSString *dataSourceStringEntered;
+@property (assign, nonatomic) NSString *visibilityActionStringEntered; //
 
 @property (assign, nonatomic) NSString *prefixText;
 
@@ -390,10 +390,11 @@ typedef NSInteger LayoutTag;
 
 
 @interface Element (ActionsAndDataSources)
+/*
 -(void)setVisibilityActionStringEntered:(NSString *)theVisibilityActionStringEntered;
 -(void)setActionStringEntered:(NSString *)theActionStringEntered;
 -(void)setDataSourceStringEntered:(NSString *)theDataSourceStringEntered;
-
+*/
 @end
 
 

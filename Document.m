@@ -215,17 +215,16 @@
 
 -(NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
 {
-    NSLog(@"Resizing to : %@", NSStringFromSize(frameSize));
-    
-    NSLog(@"Width of scrollview is: %f", self.mainStageScrollView.frame.size.width);
     
     for (Element *e in self.stageView.elementArray)
     {
         if ([[e layoutType] isEqualToString:PERCENTAGE_BASED_LAYOUT])
         {
-            <#statements#>
+            [[self stageView] updateSizeInPixelsWhenScrollViewSizeChangess:e];
+            
         }
     }
+    [self.stageView setNeedsDisplay:YES];
     
     return frameSize;
 }

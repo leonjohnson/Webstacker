@@ -482,6 +482,7 @@ typedef NSInteger		ShapeCutCopyType;
 -(CGSize)sizeAsPercentageOfHighestContainingElement: (Element*)selElement;
 -(CGSize)sizeOfHighestContainingElement: (Element*)selElement;
 -(CGSize)updateElementWithPercentagesAndAttributesPanelWithElementAttributes:(Element*)selElement;
+-(void)updateSizeInPixelsWhenScrollViewSizeChangess:(Element*)selElement;
 @end
 
 

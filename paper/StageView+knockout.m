@@ -126,13 +126,17 @@
     NSLog(@"Elements inside me are : %@", elementsInsideMe);
     for (NSDictionary *ele in elementsInsideMe)
     {
-        [elementsInsideMeIDs addObject:[ele objectForKey:JS_ID]];
-        if ( [[ele objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG ] || [[ele objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG ] )
+        if (![[ele objectForKey:@"tag"] isEqualToString:TEXT_BOX_TAG]) // textfields should be excluded from the class definition
         {
-            NSLog(@"jsid ? %@", [ele objectForKey:JS_ID]);
-            [parameterList addObject:[ele objectForKey:JS_ID]];
-            NSLog(@"parameterList being called");
+            [elementsInsideMeIDs addObject:[ele objectForKey:JS_ID]];
+            if ( [[ele objectForKey:@"tag"] isEqualToString:TEXT_INPUT_FIELD_TAG ] || [[ele objectForKey:@"tag"] isEqualToString:DROP_DOWN_MENU_TAG ] )
+            {
+                NSLog(@"jsid ? %@", [ele objectForKey:JS_ID]);
+                [parameterList addObject:[ele objectForKey:JS_ID]];
+                NSLog(@"parameterList being called");
+            }
         }
+        
             
         
     }
@@ -300,16 +304,16 @@
 
 
 // PURPOSE: To generate code from the entered dataSource that sits inline with HTML tags.
--(NSString *)dataSourceBindingCode: (Element*)ele
+-(NSMutableString *)dataSourceBindingCode: (Element*)ele
 {
     NSLog(@"being called ??");
-    NSString *dataSourceCodeStringToReturn = [NSMutableString string];
+    NSMutableString *dataSourceCodeStringToReturn = [NSMutableString string];
     
     if (ele.dataSourceStringEntered)
     {
         // The generic response
         NSString *startOfDataSourceCode = @"data-bind=\"text: ";
-        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"%@%@ \"", startOfDataSourceCode, ele.dataSourceStringEntered];
+        dataSourceCodeStringToReturn = [NSMutableString stringWithFormat:@"%@%@ \"", startOfDataSourceCode, ele.dataSourceStringEntered];
         
         
         // Overwrite with the following specific cases if relevant...
@@ -327,7 +331,7 @@
             [stringToReturn appendString:substring]; // 'total'
             [stringToReturn appendString:copy]; //'Surchage' for example
             
-            dataSourceCodeStringToReturn = [NSString stringWithFormat:@"%@%@().toFixed(2) \"", startOfDataSourceCode, stringToReturn];
+            dataSourceCodeStringToReturn = [NSMutableString stringWithFormat:@"%@%@().toFixed(2) \"", startOfDataSourceCode, stringToReturn];
             
             return dataSourceCodeStringToReturn;
         }
@@ -345,7 +349,7 @@
             // Within each app, each key must be unique
             
             NSString *dataSourceName = [self dataSourceNameWithoutIndexContainingKey:ele];
-            dataSourceCodeStringToReturn = [NSString stringWithFormat: @"data-bind=\"options: $root.%@, optionsText: \'%@\', value: %@\"",
+            dataSourceCodeStringToReturn = [NSMutableString stringWithFormat: @"data-bind=\"options: $root.%@, optionsText: \'%@\', value: %@\"",
                                             dataSourceName,
                                             ele.dataSourceStringEntered,
                                             ele.jsid]; // the last choice was 'ele.elementid'but to make sure viewModel method can set the matching name, I've just used a static string.
@@ -356,18 +360,20 @@
         if ([ele.dataSourceStringEntered containsString:@"price"])
         {
             NSLog(@"price ds called");
-            dataSourceCodeStringToReturn = [NSString stringWithFormat:@"data-bind=\"text: %@\"", ele.jsid];
-            return dataSourceCodeStringToReturn;
+            dataSourceCodeStringToReturn = [NSMutableString stringWithFormat:@"data-bind=\"text: %@", ele.jsid];
+            //return dataSourceCodeStringToReturn;
         }
         
     
     }
-    NSString *visiString = [self visibilityBindingCode:ele];
-    if (visiString != nil)
+    
+    if (ele.visibilityActionStringEntered != nil)
     {
-        dataSourceCodeStringToReturn = [NSString stringWithFormat:@"%@, %@", dataSourceCodeStringToReturn, visiString];
+        dataSourceCodeStringToReturn = [NSMutableString stringWithFormat:@"%@, %@", dataSourceCodeStringToReturn, [self visibilityBindingCode:ele]];
+        NSLog(@"Tacked on : %@", dataSourceCodeStringToReturn);
     }
     
+    [dataSourceCodeStringToReturn appendString:@"\""];
     return dataSourceCodeStringToReturn;
 }
 
@@ -399,14 +405,15 @@
         NSArray *words = [ele.actionStringEntered componentsSeparatedByString:@" "];
         NSString *firstWord = words[0];
         NSString *secondWord = words[1];
-        NSString *viewModelClassName = [NSString stringWithFormat:@"add%@", dyRow.elementid.capitalizedString];
+        NSString *addClassName = [NSString stringWithFormat:@"add%@", dyRow.elementid.capitalizedString];
+        NSString *removeClassName = [NSString stringWithFormat:@"remove%@", dyRow.elementid.capitalizedString];
         NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
         
         // Remove row
         if ([firstWord containsString:@"Remove"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) )
         {
             NSLog(@"ACTION STRING IS : %@", ele.actionStringEntered);
-            actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: $root.%@\"", viewModelClassName];
+            actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: $root.%@\"", removeClassName];
             return actionsStringToReturn;
         }
         
@@ -417,7 +424,7 @@
             
             // The default if 'add row' text found
             NSLog(@"grrh");
-            actionsStringToReturn = [NSString stringWithFormat: @"data-bind=\"click: %@\" ", viewModelClassName];
+            actionsStringToReturn = [NSString stringWithFormat: @"data-bind=\"click: %@\" ", addClassName];
             
             // Now check if any 'max' or 'min' exists in the string entered
             NSMutableString *copy = [NSMutableString stringWithString:ele.actionStringEntered];
@@ -494,6 +501,8 @@
 // PURPOSE: To generate code from the entered dataSource that sits inline with HTML tags.
 -(NSString *)visibilityBindingCode: (Element*)ele
 {
+    NSLog(@"VISI string is :  %@", ele.visibilityActionStringEntered);
+    
     // TODO: validate that the string entered contains '>' and a number after it or a white space and then a number
     NSArray *wordsEntered = [ele.visibilityActionStringEntered componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *numberEntered = [wordsEntered lastObject];
@@ -503,20 +512,26 @@
     NSLog(@"Object being totalled: %@", objectsBeingTotalled);
     
     BOOL visibilityStringMatchesAtLeastOneIDinDyRow;
+    NSString *idOfElementToToggleVisibility = @"";
     for (NSString *theid in self.idsInsideDyRow) {
         if ([ele.visibilityActionStringEntered containsString:theid])
         {
             visibilityStringMatchesAtLeastOneIDinDyRow = YES;
+            idOfElementToToggleVisibility = [NSString stringWithString:theid];
         }
     }
     
+    NSLog(@"id I'm going to use is : %@", idOfElementToToggleVisibility);
     NSString *visibilityCodeString = @"";
     // only show if more than x total price or x total seats
     if (ele.visibilityActionStringEntered != nil && [ele.visibilityActionStringEntered containsString:@"total"] && visibilityStringMatchesAtLeastOneIDinDyRow)
     {
-        visibilityCodeString = [NSString stringWithFormat:@"data-bind=\"visible: total%@() > %@, ", objectsBeingTotalled, numberEntered];
+        NSLog(@"in here - yes!");
+        visibilityCodeString = [NSString stringWithFormat:@"visible: %@() > %@ ", idOfElementToToggleVisibility, numberEntered];
+        ele.contentURL = @"#";
     }
     
+    NSLog(@"About to return the string : %@", visibilityCodeString);
     return visibilityCodeString;
 }
 
