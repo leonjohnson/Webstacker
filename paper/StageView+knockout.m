@@ -499,6 +499,9 @@
 
 
 // PURPOSE: To generate code from the entered dataSource that sits inline with HTML tags.
+
+// NOTE: This is called as part of the data-binding method 'dataSourceBindingCode:'
+
 -(NSString *)visibilityBindingCode: (Element*)ele
 {
     NSLog(@"VISI string is :  %@", ele.visibilityActionStringEntered);
@@ -506,14 +509,26 @@
     // TODO: validate that the string entered contains '>' and a number after it or a white space and then a number
     NSArray *wordsEntered = [ele.visibilityActionStringEntered componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *numberEntered = [wordsEntered lastObject];
-    NSLog(@"SECOND CHARACTER IS : %@", numberEntered);
+    NSLog(@"LAST CHARACTER IS : %@", numberEntered);
     
     NSString *objectsBeingTotalled = [wordsEntered[1] capitalizedString];
     NSLog(@"Object being totalled: %@", objectsBeingTotalled);
     
+    
+    // get a list of all datasource headers
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    NSMutableArray *dataModelHeaders = [NSMutableArray new];
+    [appDelegate.arrayDataSource enumerateObjectsUsingBlock:^(id dictionarys, NSUInteger index, BOOL *stop)
+     {
+         NSLog(@"dictionarys is : %@", dictionarys);
+         NSArray *dataSourceArray = [dictionarys objectForKey:@"DataSource"];
+         [dataModelHeaders addObjectsFromArray:dataSourceArray];
+     }];
+    
     BOOL visibilityStringMatchesAtLeastOneIDinDyRow;
     NSString *idOfElementToToggleVisibility = @"";
-    for (NSString *theid in self.idsInsideDyRow) {
+    for (NSString *theid in dataModelHeaders) {
+        NSLog(@"Comparing strings: %@ and %@", ele.visibilityActionStringEntered, theid);
         if ([ele.visibilityActionStringEntered containsString:theid])
         {
             visibilityStringMatchesAtLeastOneIDinDyRow = YES;
@@ -521,13 +536,13 @@
         }
     }
     
-    NSLog(@"id I'm going to use is : %@", idOfElementToToggleVisibility);
+    NSLog(@"id I'm going to use is : %@", [ele jsid]);
     NSString *visibilityCodeString = @"";
     // only show if more than x total price or x total seats
     if (ele.visibilityActionStringEntered != nil && [ele.visibilityActionStringEntered containsString:@"total"] && visibilityStringMatchesAtLeastOneIDinDyRow)
     {
         NSLog(@"in here - yes!");
-        visibilityCodeString = [NSString stringWithFormat:@"visible: %@() > %@ ", idOfElementToToggleVisibility, numberEntered];
+        visibilityCodeString = [NSString stringWithFormat:@"visible: %@() > %@ ", [ele jsid], numberEntered];
         ele.contentURL = @"#";
     }
     

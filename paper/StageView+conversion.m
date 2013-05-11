@@ -2026,7 +2026,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                                         ele.borderRadius, @"borderRadius",
                                         [borderRadiiOn componentsJoinedByString:@" "], @"borderRadiusAsString", //the string containing four radii mesurements
                                         [self hsla:ele.colorAttributes], @"backgroundColor",
-                                        [self dataSourceBindingCode:ele], DATA_SOURCE_CODE,
+                                        //[self dataSourceBindingCode:ele], DATA_SOURCE_CODE,
                                         [self actionCodeString:ele], ACTION_CODE,
                                         [self dataSourceNameContainingKey:ele], ASSOCIATED_MODEL,
                                         ele.dataSourceStringEntered, DATA_SOURCE_STRING_ENTERED,
@@ -2134,6 +2134,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     NSLog(@"Solo has : %lu items", [self.solos count]); //THESE ARE OBJECTS WITH NOTHING TO THE LEFT OF THEM. CORRECT. - 03/11/2012
     self.sortedArray = [NSMutableArray array];
+    self.idsInsideDyRow = [NSMutableArray array];
     self.rows = [NSMutableArray array];
     for (NSDictionary *g in self.solos)
     {
@@ -2449,7 +2450,6 @@ BOOL hasLeadingNumberInString(NSString* s)
             [convertedGroupingBox setHeight:[[elem objectForKey:@"height"]intValue]];
             [self updateNestedGroupingBoxesVariable];
             [groupingBoxes addObject:convertedGroupingBox];
-            NSLog(@"UPDATE GB5 : %lu", groupingBoxes.count);
             NSLog(@"idprevknownas : %@", convertedGroupingBox.idPreviouslyKnownAs);
             NSLog(@"About to add: %@", convertedGroupingBox);
         }
@@ -2458,6 +2458,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         if ([[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG])
         {
             NSArray *elementsInsideRow = [self elementsInside:elem usingElements:self.sortedArray];
+            NSLog(@"ELEMENTS INSIDE ROW : %@", elementsInsideRow);
             for (NSDictionary*ele in elementsInsideRow)
             {
                 [self.idsInsideDyRow addObject:[ele objectForKey:JS_ID]];
@@ -2466,7 +2467,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         }
         
     } //FINISHED OF SOLO LOOP
-    
+    NSLog(@"SELF.IDS INSIDE DYROW = %@", self.idsInsideDyRow);
     
     
     
@@ -3606,6 +3607,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     // ASSUMPTION, YOU CAN ONLY HAVE ONE DYROW ON THE PAGE
     NSMutableArray *bucket = [NSMutableArray new];
     self.jsCode2 = [NSMutableString string];
+    // write method here that gets the app delegate datasource and gives me back an array of headers and makes it avaiable to visibility method
     for (NSMutableDictionary *element in [self.sortedArray copy])
     {
         if ([[element objectForKey:@"tag"] isEqual:DYNAMIC_ROW_TAG]) {
@@ -3617,7 +3619,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             // This is called if the element has a dataSource string to be converted into code,
             
             // but the element is positioned before the element that provides the reference to the ko.observeredArray (aMeal) - aka koObservableMapped
-            
+            NSLog(@"We're in the DATA_SOURCE_CODE zone!");
             Element * e = [self elementWithID:[element objectForKey:@"id"]];
             NSString *dataSourceString = [self dataSourceBindingCode:e];
             [element setObject:dataSourceString forKey:DATA_SOURCE_CODE];
