@@ -192,7 +192,6 @@
 	CGContextRef ctx = (CGContextRef) [tvarNSGraphicsContext graphicsPort];
     [self DrawShape:ctx];
     
-    NSLog(@"is selected : %i", isSelected);
 }
 
 

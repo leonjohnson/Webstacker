@@ -114,6 +114,7 @@
 																	<string key="NSFrameSize">{208, 93}</string>
 																	<reference key="NSSuperview" ref="610265007"/>
 																	<reference key="NSWindow"/>
+																	<reference key="NSNextKeyView" ref="532813818"/>
 																	<object class="NSTextContainer" key="NSTextContainer" id="52758967">
 																		<object class="NSLayoutManager" key="NSLayoutManager">
 																			<object class="NSTextStorage" key="NSTextStorage">
@@ -249,7 +250,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 													<string key="NSFrame">{{680, 315}, {210, 95}}</string>
 													<reference key="NSSuperview" ref="494326585"/>
 													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView" ref="532813818"/>
+													<reference key="NSNextKeyView" ref="610265007"/>
 													<int key="NSsFlags">133122</int>
 													<reference key="NSVScroller" ref="532813818"/>
 													<reference key="NSHScroller" ref="224122977"/>
@@ -262,7 +263,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 											<string key="NSFrameSize">{2031, 1436}</string>
 											<reference key="NSSuperview" ref="289510147"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="324106534"/>
+											<reference key="NSNextKeyView" ref="694089969"/>
 											<string key="NSClassName">StageView</string>
 										</object>
 									</array>
@@ -311,7 +312,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<string key="NSFrameSize">{1155, 666}</string>
 							<reference key="NSSuperview" ref="1073034890"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="694089969"/>
+							<reference key="NSNextKeyView" ref="289510147"/>
 							<int key="NSsFlags">133312</int>
 							<reference key="NSVScroller" ref="694089969"/>
 							<reference key="NSHScroller" ref="1000656136"/>
@@ -2265,14 +2266,6 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">changeStageBackgroundColor:</string>
-						<reference key="source" ref="494326585"/>
-						<reference key="destination" ref="788518183"/>
-					</object>
-					<int key="connectionID">1368</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">saveDocumentSettings:</string>
 						<reference key="source" ref="494326585"/>
 						<reference key="destination" ref="324848125"/>
@@ -2318,6 +2311,22 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<reference key="destination" ref="386018009"/>
 					</object>
 					<int key="connectionID">2390</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">backgroundColorWell</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="788518183"/>
+					</object>
+					<int key="connectionID">2391</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">changeStageBackgroundColor:</string>
+						<reference key="source" ref="494326585"/>
+						<reference key="destination" ref="788518183"/>
+					</object>
+					<int key="connectionID">2393</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -3529,7 +3538,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">2390</int>
+			<int key="maxID">2393</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3826,6 +3835,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="backgroundColorWell">NSColorWell</string>
 						<string key="buttonTextLabel">NSTextField</string>
 						<string key="documentSettingsButton">NSButton</string>
 						<string key="documentSettingsPopover">NSPopover</string>
@@ -3860,6 +3870,10 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<string key="typeFaceTrait">NSPopUpButton</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="backgroundColorWell">
+							<string key="name">backgroundColorWell</string>
+							<string key="candidateClassName">NSColorWell</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="buttonTextLabel">
 							<string key="name">buttonTextLabel</string>
 							<string key="candidateClassName">NSTextField</string>

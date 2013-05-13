@@ -212,6 +212,7 @@ static NSImage *bottomImage;
     //[_buttonTextField bind:@"value" toObject:self withKeyPath:@"buttonTextField" options:nil];
 	
 	self.isShowFontTab = NO;
+    [backgroundColorWell setColor:self.stageBackgroundColor];
 	
     return;
 }
@@ -2240,7 +2241,7 @@ static NSImage *bottomImage;
     int oldTag = [self elementCount];
     int newTag = oldTag+1;
     [shape setValue:[[NSNumber numberWithInt:newTag] stringValue] forKey:@"elementTag"];
-    [shape setValue:[NSString stringWithFormat:@"%i", newTag] forKey:@"elementid"];
+    [shape setValue:[NSString stringWithFormat:@"shape%i", newTag] forKey:@"elementid"];
 	
     self.elementCount = newTag;
     [self locateElementOnStage:shape];
@@ -2965,7 +2966,7 @@ static NSImage *bottomImage;
 		dict = nil;
 	}
 	
-	//BOOL bResult = [savedDataArray writeToFile:filename atomically:YES];
+	BOOL bResult = [savedDataArray writeToFile:filename atomically:YES];
 	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:savedDataArray];
 	[savedDataArray release];
 	

@@ -157,6 +157,7 @@ typedef NSInteger		ShapeCutCopyType;
     
     // background appearance
     BOOL showGridlines;
+    IBOutlet NSColorWell *backgroundColorWell;
 }
 @property (nonatomic, assign) NSMutableArray *sortedArray;
 @property (nonatomic, assign) NSMutableString *jsCode2;

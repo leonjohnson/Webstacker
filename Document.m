@@ -491,7 +491,7 @@
 	[stageView SpaceEvenlyElement:spacing flag:SPACING_VERT];
 }
 
-
+/*
 - (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
 {
     SEL theAction = [anItem action];
@@ -529,7 +529,7 @@
     return [super validateUserInterfaceItem:anItem];
 }
 
-
+*/
 
 
 

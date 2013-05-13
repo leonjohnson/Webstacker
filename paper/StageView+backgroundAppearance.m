@@ -20,7 +20,7 @@
     [self setNeedsDisplay: YES];
 }
 
-- (IBAction)changeStageBackgroundColor:(id)sender
+- (void)changeStageBackgroundColor:(id)sender
 {
     NSLog(@"%@", [sender color]);
     self.stageBackgroundColor = [[sender color] colorUsingColorSpaceName:NSDeviceRGBColorSpace];

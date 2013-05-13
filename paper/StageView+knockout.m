@@ -349,7 +349,7 @@
             // Within each app, each key must be unique
             
             NSString *dataSourceName = [self dataSourceNameWithoutIndexContainingKey:ele];
-            dataSourceCodeStringToReturn = [NSMutableString stringWithFormat: @"data-bind=\"options: $root.%@, optionsText: \'%@\', value: %@\"",
+            dataSourceCodeStringToReturn = [NSMutableString stringWithFormat: @"data-bind=\"options: $root.%@, optionsText: \'%@\', value: %@",
                                             dataSourceName,
                                             ele.dataSourceStringEntered,
                                             ele.jsid]; // the last choice was 'ele.elementid'but to make sure viewModel method can set the matching name, I've just used a static string.
@@ -509,6 +509,7 @@
     // TODO: validate that the string entered contains '>' and a number after it or a white space and then a number
     NSArray *wordsEntered = [ele.visibilityActionStringEntered componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *numberEntered = [wordsEntered lastObject];
+    numberEntered = [numberEntered substringFromIndex:[numberEntered length]-1];
     NSLog(@"LAST CHARACTER IS : %@", numberEntered);
     
     NSString *objectsBeingTotalled = [wordsEntered[1] capitalizedString];
@@ -521,18 +522,18 @@
     [appDelegate.arrayDataSource enumerateObjectsUsingBlock:^(id dictionarys, NSUInteger index, BOOL *stop)
      {
          NSLog(@"dictionarys is : %@", dictionarys);
-         NSArray *dataSourceArray = [dictionarys objectForKey:@"DataSource"];
+         NSArray *dataSourceArray = [dictionarys objectForKey:@"DataSource"][0];
          [dataModelHeaders addObjectsFromArray:dataSourceArray];
      }];
     
     BOOL visibilityStringMatchesAtLeastOneIDinDyRow;
     NSString *idOfElementToToggleVisibility = @"";
-    for (NSString *theid in dataModelHeaders) {
-        NSLog(@"Comparing strings: %@ and %@", ele.visibilityActionStringEntered, theid);
-        if ([ele.visibilityActionStringEntered containsString:theid])
+    for (NSString *header in dataModelHeaders) {
+        NSLog(@"Comparing strings: %@ and %@", ele.visibilityActionStringEntered, header);
+        if ([ele.visibilityActionStringEntered containsString:header])
         {
             visibilityStringMatchesAtLeastOneIDinDyRow = YES;
-            idOfElementToToggleVisibility = [NSString stringWithString:theid];
+            idOfElementToToggleVisibility = [NSString stringWithString:header];
         }
     }
     
