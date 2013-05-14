@@ -128,7 +128,7 @@
     [layoutTypeLabel setStringValue:NSLocalizedString(@"Type", nil)];
     [widthLabel setStringValue:NSLocalizedString(@"Width", nil)];
     [heightLabel setStringValue:NSLocalizedString(@"Height", nil)];
-    [backgroundColorLabel setStringValue:NSLocalizedString(@"Background color", nil)];
+    [backgroundColorLabel setStringValue:NSLocalizedString(@"Shape color", nil)];
     [borderWidthLabel setStringValue:NSLocalizedString(@"Border Width", nil)];
     // Clean up
     [s release];

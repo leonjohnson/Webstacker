@@ -725,7 +725,9 @@
         {
             if ([header isEqualToString:ele.dataSourceStringEntered]) {
                 NSLog(@"Gotcha!");
-                return [NSString stringWithFormat:@"%@[%li]",[dict objectForKey:@"Name"], (unsigned long)[headerTitles indexOfObject:header]]; // This is a string that was entered by the user into the Name field of the DataSource window.
+                NSArray* dsName = [[dict objectForKey:@"Name"] componentsSeparatedByCharactersInSet :[NSCharacterSet whitespaceCharacterSet]];
+                NSString* nospacestring = [dsName componentsJoinedByString:@""];
+                return [NSString stringWithFormat:@"%@[%li]",nospacestring, (unsigned long)[headerTitles indexOfObject:header]]; // This is a string that was entered by the user into the Name field of the DataSource window.
             }
         }
     }
@@ -753,7 +755,9 @@
         {
             if ([header isEqualToString:ele.dataSourceStringEntered]) {
                 NSLog(@"Gotcha!");
-                return [dict objectForKey:@"Name"]; // This is a string that was entered by the user into the Name field of the DataSource window.
+                NSArray* dsName = [[dict objectForKey:@"Name"] componentsSeparatedByCharactersInSet :[NSCharacterSet whitespaceCharacterSet]];
+                NSString* nospacestring = [dsName componentsJoinedByString:@""];
+                return nospacestring; // This is a string that was entered by the user into the Name field of the DataSource window.
             }
         }
     }

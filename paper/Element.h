@@ -162,9 +162,12 @@ typedef NSInteger LayoutTag;
 	NSMutableArray			*arrayShadows;
     
     
+    
+    
     /**********************************************/
 }
 
+@property (assign, nonatomic) NSColor *elementHighlightColor;
 
 @property (assign, nonatomic) ElementType				uType;
 @property (readonly, assign, nonatomic) NSMutableString *elementid;

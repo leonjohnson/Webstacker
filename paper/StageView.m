@@ -1725,13 +1725,14 @@ static NSImage *bottomImage;
 		Element *shape = [elementArray objectAtIndex:index];
 		
 		NSPoint ptShape;
-		
-		if (shape.uType != SHAPE_TEXTBOX) {
+		ptShape = NSMakePoint(point.x - shape.frame.origin.x, point.y - shape.frame.origin.y);
+		/*
+        if (shape.uType != SHAPE_TEXTBOX) {
 			ptShape = NSMakePoint(point.x - shape.frame.origin.x, point.y - shape.frame.origin.y);
 		} else {
 			ptShape = point;
 		}
-		
+		*/
 		shape.isPtInElement = NO;
 		
 		if (!isOvered && [shape IsPointInElement:ptShape] != SHT_NONE) {
@@ -1811,6 +1812,10 @@ static NSImage *bottomImage;
             currentElement = [shape retain];
             Singleton *sg = [[Singleton alloc]init];
             sg.currentElement = currentElement;
+            
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            NSString *phrase = [NSString stringWithFormat:@"%@ color", [sg.currentElement class]];
+            [[appDelegate backgroundColorLabel] setStringValue: NSLocalizedString(phrase, nil)];
             
             [attributeDelegate updateLayoutDisplay:sg.currentElement];
             
@@ -1923,6 +1928,9 @@ static NSImage *bottomImage;
         else
         {
             stageClicked = YES;
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            NSString *phrase = @"Shape color";
+            [[appDelegate backgroundColorLabel] setStringValue: NSLocalizedString(phrase, nil)];
             
         }
 	}
@@ -2242,6 +2250,10 @@ static NSImage *bottomImage;
     int newTag = oldTag+1;
     [shape setValue:[[NSNumber numberWithInt:newTag] stringValue] forKey:@"elementTag"];
     [shape setValue:[NSString stringWithFormat:@"shape%i", newTag] forKey:@"elementid"];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    NSString *phrase = [NSString stringWithFormat:@"%@ color", [shape class]];
+    [[appDelegate backgroundColorLabel] setStringValue: NSLocalizedString(phrase, nil)];
 	
     self.elementCount = newTag;
     [self locateElementOnStage:shape];

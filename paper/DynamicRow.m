@@ -71,7 +71,7 @@
 
 - (NSInteger)IsPointInElement:(NSPoint)pt
 {
-	return SHT_NONE;
+	return [super IsPointInElement:pt];
 }
 
 

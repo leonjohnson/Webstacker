@@ -114,6 +114,12 @@
     //CGContextSetRGBStrokeColor( context, 0.05, 0.05, 0.05, 1.0 );
 	//CGContextStrokeRect( context, CGRectMake(2, 2, rtFrame.size.width, rtFrame.size.height) );
     
+    
+    NSRect rectangleFrame = NSMakeRect(2, 2, rtFrame.size.width, rtFrame.size.height);
+    
+    NSBezierPath *rectanglePath = [NSBezierPath bezierPathWithRect:rectangleFrame];
+        
+        
 	if (isSelected == YES) {
 		[self DrawBorderFrame:context];
 	}
@@ -127,9 +133,22 @@
     
     [text2Style setAlignment: NSLeftTextAlignment];
 	
+    
 	if (self.isPtInElement == YES) { // highlight shape when the mouse is over the shape.
 		CGContextSetRGBStrokeColor(context, 0.34, 0.4, 0.9, 1.0);
+        NSLog(@"first textbox hover");
 	}
+    
+    
+    if (self.isPtInElement == YES) { // highlight shape when the mouse is over the shape.
+        NSLog(@"mouse in");
+		[self.elementHighlightColor set];
+		if ([borderWidth floatValue] == 0) {
+			[rectanglePath setLineWidth:1.0f];
+			[rectanglePath stroke];
+		}
+	}
+    
     
     [contentText drawInRect:CGRectMake(5, 0, rtFrame.size.width - 10, rtFrame.size.height)];
 }

@@ -18,6 +18,7 @@
         [self setTopRightBorderRadius:YES];
         [self setBottomLeftBorderRadius:YES];
         [self setBottomRightBorderRadius:YES];
+        self.colorAttributes = [NSColor colorWithCalibratedRed: 0.02 green: 0.24 blue: 0.75 alpha: 1];
     }
     return self;
 }
@@ -194,10 +195,19 @@
     
     //[roundedRectangle2Path fill];
     [twitterBorderColor setStroke];
-	
+	/*
 	if (self.isPtInElement == YES) { // highlight shape when the mouse is over the shape.
 		[[NSColor colorWithCalibratedRed:1 green:0.3 blue:0.2 alpha:1.0] set];
 	}
+     */
+    
+    if (self.isPtInElement == YES) { // highlight shape when the mouse is over the shape.
+        [self.elementHighlightColor set];
+        if ([borderWidth floatValue] == 0) {
+            [roundedRectangle2Path setLineWidth:3.0f];
+            [roundedRectangle2Path stroke];
+        }
+    }
 	
     [roundedRectangle2Path setLineWidth: [borderWidth floatValue]];
     [roundedRectangle2Path stroke];
@@ -256,6 +266,7 @@
      CGContextFillPath(context);
      
      CGContextRestoreGState(context);
+     
      
      
      */

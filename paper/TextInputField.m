@@ -64,7 +64,7 @@
     [[NSColor grayColor] set];
 	
 	if (self.isPtInElement == YES) { // highlight shape when the mouse is over the shape.
-		[[NSColor colorWithCalibratedRed:0.34 green:0.4 blue:0.9 alpha:1.0] set];
+		[self.elementHighlightColor set];
 		if ([borderWidth floatValue] == 0) {
 			[path setLineWidth:1.0];
 			[path stroke];

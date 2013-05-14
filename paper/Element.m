@@ -14,6 +14,7 @@
 #import "DynamicRow.h"
 #import "DynamicImage.h"
 #import "Container.h"
+#import "NSColor+colorToHex.h"
 
 @implementation Element
 
@@ -84,6 +85,8 @@
     }
     
     //[self setWantsLayer:YES];
+    //self.elementHighlightColor = [NSColor colorWithCalibratedRed:1 green:0.4 blue:0.9 alpha:1.0];
+    self.elementHighlightColor = [[NSColor colorWithCalibratedRed:1 green:0.4 blue:0.9 alpha:1.0] colorWithHexString:@"4CC1FC"];
     return self;
 }
 
