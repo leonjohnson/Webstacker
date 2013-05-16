@@ -171,7 +171,7 @@
 	}
 	shape.isSelected = FALSE;
 	shape.arrayShadows = nil;
-	shape.canMove = NO;
+	shape.canMove = YES;
 	shape.URLString = [[NSString alloc] initWithString:@""];
 	
 	return shape;

@@ -63,7 +63,7 @@
 	}
 	
 	Element *shape = [selElementArray objectAtIndex:0];
-	[shape setShadowOfShape:x offY:y colorR:r colorG:g colorB:blur opacity:alpha Blur:blur direct:d Index:index];
+	[shape setShadowOfShape:x offY:y colorR:r colorG:g colorB:b opacity:alpha Blur:blur direct:d Index:index];
 	
 	[attributeDelegate setShadowList:shape.arrayShadows];
 	

@@ -448,7 +448,7 @@
 - (IBAction)OnAddShadow:(id)sender
 {
 	Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-	[curDoc.stageView addShapeShadow:3 offY:3.0 ColorR:0 ColorG:0 ColorB:0 Opacity:1.0 Blur:10 Direction:YES];
+	[curDoc.stageView addShapeShadow:3 offY:3.0 ColorR:1.0 ColorG:0 ColorB:0 Opacity:1.0 Blur:10 Direction:YES];
 	
 	[_tableViewShadowList reloadData];
 	
