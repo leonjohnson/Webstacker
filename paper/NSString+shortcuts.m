@@ -10,7 +10,7 @@
 
 @implementation NSString (shortcuts)
 
-- (BOOL) containsString: (NSString*) substring
+- (BOOL) containstheString: (NSString*) substring
 {
     NSLog(@"string received is : %@", substring);
     NSRange range = [self rangeOfString:substring options:NSCaseInsensitiveSearch];

@@ -505,10 +505,12 @@ static NSImage *bottomImage;
 
 -(BOOL)isElementIDUnique: (NSMutableString *)string
 {
+    NSLog(@" inside isElementIDUnique - count - %lu", elementArray.count);
     for (Element *e in elementArray)
     {
         if ([string isEqualToString:e.elementid])
         {
+            NSLog(@"id = %@", e.elementid);
             return NO;
         }
     }
@@ -1723,7 +1725,7 @@ static NSImage *bottomImage;
 	//for (Element *shape in elementArray) {
 	for (NSInteger index = [elementArray count] - 1; index >= 0; index -- ) {
 		Element *shape = [elementArray objectAtIndex:index];
-		
+		NSLog(@"element array : %lu", shape.uType);
 		NSPoint ptShape;
 		ptShape = NSMakePoint(point.x - shape.frame.origin.x, point.y - shape.frame.origin.y);
 		/*
@@ -1735,6 +1737,7 @@ static NSImage *bottomImage;
 		*/
 		shape.isPtInElement = NO;
 		
+        NSLog(@"pt = %f,%f", ptShape.x, ptShape.y);
 		if (!isOvered && [shape IsPointInElement:ptShape] != SHT_NONE) {
 			shape.isPtInElement = YES;
 			isOvered = YES;
@@ -2970,7 +2973,12 @@ static NSImage *bottomImage;
  */
 - (NSData *)SaveProjectToFile:(NSString*)filename;
 {
-	NSMutableArray *savedDataArray = [[NSMutableArray alloc] init];
+	// 1. Get the datasource
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    NSArray *thedatasource = [NSArray arrayWithArray:appDelegate.arrayDataSource];
+    
+    // 2.
+    NSMutableArray *savedDataArray = [[NSMutableArray alloc] init];
 	
 	for (Element* element in elementArray) {
 		NSMutableDictionary *dict = [element getShapeData];
@@ -2978,7 +2986,7 @@ static NSImage *bottomImage;
 		dict = nil;
 	}
 	
-	BOOL bResult = [savedDataArray writeToFile:filename atomically:YES];
+	//BOOL bResult = [savedDataArray writeToFile:filename atomically:YES];
 	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:savedDataArray];
 	[savedDataArray release];
 	
@@ -2996,22 +3004,40 @@ static NSImage *bottomImage;
 {
 	NSArray *openDataArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 	if (openDataArray == nil) {
+        NSLog(@"this array is empty");
 		return NO;
 	}
 	
+    NSLog(@"stage 1 of opening project from file");
 	// initialize stage view
 	[self initDrawStage];
 	
+    NSLog(@"stage 2 of opening project from file with openDataArray of %@", openDataArray);
+    NSLog(@"stageView = %@ and width = %f", self, self.frame.size.width);
+    
 	for (NSDictionary *dict in openDataArray) {
-		Element *element = [Element createElementFromDictionary:dict];
+		NSLog(@"gonna cycle through the openDataArray");
+        Element *element = [Element createElementFromDictionary:dict];
+        NSLog(@"just added it to stageView 1: %@", element.elementid);
 		if (element) {
 			element.insideOperationElement = self;
 			[self addSubview:element];
-			[elementArray addObject:element];
+            NSLog(@"just added it to stageView 2");
+			//[elementArray addObject:element];
+            [elementArray insertObject:element atIndex:0];
+            NSLog(@"Added a %lu to elementArray", element.uType);
 			//[shape setBoundRect:shape.rtFrame];
+            
+            [element setValue:[NSMutableString stringWithString:element.elementTag] forKey:ELEMENT_ID];
 		}
 	}
 	
+    [self setNeedsDisplay:YES];
+    
+    NSLog(@"ELEMENT ARRAY : %@", [elementArray valueForKey:ELEMENT_ID]);
+    
+    NSLog(@"stage 3 of opening project from file");
+    NSLog(@"stageview has %lu subviews", self.subviews.count);
 	// set accepting mouse move event
 	[[self window] setInitialFirstResponder:self];
 	[[self window] makeFirstResponder:self];
@@ -3023,6 +3049,12 @@ static NSImage *bottomImage;
 	[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0];
 	//[shadowDelegate setShadowProperty:0 Distance:0 colorR:0 colorG:0 colorB:0 Opacity:0 Blur:0 Direct:YES];
 	
+    
+    // set shadow array to shadow list panel
+	//[shadowDelegate setShadowList:nil];
+	
+	// adding layers to layerPanel
+	[layerDelegate SetLayerList];
 	return YES;
 }
 

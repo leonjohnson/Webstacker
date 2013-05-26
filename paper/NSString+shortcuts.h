@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface NSString (shortcuts)
-- (BOOL) containsString: (NSString*) substring;
+- (BOOL) containstheString: (NSString*) substring;
 - (NSDictionary*) standardFontAttributes;
 - (NSFont*) standardFont;
 - (NSSize) sizeOfStandardString;

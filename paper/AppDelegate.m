@@ -245,6 +245,8 @@
     
     [_currentlySelectedLabel bind:@"value" toObject:self withKeyPath:@"sg.currentElement.elementid" options:nil];
     
+    [_cssOverride bind:@"attributedString" toObject:self withKeyPath:@"sg.currentElement.extracss" options:nil];
+    
         
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(clearKerningAndLeadingFields) 

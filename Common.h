@@ -106,6 +106,8 @@
 
 #define CONTENTURL                              @"URL"
 
+#define CSS_CODE                                @"cssOverride"
+
 
 #define IN_RUNNING_LION (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6)
 #define IN_COMPILING_LION __MAC_OS_X_VERSION_MAX_ALLOWED >= 1070

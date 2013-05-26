@@ -31,6 +31,7 @@ HeaderTextDelegate
 }
 
 - (void)initWithDataSource:(NSInteger)index;
+- (void)deleteDataSourceEntry:(NSInteger)index;
 
 - (IBAction)OnAdd:(id)sender;
 - (IBAction)OnRemove:(id)sender;

@@ -166,6 +166,15 @@ typedef NSInteger LayoutTag;
     
     /**********************************************/
 }
+@property (nonatomic) CGFloat						shadowAngle;
+@property (nonatomic) CGFloat						shadowDistance;
+@property (assign) CGColorRef						shadowCGColor;
+@property (nonatomic) CGFloat						shadowOpacity;
+@property (nonatomic) CGFloat						shadowBlur;
+@property (nonatomic) BOOL							shadowDirection;
+@property (assign) NSMutableArray					*arrayShadows;
+@property (assign, nonatomic) NSAttributedString *extracss;
+
 
 @property (assign, nonatomic) NSColor *elementHighlightColor;
 
@@ -216,7 +225,6 @@ typedef NSInteger LayoutTag;
 @property (assign, nonatomic) NSString *prefixText;
 
 @property (nonatomic) BOOL							isPtInElement;
-@property (assign) NSMutableArray					*arrayShadows;
 
 @property (assign, nonatomic) NSString *jsid;
 @property (assign, nonatomic) NSString *topMarginForRow;
@@ -389,6 +397,7 @@ typedef NSInteger LayoutTag;
 -(void)postNotificationToRedraw;
 - (NSImage *)imageWithSubviews;
 -(void)setColorAttributes:(id)sender;
+-(void)setElementid:(NSMutableString *)eleid;
 @end
 
 

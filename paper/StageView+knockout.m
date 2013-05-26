@@ -51,7 +51,7 @@
         NSMutableString *totalAnyNumericSetOfValuesInAModel = [NSMutableString string];
         for (NSMutableDictionary *elementDictionary in sortedArray)
         {
-            if ([[elementDictionary objectForKey:DATA_SOURCE_STRING_ENTERED] containsString:@"total"]) //TODO: make this upper or lowercase // Could be Totalsurcharge
+            if ([[elementDictionary objectForKey:DATA_SOURCE_STRING_ENTERED] containstheString:@"total"]) //TODO: make this upper or lowercase // Could be Totalsurcharge
             {
                 NSLog(@"We've got: %@", elementDictionary);
                 // Take the first word, and the second word (assumption: there are just two words)
@@ -273,7 +273,7 @@
             //{
                 //THEN TAKE THE SECOND WORD 'PRICE' AND CREATE THE STRING AS PER MONEY3.html
                 // DESIGN DECISION: the JS_ID for this field (Ele) will probably have the word price in it or something appropriate so no need to append the word price to self.
-        if ([[ele objectForKey:DATA_SOURCE_STRING_ENTERED] containsString:@"price"] && firstWord)
+        if ([[ele objectForKey:DATA_SOURCE_STRING_ENTERED] containstheString:@"price"] && firstWord)
         {
             codeStringToReturn = [NSMutableString stringWithFormat:@"self.%@ = ko.computed(function() {\n var price = self.%@().%@; \n return %@ ? \"$\" + %@.toFixed(2) : \"None\"; \n });", [ele objectForKey:JS_ID], self.koObservable, firstWord, firstWord, firstWord];
             return codeStringToReturn;
@@ -357,7 +357,7 @@
         }
         
         
-        if ([ele.dataSourceStringEntered containsString:@"price"])
+        if ([ele.dataSourceStringEntered containstheString:@"price"])
         {
             NSLog(@"price ds called");
             dataSourceCodeStringToReturn = [NSMutableString stringWithFormat:@"data-bind=\"text: %@", ele.jsid];
@@ -386,7 +386,7 @@
 -(NSString *)actionCodeString: (Element*)ele
 {
     NSLog(@"starting point");
-    NSLog(@"We haave: %c", [@"timadd" containsString:@"Add"]);
+    NSLog(@"We haave: %c", [@"timadd" containstheString:@"Add"]);
     
     NSString *actionsStringToReturn = [NSMutableString string];
     
@@ -410,7 +410,7 @@
         NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
         
         // Remove row
-        if ([firstWord containsString:@"Remove"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) )
+        if ([firstWord containstheString:@"Remove"] && ([secondWord containstheString:@"row"] || [secondWord containstheString:dyRowID]) )
         {
             NSLog(@"ACTION STRING IS : %@", ele.actionStringEntered);
             actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: $root.%@\"", removeClassName];
@@ -419,7 +419,7 @@
         
         
         // Add row
-        if ([firstWord containsString:@"Add"] && ([secondWord containsString:@"row"] || [secondWord containsString:dyRowID]) ) //what if the dyRow element has an id of myRow and not row? WE SHOULD ALLOW THE USER TO ENTER ADD ROW OR ADD SEAT
+        if ([firstWord containstheString:@"Add"] && ([secondWord containstheString:@"row"] || [secondWord containstheString:dyRowID]) ) //what if the dyRow element has an id of myRow and not row? WE SHOULD ALLOW THE USER TO ENTER ADD ROW OR ADD SEAT
         {
             
             // The default if 'add row' text found
@@ -530,7 +530,7 @@
     NSString *idOfElementToToggleVisibility = @"";
     for (NSString *header in dataModelHeaders) {
         NSLog(@"Comparing strings: %@ and %@", ele.visibilityActionStringEntered, header);
-        if ([ele.visibilityActionStringEntered containsString:header])
+        if ([ele.visibilityActionStringEntered containstheString:header])
         {
             visibilityStringMatchesAtLeastOneIDinDyRow = YES;
             idOfElementToToggleVisibility = [NSString stringWithString:header];
@@ -540,7 +540,7 @@
     NSLog(@"id I'm going to use is : %@", [ele jsid]);
     NSString *visibilityCodeString = @"";
     // only show if more than x total price or x total seats
-    if (ele.visibilityActionStringEntered != nil && [ele.visibilityActionStringEntered containsString:@"total"] && visibilityStringMatchesAtLeastOneIDinDyRow)
+    if (ele.visibilityActionStringEntered != nil && [ele.visibilityActionStringEntered containstheString:@"total"] && visibilityStringMatchesAtLeastOneIDinDyRow)
     {
         NSLog(@"in here - yes!");
         visibilityCodeString = [NSString stringWithFormat:@"visible: %@() > %@ ", [ele jsid], numberEntered];

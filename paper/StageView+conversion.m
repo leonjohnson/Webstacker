@@ -2090,6 +2090,11 @@ BOOL hasLeadingNumberInString(NSString* s)
             [export setObject:ele.topMarginForRow forKey:TOP_MARGIN_FOR_ROW];
         }
         
+        if ([ele extracss] != nil)
+        {
+            [export setObject:ele.extracss.string forKey:CSS_CODE];
+        }
+        
         [arrayOfElementDetails addObject:export];
         NSLog(@"Exporting: %@", export);
         

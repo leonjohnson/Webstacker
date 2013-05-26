@@ -408,6 +408,13 @@ typedef NSInteger		ShapeCutCopyType;
 - (NSData *)SaveProjectToFile:(NSString*)filename;
 
 
+/*
+ @function:		OpenProjectFromFile
+ @params:		data:			file data
+ @return:		open sucessfully, return YES. otherwise NO.
+ @purpose:		This function read shapes value from filename and create shapes of stageview.
+ */
+- (BOOL)OpenProjectFromFile:(NSData *)data;
 
 
 /*

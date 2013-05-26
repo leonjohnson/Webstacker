@@ -97,6 +97,20 @@
 	_txtFieldHeader = nil;
 }
 
+- (void)deleteDataSourceEntry:(NSInteger)index
+{
+	_index = index;
+	
+	// initialize data source
+	if (_index < 0) { // create new data source, if adding method
+		return;
+	} else { // reference from data source of app delegate, if modifying method
+		AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+		[appDelegate.arrayDataSource removeObjectAtIndex:_index];
+	}
+	
+	_txtFieldHeader = nil;
+}
 
 #pragma mark - NSWindow delegate implementation
 
@@ -328,6 +342,8 @@
 	}
 	
 	NSLog( @"%@", strLog );
+    
+    [[self window]performClose:self];
 }
 
 - (void)OnEditHeader:(id)sender

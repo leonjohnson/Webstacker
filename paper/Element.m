@@ -173,6 +173,13 @@
 {
     
 }
+
+
+- (NSInteger)IsPointInElement:(NSPoint)pt
+{
+    
+}
+
 /*
  @function:		setBoundRect
  @params:		rt:   shape's bound rect
@@ -563,9 +570,98 @@
 */
 
 
+/*
+ @function:		getShapeData
+ @params:		nothing
+ @return:       returns the dictionary data of the text box shape.
+ @purpose:		This function create the dictionary data from text box shape and return it.
+ */
 - (NSMutableDictionary *)getShapeData
 {
-	return nil;
+	// format shape type and frame rect
+	NSNumber *type = [NSNumber numberWithInteger:uType];
+	NSNumber *xPos = [NSNumber numberWithFloat:rtFrame.origin.x];
+	NSNumber *yPos = [NSNumber numberWithFloat:rtFrame.origin.y];
+	NSNumber *width = [NSNumber numberWithFloat:rtFrame.size.width];
+	NSNumber *height = [NSNumber numberWithFloat:rtFrame.size.height];
+    
+    NSColor *thecolor = [self colorAttributes];
+	
+	// set type and frame rect value to dictionary
+	NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObject:type forKey:@"ShapeType"];
+    [dict setValue:elementid forKey:ELEMENT_ID];
+	[dict setValue:xPos forKey:@"xPos"];
+	[dict setValue:yPos forKey:@"yPos"];
+	[dict setValue:width forKey:@"Width"];
+	[dict setValue:height forKey:@"Height"];
+    [dict setValue:thecolor forKey:@"color"];
+    [dict setValue:self.layoutType forKey:@"measurementType"];
+    [dict setValue:[NSNumber numberWithFloat:self.width_as_percentage] forKey:@"width_as_percentage"];
+    [dict setValue:[NSNumber numberWithFloat:self.height_as_percentage] forKey:@"height_as_percentage"];
+    
+    [dict setObject:borderRadius forKey:@"borderRadius"];
+    [dict setObject:borderWidth forKey:@"borderWidth"];
+    [dict setObject:[NSNumber numberWithBool:topLeftBorderRadius] forKey:@"topLeftRadius"];
+    [dict setObject:[NSNumber numberWithBool:topRightBorderRadius] forKey:@"topRightRadius"];
+    [dict setObject:[NSNumber numberWithBool:bottomLeftBorderRadius] forKey:@"bottomLeftRadius"];
+    [dict setObject:[NSNumber numberWithBool:bottomRightBorderRadius] forKey:@"bottomRightRadius"];
+	
+    if (actionStringEntered != nil)
+    {
+        [dict setObject:actionStringEntered forKey:@"actionstring"];
+    }
+    
+    if (dataSourceStringEntered != nil)
+    {
+        [dict setObject:dataSourceStringEntered forKey:@"datasourcestring"];
+    }
+    
+    if (_visibilityActionStringEntered != nil)
+    {
+        [dict setObject:_visibilityActionStringEntered forKey:@"visibility"];
+    }
+    
+    
+    
+    
+    
+	// format shape shadow data
+	NSNumber *shwAngle = [NSNumber numberWithFloat:_shadowAngle];
+	NSNumber *shwDistance = [NSNumber numberWithFloat:_shadowDistance];
+	NSNumber *shwOpacity = [NSNumber numberWithFloat:_shadowOpacity];
+	const CGFloat *components = CGColorGetComponents( _shadowCGColor );
+    if (components != nil)
+    {
+        NSNumber *shwColorR =  [NSNumber numberWithFloat:components[0]];
+        NSNumber *shwColorG =  [NSNumber numberWithFloat:components[1]];
+        NSNumber *shwColorB =  [NSNumber numberWithFloat:components[2]];
+        NSNumber *shwDirection = [NSNumber numberWithBool:_shadowDirection];
+        
+        [dict setValue:shwColorR forKey:@"shadowColorR"];
+        [dict setValue:shwColorG forKey:@"shadowColorG"];
+        [dict setValue:shwColorB forKey:@"shadowColorB"];
+        [dict setValue:shwDirection forKey:@"shadowDirection"];
+        
+        // set shadow information to dictionary
+        [dict setValue:shwAngle forKey:@"shadowAngle"];
+        [dict setValue:shwDistance forKey:@"shadowDistance"];
+        [dict setValue:shwOpacity forKey:@"shadowOpacity"];
+    }
+	
+	
+	
+	
+	
+	[dict setValue:contentText forKey:@"Text"];
+	
+	// free all value
+	type = nil;
+	xPos = nil;
+	yPos = nil;
+	width = nil;
+	height = nil;
+	
+	return dict;
 }
 
 /*
@@ -576,80 +672,209 @@
  */
 + (Element *)createElementFromDictionary:(NSDictionary *)dict
 {
-	Element *element;
-	
-	// shape information from dictionary
+    NSLog(@"dict is %@", dict);
+    ElementType e = [dict objectForKey:@"ShapeType"];
+    //Element *element = [self createElement:e];
+    Element *element = [Element new];
+    NSLog(@"stepp 3");
+    
+    // shape information from dictionary
+    NSMutableString *eleid = [dict valueForKey:ELEMENT_ID];
+    
 	NSNumber *type = [dict valueForKey:@"ShapeType"];
 	NSNumber *xPos = [dict valueForKey:@"xPos"];
 	NSNumber *yPos = [dict valueForKey:@"yPos"];
 	NSNumber *width = [dict valueForKey:@"Width"];
 	NSNumber *height = [dict valueForKey:@"Height"];
-	
+	NSColor *thecolor = [dict valueForKey:@"color"];
+    NSString *measurementType = [dict valueForKey:@"measurementType"];
+    NSString *widthAsPercentage = [dict valueForKey:@"width_as_percentage"];
+    NSString *heightAsPercentage = [dict valueForKey:@"height_as_percentage"];
+    
+    NSString *theBorderRadius = [dict valueForKey:@"borderRadius"];
+    NSString *theBorderWidth = [dict valueForKey:@"borderWidth"];
+    
+    NSString *theTopLeftBorderRadius = [dict valueForKey:@"topLeftRadius"];
+    NSString *theTopRightBorderRadius = [dict valueForKey:@"topRightRadius"];
+    NSString *theBottomLeftBorderRadius = [dict valueForKey:@"bottomLeftRadius"];
+    NSString *theBottomRightBorderRadius = [dict valueForKey:@"bottomRightRadius"];
+    
+    NSString *actionString = [dict valueForKey:@"actionstring"];
+    NSString *dataSourceString = [dict valueForKey:@"datasourcestring"];
+    NSString *visibilityString = [dict valueForKey:@"visibility"];
+    
+    
+    
+    NSNumber *shadowAngle = [dict valueForKey:@"shadowAngle"];
+    NSNumber *shadowDistance = [dict valueForKey:@"shadowDistance"];
+    NSNumber *shadowOpacity = [dict valueForKey:@"shadowOpacity"];
+    NSNumber *shadowBlur = [dict valueForKey:@"shadowBlur"];
+    NSNumber *shadowColorR = [dict valueForKey:@"shadowColorR"];
+    NSNumber *shadowColorG = [dict valueForKey:@"shadowColorG"];
+    NSNumber *shadowColorB = [dict valueForKey:@"shadowColorB"];
+    NSNumber *shadowDirection = [dict valueForKey:@"shadowDirection"];
+    
 	// shadow information from dictionary
-	NSNumber *shadowAngle = [dict valueForKey:@"shadowAngle"];
-	NSNumber *shadowDistance = [dict valueForKey:@"shadowDistance"];
-	NSNumber *shadowOpacity = [dict valueForKey:@"shadowOpacity"];
-	NSNumber *shadowBlur = [dict valueForKey:@"shadowBlur"];
-	NSNumber *shadowColorR = [dict valueForKey:@"shadowColorR"];
-	NSNumber *shadowColorG = [dict valueForKey:@"shadowColorG"];
-	NSNumber *shadowColorB = [dict valueForKey:@"shadowColorB"];
-	NSNumber *shadowDirection = [dict valueForKey:@"shadowDirection"];
+    if ([dict objectForKey:@"shadowAngle"] != nil)
+    {
+        
+    }
+	
 	
 	NSRect rt = NSMakeRect([xPos floatValue], [yPos floatValue], [width floatValue], [height floatValue]);
-	/*
+	
+    NSLog(@"ele = %@", element);
+    
+    
 	switch ([type integerValue]) {
-		case SHAPE_CIRCLE:
-			element = [[CCircle alloc] init];
+		case SHAPE_BUTTON:
+			element = [[Button alloc] init];
 			break;
 			
-		case SHAPE_RECTANGLE:
-			element = [[CRectangle alloc] init];
+		case SHAPE_CONTAINER:
+			element = [[Container alloc] init];
 			break;
 			
-		case SHAPE_TRIANGLE:
-			element = [[CTriangle alloc] init];
+		case SHAPE_DROPDOWN:
+			element = [[DropDown alloc] init];
 			break;
+        
+        case SHAPE_DYNAMIC_ROW:
+			element = [[DropDown alloc] init];
+			break;
+            
+        case SHAPE_IMAGE:
+			element = [[Image alloc] init];
+            //NSNumber *imgType = [dict valueForKey:@"ImageType"];
+			NSData *imgData = [dict valueForKey:@"ImageData"];
+			[((Image *)element) setImageData:imgData];
+			break;
+        
+        case SHAPE_PLACEHOLDER_IMAGE:
+			element = [[Image alloc] init];
+			break;
+        
+        case SHAPE_RECTANGLE:
+            NSLog(@"trying to re recreate a box");
+            element = [[Box alloc]init];
+            NSLog(@"boxed");
+            break;
 			
 		case SHAPE_TEXTBOX:
-			element = [[CTextBox alloc] init];
-			
-			NSString *text = [dict valueForKey:@"Text"];
-			[((CTextBox *)element) setContentText:text];
+			element = [[TextBox alloc] init];
+			NSMutableAttributedString *text = [dict valueForKey:@"Text"];
+			[((TextBox *)element) setContentText:text];
 			break;
 			
-		case SHAPE_IMAGE:
-			element = [[CImage alloc] init];
-			
-			//NSNumber *imgType = [dict valueForKey:@"ImageType"];
-			NSData *imgData = [dict valueForKey:@"ImageData"];
-			[((CImage *)element) setImageData:imgData];
-			break;
-			
-		case SHAPE_GROUP:
-			element = [[CGropBox alloc] init];
+		case SHAPE_TEXTFIELD:
+			element = [[TextInputField alloc] init];
 			break;
 	}
-     */
-	
+    
+    
+    NSLog(@"ele2 = %@", element);
+    
 	if (element) {
 		element.uType = [type integerValue];
+        if (thecolor)
+        {
+            element.colorAttributes = thecolor;
+            NSLog(@"color done");
+        }
+        
+        if (measurementType)
+        {
+            element.layoutType = measurementType;
+            NSLog(@"layout done");
+        }
+        
+        if ([widthAsPercentage floatValue])
+        {
+            element.width_as_percentage = [widthAsPercentage floatValue];
+            NSLog(@"width as perce done");
+        }
+        
+        if ([heightAsPercentage floatValue])
+        {
+            element.height_as_percentage = [heightAsPercentage floatValue];
+            NSLog(@"height as perce done");
+        }
+        
+        
+        if (eleid)
+        {
+            [element setValue:eleid forKey:@"elementTag"];
+            NSLog(@"eleid is : %@", eleid);
+            [element setElementid:eleid];
+            NSLog(@"ELEMENTid IS now - is : %@", element.elementid);
+            
+        }
+
+        
+        if (theBorderRadius)
+        {
+            element.borderRadius = [NSNumber numberWithInteger:[theBorderRadius integerValue]];
+            element.borderWidth = [NSNumber numberWithInteger:[theBorderWidth integerValue]];
+            element.topLeftBorderRadius = [theTopLeftBorderRadius boolValue];
+            element.topRightBorderRadius = [theTopRightBorderRadius boolValue];
+            element.bottomLeftBorderRadius = [theBottomLeftBorderRadius boolValue];
+            element.bottomRightBorderRadius = [theBottomRightBorderRadius boolValue];
+            
+        }
+        
+        if (actionString)
+        {
+            element.actionStringEntered = actionString;
+        }
+        
+        
+        if (dataSourceString)
+        {
+            element.dataSourceStringEntered = dataSourceString;
+            
+        }
+        
+        
+        if (visibilityString)
+        {
+            element.visibilityActionStringEntered = visibilityString;
+            
+        }
 		
-		/* for shadow
-		shape.shadowAngle = [shadowAngle floatValue];
-		shape.shadowDistance = [shadowDistance floatValue];
-		shape.shadowOpacity = [shadowOpacity floatValue];
-		shape.shadowBlur = [shadowBlur floatValue];
-		shape.shadowCGColor = CGColorCreateGenericRGB([shadowColorR floatValue], [shadowColorG floatValue], [shadowColorB floatValue], 1.0);
-		shape.shadowDirection = [shadowDirection floatValue];
+        if ([dict objectForKey:@"shadowAngle"] != nil)
+        {
+            element.shadowAngle = [shadowAngle floatValue];
+            element.shadowDistance = [shadowDistance floatValue];
+            element.shadowOpacity = [shadowOpacity floatValue];
+            element.shadowBlur = [shadowBlur floatValue];
+            element.shadowCGColor = CGColorCreateGenericRGB([shadowColorR floatValue], [shadowColorG floatValue], [shadowColorB floatValue], 1.0);
+            element.shadowDirection = [shadowDirection floatValue];
+            NSLog(@"shadows done");
+        }
+		// for shadow
 		
-		shape.isSelected = NO;
-		[shape setBoundRect:rt];
-		[shape createHandleArray];
-         */
+		//[element setValue:eleid forKey:ELEMENT_ID];
+        //[element setValue:[NSMutableString stringWithString:@"samba"] forKey:ELEMENT_ID];
+		element.arrayShadows = nil;
+		element.isSelected = NO;
+		element.isPtInElement = NO;
+		[element setBoundRect:rt];
+		[element createHandleArray];
+        
+        
+        
 	}
-	
+    /*
+    if (eleid != nil) {
+        [element setElementid:[NSMutableString stringWithString:eleid]];
+    }
+     */
+	NSLog(@"About to return an element with utype : %lu and width of: %@, and id of %@", element.uType, width, element.elementid);
 	return element;
 }
+
+
+
 
 #pragma mark - provide image representation
 - (NSImage *)imageWithSubviews

@@ -505,7 +505,7 @@
 {
 	if (tableView == _tableViewShadowList) {
 		if ([[tableColumn identifier] isEqualToString:@"Shadow"]) {
-			NSString *string = [NSString stringWithFormat:@"Sahdow %ld", row];
+			NSString *string = [NSString stringWithFormat:@"Shadow %ld", row];
 			
 			return string;
 		}

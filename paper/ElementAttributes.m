@@ -162,13 +162,20 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     
     // Just save the color to the ivar.
-    
+    NSLog(@"Attempting to set color attributes");
     NSColor *colorReceived = sender;
+    NSLog(@"color received : %@", colorReceived);
+    colorAttributes = [NSColor new];
     [colorAttributes retain];
+    NSLog(@"colorattributes = %@", colorAttributes);
     colorAttributes = colorReceived;
-    
+    NSLog(@"Attempting to set color attributes 2");
     Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-    [[[NSApp delegate]colorHexValue] setStringValue:[[curDoc stageView] hsla:colorReceived]];
+    NSLog(@"Attempting to set color attributes 3");
+    //NSLog(@"STAGE VIEW IS INITIALISED ??? : %@", [curDoc stageView]);
+    //NSLog(@"color got back is : %@", [[curDoc stageView] hsla:colorReceived]);
+    //[[[NSApp delegate]colorHexValue] setStringValue:[[curDoc stageView] hsla:colorReceived]];
+    NSLog(@"Attempting to set color attributes 4");
     [self setNeedsDisplay:YES];
 }
 
@@ -251,66 +258,80 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     //do some validation
     NSLog(@"gonna do some validation : %@", eleid);
     
-    
+    //TODO: Find out why curDoc is nil.
     // 1. check its unique
     Document *curDoc = [[NSDocumentController sharedDocumentController] currentDocument];
-    BOOL isUnique = [[curDoc stageView] isElementIDUnique:eleid];
-    if (isUnique == NO)
-    {
-        NSLog(@"vali 5");
-        elementid =[NSMutableString stringWithString:@""];
-        [[[NSApp delegate] labelWarningField]setHidden:NO];
-        [[[NSApp delegate] elementidField]setStringValue:elementTag];
-        return;
-    }
     
-    // 2. Remove spaces, symbols except hypens
-    NSRange whiteSpaceRange = [eleid rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
-    NSRange symbolRange = [eleid rangeOfCharacterFromSet:[NSCharacterSet symbolCharacterSet]];
-    if (whiteSpaceRange.location != NSNotFound || symbolRange.location != NSNotFound)
+    if (curDoc != nil)
     {
-        NSLog(@"Found whitespace or a symbol. ");
-        elementid =[NSMutableString stringWithString:elementTag];
-        [[[NSApp delegate] labelWarningField]setHidden:NO];
-        [[[NSApp delegate] elementidField]setStringValue:elementTag];
-        return;
-    }
-    
-    // 3. Can't begin with a keyword including 'element' but also button,p, etc
-    NSArray *keywords = [NSArray arrayWithObjects:@"button", nil];
-    for (NSString *word in keywords)
-    {
-        if ([eleid isEqualToString:word])
+        NSLog(@"CURdOC is : %@", curDoc);
+        NSLog(@"stageview initiated - %@", [curDoc stageView]);
+        NSLog(@"!!@ The element array contains : %@", [[curDoc stageView] elementArray]);
+        BOOL isUnique = [[curDoc stageView] isElementIDUnique:eleid];
+        NSLog(@"isUnique equals %c", isUnique);
+        if (isUnique == NO)
         {
-            NSLog(@"vali 3");
-            elementid =[NSMutableString stringWithString:elementTag];
+            NSLog(@"vali 5");
+            elementid =[NSMutableString stringWithString:@""];
             [[[NSApp delegate] labelWarningField]setHidden:NO];
-            [[[NSApp delegate] elementidField]setStringValue:elementTag];
+            if (elementTag)
+            {
+                [[[NSApp delegate] elementidField]setStringValue:elementTag];
+            }
+            
             return;
         }
-    }
-    
-    
-    // 4. Between 3 and 16 characters
-    if ( ([eleid length] < 3) || ([eleid length] > 15) )
-    {
-        NSLog(@"Lenth = %lu", eleid.length);
-        NSLog(@"integer value = %lu", eleid.integerValue);
         
-        if ( ([eleid length] < 3) & ([eleid integerValue] != 0))
+        // 2. Remove spaces, symbols except hypens
+        NSRange whiteSpaceRange = [eleid rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSRange symbolRange = [eleid rangeOfCharacterFromSet:[NSCharacterSet symbolCharacterSet]];
+        if (whiteSpaceRange.location != NSNotFound || symbolRange.location != NSNotFound)
         {
-            //
-        }
-        else
-        {
-            NSLog(@"vali 4");
+            NSLog(@"Found whitespace or a symbol. ");
             elementid =[NSMutableString stringWithString:elementTag];
             [[[NSApp delegate] labelWarningField]setHidden:NO];
             [[[NSApp delegate] elementidField]setStringValue:elementTag];
             return;
         }
         
+        // 3. Can't begin with a keyword including 'element' but also button,p, etc
+        NSArray *keywords = [NSArray arrayWithObjects:@"button", nil];
+        for (NSString *word in keywords)
+        {
+            if ([eleid isEqualToString:word])
+            {
+                NSLog(@"vali 3");
+                elementid =[NSMutableString stringWithString:elementTag];
+                [[[NSApp delegate] labelWarningField]setHidden:NO];
+                [[[NSApp delegate] elementidField]setStringValue:elementTag];
+                return;
+            }
+        }
+        
+        
+        // 4. Between 3 and 16 characters
+        if ( ([eleid length] < 3) || ([eleid length] > 15) )
+        {
+            NSLog(@"Lenth = %lu", eleid.length);
+            NSLog(@"integer value = %lu", eleid.integerValue);
+            
+            if ( ([eleid length] < 3) & ([eleid integerValue] != 0))
+            {
+                //
+            }
+            else
+            {
+                NSLog(@"vali 4");
+                elementid =[NSMutableString stringWithString:elementTag];
+                [[[NSApp delegate] labelWarningField]setHidden:NO];
+                [[[NSApp delegate] elementidField]setStringValue:elementTag];
+                return;
+            }
+            
+        }
+
     }
+    
     
     //home free, the id label eneterd has passed all of the above tests so we can now save it :-)
     elementid = eleid;

@@ -118,6 +118,7 @@
 @property (assign) IBOutlet NSTextField *bottomRightLabel;
 @property (assign) IBOutlet NSTextField *tagLabel;
 @property (assign) IBOutlet NSTextField *currentlySelectedLabel;
+@property (assign) IBOutlet NSTextView *cssOverride;
 
 
 

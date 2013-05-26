@@ -50,7 +50,7 @@
 - (void)initWithData
 {
 	if (dataFromeFile) {
-		//[stageView OpenProjectFromFile:dataFromeFile];
+        [stageView OpenProjectFromFile:dataFromeFile];
 		[dataFromeFile release];
 		dataFromeFile = nil;
 		scale = 100;

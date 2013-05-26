@@ -59,6 +59,22 @@
 	[NSApp runModalForWindow:dataSourceWindowController.window];
 }
 
+- (IBAction)OnDelete:(id)sender
+{
+	NSInteger index = [_tableView selectedRow];
+	
+	if (index < 0) {
+		return;
+	}
+	
+	[self setIsVisible:NO];
+	
+	DataSourceWindowController *dataSourceWindowController = [[DataSourceWindowController alloc] init];
+	[dataSourceWindowController deleteDataSourceEntry:index];
+    [_tableView reloadData];
+	//[NSApp runModalForWindow:dataSourceWindowController.window];
+}
+
 
 #pragma mark - table view data source implementation
 
