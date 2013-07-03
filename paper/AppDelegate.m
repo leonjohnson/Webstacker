@@ -2,7 +2,7 @@
  
  The Singleton is called upon in this class
  but it is never assigned to an element, this
- priledge is only given to the stageView
+ privilege is only given to the stageView
  via the DocumentController. Brap!
  
  */

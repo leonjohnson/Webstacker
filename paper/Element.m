@@ -21,7 +21,7 @@
 
 @synthesize insideOperationElement;
 @synthesize elementid;
-@synthesize uType, isSelected, rtFrame, color, colorAttributes, contentURL;
+@synthesize uType, isSelected, rtFrame, color, colorAttributes;
 @synthesize borderWidth;
 @synthesize border;
 @synthesize borderRadius;
@@ -41,13 +41,16 @@
 @synthesize actionStringEntered, dataSourceStringEntered;
 @synthesize arrayShadows;
 
-
-
+@synthesize URLString;
+@synthesize canMove;
 
 
 - (void)dealloc
 {
 	free( handleArray );
+	if (URLString) {
+		[URLString release];
+	}
 	
 	[super dealloc];
 }
@@ -81,6 +84,8 @@
                    [NSNumber numberWithInt:0], @"body",
                    nil];
         layoutType = PIXEL_BASED_LAYOUT;
+        
+        URLString = @"";
         
     }
     
@@ -165,6 +170,8 @@
 	}
 	shape.isSelected = FALSE;
 	shape.arrayShadows = nil;
+    shape.canMove = YES;
+	shape.URLString = [[NSString alloc] initWithString:@""];
 	
 	return shape;
 }
@@ -395,7 +402,11 @@
  */
 - (void)MoveElement:(NSSize)offset
 {
-	rtFrame = NSOffsetRect( rtFrame, offset.width, offset.height );
+	if (!canMove) {
+		return;
+	}
+    
+    rtFrame = NSOffsetRect( rtFrame, offset.width, offset.height );
 	[self setFrame:CGRectMake(rtFrame.origin.x - 2, rtFrame.origin.y - 2, rtFrame.size.width + 4, rtFrame.size.height + 4)];
 }
 
@@ -409,7 +420,11 @@
  */
 - (void)OnMouseMove:(NSSize)offset HitTest:(NSInteger)hitTest
 {
-	Singleton *sg = [[Singleton alloc]init];
+	
+    if (!canMove) {
+		return;
+	}
+    Singleton *sg = [[Singleton alloc]init];
     
     switch (hitTest & SHT_HANDLESIZING)
     {
@@ -605,6 +620,14 @@
     [dict setObject:[NSNumber numberWithBool:topRightBorderRadius] forKey:@"topRightRadius"];
     [dict setObject:[NSNumber numberWithBool:bottomLeftBorderRadius] forKey:@"bottomLeftRadius"];
     [dict setObject:[NSNumber numberWithBool:bottomRightBorderRadius] forKey:@"bottomRightRadius"];
+    
+    [dict setObject:[NSNumber numberWithBool:canMove] forKey:@"canMove"];
+    [dict setValue:URLString forKey:URLSTRING];
+    
+    if ([self buttonText] != nil)
+    {
+        [dict setObject:buttonText forKey:@"buttonText"];
+    }
 	
     if (actionStringEntered != nil)
     {
@@ -661,6 +684,8 @@
 	width = nil;
 	height = nil;
 	
+    NSLog(@"Saving dictionary : %@", dict);
+    
 	return dict;
 }
 
@@ -673,10 +698,7 @@
 + (Element *)createElementFromDictionary:(NSDictionary *)dict
 {
     NSLog(@"dict is %@", dict);
-    ElementType e = [dict objectForKey:@"ShapeType"];
-    //Element *element = [self createElement:e];
     Element *element = [Element new];
-    NSLog(@"stepp 3");
     
     // shape information from dictionary
     NSMutableString *eleid = [dict valueForKey:ELEMENT_ID];
@@ -714,6 +736,14 @@
     NSNumber *shadowColorB = [dict valueForKey:@"shadowColorB"];
     NSNumber *shadowDirection = [dict valueForKey:@"shadowDirection"];
     
+    NSString *buttonText = [dict valueForKey:@"buttonText"];
+    
+    // Use object forKey here as this is quicker and we know for sure that this data exists as this data is created whenever an ele is created:
+    BOOL *moveable = [[dict objectForKey:@"canMove"] boolValue];
+    NSString *theUrl = [dict objectForKey:URLSTRING];
+    
+    
+    
 	// shadow information from dictionary
     if ([dict objectForKey:@"shadowAngle"] != nil)
     {
@@ -729,6 +759,9 @@
 	switch ([type integerValue]) {
 		case SHAPE_BUTTON:
 			element = [[Button alloc] init];
+            if (buttonText) {
+                element.buttonText = buttonText;
+            }
 			break;
 			
 		case SHAPE_CONTAINER:
@@ -740,7 +773,7 @@
 			break;
         
         case SHAPE_DYNAMIC_ROW:
-			element = [[DropDown alloc] init];
+			element = [[DynamicRow alloc] init];
 			break;
             
         case SHAPE_IMAGE:
@@ -840,6 +873,13 @@
             element.visibilityActionStringEntered = visibilityString;
             
         }
+        
+        if (theUrl)
+        {
+            element.URLString = theUrl;
+            
+            
+        }
 		
         if ([dict objectForKey:@"shadowAngle"] != nil)
         {
@@ -851,11 +891,18 @@
             element.shadowDirection = [shadowDirection floatValue];
             NSLog(@"shadows done");
         }
+        
+        if (moveable != nil)
+            element.canMove = moveable;
+        else
+            element.canMove = YES;
+        
 		// for shadow
 		
 		//[element setValue:eleid forKey:ELEMENT_ID];
         //[element setValue:[NSMutableString stringWithString:@"samba"] forKey:ELEMENT_ID];
-		element.arrayShadows = nil;
+		
+        element.arrayShadows = nil;
 		element.isSelected = NO;
 		element.isPtInElement = NO;
 		[element setBoundRect:rt];

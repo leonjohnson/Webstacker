@@ -18,8 +18,6 @@
 #import "NSColor+colorToHex.h"
 
 
-
-
 @implementation StageView (conversion)
 
 #define STR_LEFT   @"Left Edge"
@@ -1696,6 +1694,14 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     for (Element *ele in elementArray)
     {
+        //if no id then let's stop this straight away
+        if (ele.elementid == nil || [ele.elementid isEqualToString:@""])
+        {
+            NSLog(@"NO elementID given");
+            abortConversion = YES;
+            return;
+        }
+        
         //  Clean out any styles or markers for whiteSpaceFound from the last cycle.
         [allStyles removeAllObjects];
         [whiteSpacesFound removeAllObjects];
@@ -2031,6 +2037,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                                         [self dataSourceNameContainingKey:ele], ASSOCIATED_MODEL,
                                         ele.dataSourceStringEntered, DATA_SOURCE_STRING_ENTERED,
                                         ele.visibilityActionStringEntered, VISIBILITY_CODE,
+                                        ele.URLString, URLSTRING,
                                         //[[ele valueForKeyPath:@"opacity"] valueForKey:@"body"], @"opacity",
                                         //Also get the NSColor as a hex value
                                         nil];
@@ -3765,6 +3772,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         NSMutableString *borderStrokeString = [NSMutableString string];
         NSString *elementLayoutType = [block objectForKey:@"layoutType"];
         NSString *groupingBoxLayoutType = [NSString new];
+        NSString *urlLink = [NSString new];
         
         Ckerning = 0;
         Cleading = 0;
@@ -3965,6 +3973,23 @@ BOOL hasLeadingNumberInString(NSString* s)
         }
         
         
+        if ([block valueForKeyPath:URLSTRING])
+        {
+            NSLog(@"Block: %@ has a URL!", block);
+            
+            if ([block valueForKey:URLSTRING] == [NSNull null])
+            {
+                [block setValue:[NSNumber numberWithInt:0] forKey:URLSTRING];
+            }
+            urlLink = [NSString stringWithFormat:@"%@px", block];
+        }
+        else
+        {
+            NSLog(@"Border stroke string is nil");
+            borderStrokeString = [NSMutableString stringWithString:@"0"];            
+        }
+        
+        
         // ** STAGING GROUND: Create the attributes ready to be used below: ** //
         
         //1. Shadows
@@ -4013,6 +4038,14 @@ BOOL hasLeadingNumberInString(NSString* s)
         //2. DataSource and actions -  visibility has been tacked on to the end of dataSource
         NSString *actionCode = [block objectForKey:ACTION_CODE];
         NSString *dataSourceCode = [block objectForKey:DATA_SOURCE_CODE];
+        
+        if (actionCode==nil) {
+            actionCode = [NSString string];
+        }
+        
+        if (dataSourceCode==nil) {
+            dataSourceCode = [NSString string];
+        }
         NSLog(@"DATA SOURCE CODE = %@", dataSourceCode);
         
         
@@ -4325,7 +4358,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             
             NSLog(@"Trying to show : %@", [block objectForKey:CLASS_OR_ID_WORD]);
             
-            if ([[block objectForKey:CONTENTURL] isEqualToString:@"#"])
+            if ([[block objectForKey:URLSTRING] isEqualToString:@"#"])
             {
             arrayF = [NSArray arrayWithObjects:
                       @"<a href=\"#\" ",
@@ -5106,8 +5139,9 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     NSString *koScriptTag, *jQueryScriptTag = @"";
     if (self.jsCode2)
-        koScriptTag = @"<script src=\"http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js\"></script>\n";
-        jQueryScriptTag = @"<script src=\"http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js\"></script>\n";
+        //koScriptTag = @"<script src=\"http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js\"></script>\n";
+        koScriptTag = @"<script src=\"knockout.js\"></script>\n";
+        jQueryScriptTag = @"<script src=\"jquery.js\"></script>\n";
     
     
     
@@ -5219,6 +5253,11 @@ BOOL hasLeadingNumberInString(NSString* s)
 -(IBAction)generateCode:(id)sender
 {
     [self sortElements];
+    if (abortConversion) {
+        NSAlert *alert = [NSAlert alertWithMessageText:@"NO Tag given for an element." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please provide a Tag to all elements on the page."];
+        [alert runModal];
+        return;
+    }
     [self generateAttr];
     NSLog(@"self.sorted 2 = %@", self.sortedArray);
     [self generatejs];

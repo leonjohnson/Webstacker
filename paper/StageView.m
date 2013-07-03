@@ -1332,7 +1332,7 @@ static NSImage *bottomImage;
 	[selElementArray removeAllObjects];
 	
 	// set 0 to the attribute panel when the shape is not selected
-	[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0];
+	[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0 URL:@""];
 
     // Empty the text in the StageTextView
     [[self.textboxView textStorage] setAttributedString:[[NSAttributedString alloc] initWithString:@""]];
@@ -1661,7 +1661,8 @@ static NSImage *bottomImage;
 		[attributeDelegate SetAttributeOfShapeToPanel:shape.rtFrame.origin.x
 												 yPos:shape.rtFrame.origin.y
 												Width:shape.rtFrame.size.width
-											   Height:shape.rtFrame.size.height];
+											   Height:shape.rtFrame.size.height
+                                                  URL:shape.URLString];
 	}
 	
 	// set shadow property to shadow panel
@@ -1708,7 +1709,11 @@ static NSImage *bottomImage;
 			break;
 			
 		default:
-			[self addCursorRect:[self frame] cursor:[NSCursor arrowCursor]];
+			if ((nHitTest & SHT_HANDURLMASK) == SHT_HAVEURL) {
+				[self addCursorRect:[self frame] cursor:[NSCursor pointingHandCursor]];
+			} else {
+				[self addCursorRect:[self frame] cursor:[NSCursor arrowCursor]];
+			}
 			break;
 	}
 }
@@ -1722,10 +1727,12 @@ static NSImage *bottomImage;
 	
 	// hightlight the shape which be overed by mouse
 	BOOL isOvered = NO;
+    nHitTest = 0;
+    
 	//for (Element *shape in elementArray) {
 	for (NSInteger index = [elementArray count] - 1; index >= 0; index -- ) {
 		Element *shape = [elementArray objectAtIndex:index];
-		NSLog(@"element array : %lu", shape.uType);
+        
 		NSPoint ptShape;
 		ptShape = NSMakePoint(point.x - shape.frame.origin.x, point.y - shape.frame.origin.y);
 		/*
@@ -1737,26 +1744,32 @@ static NSImage *bottomImage;
 		*/
 		shape.isPtInElement = NO;
 		
-        NSLog(@"pt = %f,%f", ptShape.x, ptShape.y);
 		if (!isOvered && [shape IsPointInElement:ptShape] != SHT_NONE) {
 			shape.isPtInElement = YES;
 			isOvered = YES;
+            
+            if (shape.URLString && [shape.URLString length] > 0) {
+				nHitTest = SHT_HAVEURL;
+            }
 		}
 	}
-	[self setNeedsDisplay:YES];
-	
 	// selected nothing shape, don't change mouse cursor
-	if ([selElementArray count] != 1) {
-		return;
+	NSInteger beforeHitTest = nHitTest;
+	
+	if ([selElementArray count] >= 1) {
+		for (Element *selShape in selElementArray) {
+			
+			nHitTest = beforeHitTest | [selShape HitTest:point];
+			
+			[[self window] invalidateCursorRectsForView:self];
+			return;
+		}
 	}
 	
-	for (Element *selShape in selElementArray) {
-		
-		nHitTest = [selShape HitTest:point];
-		
-		[[self window] invalidateCursorRectsForView:self];
-		return;
-	}
+	nHitTest = beforeHitTest;
+	
+	[[self window] invalidateCursorRectsForView:self];
+	[self setNeedsDisplay:YES];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent
@@ -2139,7 +2152,7 @@ static NSImage *bottomImage;
 	
 	// if the user selects multiple shapes, attributes pannel shows zero.
 	if ([selElementArray count] > 1) {
-		[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0];
+		[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0 URL:@""];
 	}
 	
 	isDragingShape = NO;
@@ -2296,7 +2309,8 @@ static NSImage *bottomImage;
 	[attributeDelegate SetAttributeOfShapeToPanel:pt.x - defaultSizeOfElement.width / 2
                                              yPos:pt.y - defaultSizeOfElement.height / 2
 											Width:defaultSizeOfElement.width
-                                           Height:defaultSizeOfElement.height];
+                                           Height:defaultSizeOfElement.height
+                                            URL:shape.URLString];
 
     // Re-sort the layers panel
     [layerDelegate SetLayerList];
@@ -2332,6 +2346,28 @@ static NSImage *bottomImage;
 }
 
 #pragma mark - Change shape attribute delegate implementation
+
+- (void)ChangeURLStringOFElement:(NSString *)url
+{
+	if ([self IsSelectedShape] == NO) {
+		return;
+	}
+	
+	if ([selElementArray count] > 1) {
+		return;
+	}
+	
+	if (((Element *)[selElementArray lastObject]).uType == SHAPE_CONTAINER) {
+		return;
+	}
+	
+	if ( ((Element *)[selElementArray lastObject]).URLString != nil ) {
+		[((Element *)[selElementArray lastObject]).URLString release];
+	}
+	
+	[((Element *)[selElementArray lastObject]) setURLString:url];
+}
+
 
 /*
  @function:		ChangeAttribueOfShape
@@ -2854,7 +2890,7 @@ static NSImage *bottomImage;
     
 	// set the attribute to AttriutePanel
 	[attributeDelegate SetAttributeOfShapeToPanel:element.rtFrame.origin.x yPos:element.rtFrame.origin.y
-											Width:element.rtFrame.size.width Height:element.rtFrame.size.height];
+											Width:element.rtFrame.size.width Height:element.rtFrame.size.height URL:element.URLString];
     
     //re-sort the layers panel
     [layerDelegate SetLayerList];
@@ -2972,90 +3008,203 @@ static NSImage *bottomImage;
  @purpose:		This function saves all shapes of shape's array to filename.
  */
 - (NSData *)SaveProjectToFile:(NSString*)filename;
+
 {
-	// 1. Get the datasource
+    
+    // 0. Define the root object that will be saved
+    
+    NSMutableDictionary *savedDataDict = [[NSMutableDictionary alloc] init];
+    
+    
+    
+    // 1. Get the datasource
+    
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     NSArray *thedatasource = [NSArray arrayWithArray:appDelegate.arrayDataSource];
+	[savedDataDict setObject: thedatasource forKey:@"datasource"];
     
-    // 2.
-    NSMutableArray *savedDataArray = [[NSMutableArray alloc] init];
-	
-	for (Element* element in elementArray) {
-		NSMutableDictionary *dict = [element getShapeData];
-		[savedDataArray addObject:dict];
-		dict = nil;
-	}
-	
-	//BOOL bResult = [savedDataArray writeToFile:filename atomically:YES];
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:savedDataArray];
-	[savedDataArray release];
-	
-	return data;
+    
+    
+    // 2. Get the Elements on the page
+    
+    NSMutableArray *savedElementArray = [[NSMutableArray alloc] init];
+    
+    for (Element* element in elementArray) {
+        
+        NSMutableDictionary *dict = [element getShapeData];
+        
+        [savedElementArray addObject:dict];
+        
+        dict = nil;
+        
+        
+    }
+    
+    [savedDataDict setObject: savedElementArray forKey:@"elements"];
+    
+    
+    // 3. Save the background color
+    
+    NSColor *backgroundColor = [self stageBackgroundColor];
+    [savedDataDict setObject: backgroundColor forKey:@"backgroundColor"];
+    
+    
+    
+    //BOOL bResult = [savedDataArray writeToFile:filename atomically:YES];
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:savedDataDict];
+    
+    [savedDataDict release];
+    
+    
+    return data;
+    
 }
 
 
+
+
+
 /*
- @function:		OpenProjectFromFile
- @params:		data:			file data
- @return:		open sucessfully, return YES. otherwise NO.
- @purpose:		This function read shapes value from filename and create shapes of stageview.
+ 
+ @function:	 OpenProjectFromFile
+ 
+ @params:	 data:	 file data
+ 
+ @return:	 open sucessfully, return YES. otherwise NO.
+ 
+ @purpose:	 This function read shapes value from filename and create shapes of stageview.
+ 
  */
+
 - (BOOL)OpenProjectFromFile:(NSData *)data
+
 {
-	NSArray *openDataArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-	if (openDataArray == nil) {
+    
+    NSDictionary *openDataArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    
+    if (openDataArray == nil) {
+        
         NSLog(@"this array is empty");
-		return NO;
-	}
-	
+        
+        return NO;
+        
+    }
+    
+    
     NSLog(@"stage 1 of opening project from file");
-	// initialize stage view
-	[self initDrawStage];
-	
+    
+    // initialize stage view
+    
+    [self initDrawStage];
+    
+    
     NSLog(@"stage 2 of opening project from file with openDataArray of %@", openDataArray);
+    
     NSLog(@"stageView = %@ and width = %f", self, self.frame.size.width);
     
-	for (NSDictionary *dict in openDataArray) {
-		NSLog(@"gonna cycle through the openDataArray");
+    
+    // 0. Get the elements
+    NSArray *elementsArray = [openDataArray objectForKey:@"elements"];
+    
+    
+    for (NSDictionary *dict in elementsArray) {
+        
+        NSLog(@"gonna cycle through the openDataArray");
+        
         Element *element = [Element createElementFromDictionary:dict];
+        
         NSLog(@"just added it to stageView 1: %@", element.elementid);
-		if (element) {
-			element.insideOperationElement = self;
-			[self addSubview:element];
-            NSLog(@"just added it to stageView 2");
-			//[elementArray addObject:element];
-            [elementArray insertObject:element atIndex:0];
-            NSLog(@"Added a %lu to elementArray", element.uType);
-			//[shape setBoundRect:shape.rtFrame];
+        
+        if (element) {
             
-            [element setValue:[NSMutableString stringWithString:element.elementTag] forKey:ELEMENT_ID];
-		}
-	}
-	
+            element.insideOperationElement = self;
+            
+            [self addSubview:element];
+            
+            NSLog(@"just added it to stageView 2");
+            
+            //[elementArray addObject:element];
+            
+            //[elementArray insertObject:element atIndex:0];
+            
+            [elementArray addObject:element];
+            
+            NSLog(@"Added a %lu to elementArray", element.uType);
+            
+            //[shape setBoundRect:shape.rtFrame];
+            
+            
+            if (element.elementid)
+                [element setValue:[NSMutableString stringWithString:element.elementid] forKey:ELEMENT_ID];
+            else
+                NSLog(@"Uh oh!");
+                //[element setValue:[NSMutableString stringWithString:element.elementTag] forKey:ELEMENT_ID];
+                
+        
+            
+        }
+        
+    }
+    
+    
+    // 1. Get the stageView background color
+    NSColor *backgroundColor = [openDataArray objectForKey:@"backgroundColor"];
+    [self setStageBackgroundColor:backgroundColor];
+    [backgroundColorWell setColor:self.stageBackgroundColor];
+    [self changeStageBackgroundColor:backgroundColorWell];
+    
+    
+    // 2. Set the datasource
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    appDelegate.arrayDataSource = [NSMutableArray array];
+    NSMutableArray *ds = [openDataArray objectForKey:@"datasource"];
+    appDelegate.arrayDataSource = ds;
+    
     [self setNeedsDisplay:YES];
+    
+    
     
     NSLog(@"ELEMENT ARRAY : %@", [elementArray valueForKey:ELEMENT_ID]);
     
+    
+    
     NSLog(@"stage 3 of opening project from file");
     NSLog(@"stageview has %lu subviews", self.subviews.count);
-	// set accepting mouse move event
-	[[self window] setInitialFirstResponder:self];
-	[[self window] makeFirstResponder:self];
-	[[self window] setAcceptsMouseMovedEvents:YES];
-	
-	[self setNeedsDisplay:YES];
-	
-	// set the attribute to AttriutePanel
-	[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0];
-	//[shadowDelegate setShadowProperty:0 Distance:0 colorR:0 colorG:0 colorB:0 Opacity:0 Blur:0 Direct:YES];
-	
+    
+    // set accepting mouse move event
+    
+    [[self window] setInitialFirstResponder:self];
+    
+    [[self window] makeFirstResponder:self];
+    
+    [[self window] setAcceptsMouseMovedEvents:YES];
+    
+    
+    [self setNeedsDisplay:YES];
+    
+    
+    // set the attribute to AttriutePanel
+    
+    [attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0 URL:@""];
+    
+    //[shadowDelegate setShadowProperty:0 Distance:0 colorR:0 colorG:0 colorB:0 Opacity:0 Blur:0 Direct:YES];
+    
+    
+    
     
     // set shadow array to shadow list panel
-	//[shadowDelegate setShadowList:nil];
-	
-	// adding layers to layerPanel
-	[layerDelegate SetLayerList];
-	return YES;
+    
+    //[shadowDelegate setShadowList:nil];
+    
+    
+    // adding layers to layerPanel
+    
+    [layerDelegate SetLayerList];
+    
+    return YES;
+    
 }
 
 -(BOOL)insideMyFrame:(NSPoint)pt
@@ -3424,5 +3573,21 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
 	return nil;
 }
 
+
+
+- (void)InitAttributeBySelected
+{
+	if ([selElementArray count] == 0) {
+		[attributeDelegate SetAttributeOfShapeToPanel:0 yPos:0 Width:0 Height:0 URL:@""];
+        
+	} else {
+		[attributeDelegate SetAttributeOfShapeToPanel:((Element *)[selElementArray lastObject]).rtFrame.origin.x
+												 yPos:((Element *)[selElementArray lastObject]).rtFrame.origin.y
+												Width:((Element *)[selElementArray lastObject]).rtFrame.size.width
+											   Height:((Element *)[selElementArray lastObject]).rtFrame.size.height
+												  URL:((Element *)[selElementArray lastObject]).URLString];
+        
+	}
+}
 
 @end

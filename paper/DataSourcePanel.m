@@ -72,6 +72,10 @@
 	DataSourceWindowController *dataSourceWindowController = [[DataSourceWindowController alloc] init];
 	[dataSourceWindowController deleteDataSourceEntry:index];
     [_tableView reloadData];
+    
+    
+    
+    
 	//[NSApp runModalForWindow:dataSourceWindowController.window];
 }
 

@@ -158,6 +158,8 @@ typedef NSInteger		ShapeCutCopyType;
     // background appearance
     BOOL showGridlines;
     IBOutlet NSColorWell *backgroundColorWell;
+    
+    BOOL abortConversion;
 }
 @property (nonatomic, assign) NSMutableArray *sortedArray;
 @property (nonatomic, assign) NSMutableString *jsCode2;
@@ -254,6 +256,7 @@ typedef NSInteger		ShapeCutCopyType;
 @property (assign, nonatomic) IBOutlet NSTextField *marginAboveEachRow;
 
 @property (assign, nonatomic) NSMutableArray *idsInsideDyRow;
+
 
 //Font based methods
 -(IBAction)setFontTrait:(id)sender;
@@ -482,6 +485,10 @@ typedef NSInteger		ShapeCutCopyType;
 - (void)hideFontTab;
 - (void)selectFontofCurrentTextBox:(NSString *)fontName;
 
+
+- (void)InitAttributeBySelected;
+
+- (void)ChangeURLStringOFElement:(NSString *)url;
 @end
 
 

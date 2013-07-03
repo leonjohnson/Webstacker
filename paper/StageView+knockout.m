@@ -51,7 +51,17 @@
         NSMutableString *totalAnyNumericSetOfValuesInAModel = [NSMutableString string];
         for (NSMutableDictionary *elementDictionary in sortedArray)
         {
-            if ([[elementDictionary objectForKey:DATA_SOURCE_STRING_ENTERED] containstheString:@"total"]) //TODO: make this upper or lowercase // Could be Totalsurcharge
+            NSString *dataString = [elementDictionary objectForKey:DATA_SOURCE_STRING_ENTERED];
+            NSLog(@"D S WRONG = %@", dataString);
+            NSRange range = [dataString rangeOfString:@"total" options:NSCaseInsensitiveSearch];
+            BOOL itContainsTheString;
+            if (range.location == NSNotFound) {
+                itContainsTheString = NO;
+            }
+            else
+                itContainsTheString = YES;
+            
+            if (dataString != nil && itContainsTheString) //TODO: make this upper or lowercase // Could be Totalsurcharge
             {
                 NSLog(@"We've got: %@", elementDictionary);
                 // Take the first word, and the second word (assumption: there are just two words)
@@ -356,8 +366,10 @@
             
         }
         
+        NSString *dataString = ele.dataSourceStringEntered;
+        BOOL itContainsTheWordPrice = [dataString rangeOfString:@"price" options:NSCaseInsensitiveSearch].location != NSNotFound;
         
-        if ([ele.dataSourceStringEntered containstheString:@"price"])
+        if (itContainsTheWordPrice)
         {
             NSLog(@"price ds called");
             dataSourceCodeStringToReturn = [NSMutableString stringWithFormat:@"data-bind=\"text: %@", ele.jsid];
@@ -386,8 +398,6 @@
 -(NSString *)actionCodeString: (Element*)ele
 {
     NSLog(@"starting point");
-    NSLog(@"We haave: %c", [@"timadd" containstheString:@"Add"]);
-    
     NSString *actionsStringToReturn = [NSMutableString string];
     
     DynamicRow *dyRow = nil;
@@ -409,8 +419,13 @@
         NSString *removeClassName = [NSString stringWithFormat:@"remove%@", dyRow.elementid.capitalizedString];
         NSString *methodName = [[firstWord lowercaseString] stringByAppendingString:[secondWord capitalizedString]];
         
+        
         // Remove row
-        if ([firstWord containstheString:@"Remove"] && ([secondWord containstheString:@"row"] || [secondWord containstheString:dyRowID]) )
+        BOOL containsTheWordRemove = [firstWord rangeOfString:@"Remove" options:NSCaseInsensitiveSearch].location != NSNotFound;
+        BOOL containsTheWordRow = [secondWord rangeOfString:@"row" options:NSCaseInsensitiveSearch].location != NSNotFound;
+        BOOL containsTheDyRowID = [secondWord rangeOfString:dyRowID options:NSCaseInsensitiveSearch].location != NSNotFound;
+        
+        if (containsTheWordRemove && (containsTheWordRow || containsTheDyRowID) )
         {
             NSLog(@"ACTION STRING IS : %@", ele.actionStringEntered);
             actionsStringToReturn = [NSString stringWithFormat:@"data-bind=\"click: $root.%@\"", removeClassName];
@@ -419,7 +434,8 @@
         
         
         // Add row
-        if ([firstWord containstheString:@"Add"] && ([secondWord containstheString:@"row"] || [secondWord containstheString:dyRowID]) ) //what if the dyRow element has an id of myRow and not row? WE SHOULD ALLOW THE USER TO ENTER ADD ROW OR ADD SEAT
+        BOOL containsTheWordAdd = [firstWord rangeOfString:@"Add" options:NSCaseInsensitiveSearch].location != NSNotFound;
+        if (containsTheWordAdd && (containsTheWordRow || containsTheDyRowID) ) //what if the dyRow element has an id of myRow and not row? WE SHOULD ALLOW THE USER TO ENTER ADD ROW OR ADD SEAT
         {
             
             // The default if 'add row' text found
@@ -530,7 +546,8 @@
     NSString *idOfElementToToggleVisibility = @"";
     for (NSString *header in dataModelHeaders) {
         NSLog(@"Comparing strings: %@ and %@", ele.visibilityActionStringEntered, header);
-        if ([ele.visibilityActionStringEntered containstheString:header])
+        BOOL containsTheHeader = [ele.visibilityActionStringEntered rangeOfString:header options:NSCaseInsensitiveSearch].location != NSNotFound;
+        if (containsTheHeader)
         {
             visibilityStringMatchesAtLeastOneIDinDyRow = YES;
             idOfElementToToggleVisibility = [NSString stringWithString:header];
@@ -540,11 +557,12 @@
     NSLog(@"id I'm going to use is : %@", [ele jsid]);
     NSString *visibilityCodeString = @"";
     // only show if more than x total price or x total seats
-    if (ele.visibilityActionStringEntered != nil && [ele.visibilityActionStringEntered containstheString:@"total"] && visibilityStringMatchesAtLeastOneIDinDyRow)
+    BOOL containsTheWordTotal = [ele.visibilityActionStringEntered rangeOfString:@"total" options:NSCaseInsensitiveSearch].location != NSNotFound;
+    if (ele.visibilityActionStringEntered != nil && containsTheWordTotal && visibilityStringMatchesAtLeastOneIDinDyRow)
     {
         NSLog(@"in here - yes!");
         visibilityCodeString = [NSString stringWithFormat:@"visible: %@() > %@ ", [ele jsid], numberEntered];
-        ele.contentURL = @"#";
+        ele.URLString = @"#";
     }
     
     NSLog(@"About to return the string : %@", visibilityCodeString);

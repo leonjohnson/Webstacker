@@ -9,11 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "BasePanel.h"
 
-@interface DataSourcePanel : BasePanel
-<
-NSTableViewDataSource,
-NSTableViewDelegate
->
+@interface DataSourcePanel : BasePanel <NSTableViewDataSource, NSTableViewDelegate>
 {
 	NSMutableArray					*_arrayDataSource;
 	IBOutlet NSTableView			*_tableView;

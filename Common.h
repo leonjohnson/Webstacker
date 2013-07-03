@@ -104,7 +104,7 @@
 #define PADDING_LEFT                            @"paddingLeft"
 #define FLEXIBLE_PADDING_LEFT                   @"FlexiblePaddingLeft"
 
-#define CONTENTURL                              @"URL"
+#define URLSTRING                              @"URLString"
 
 #define CSS_CODE                                @"cssOverride"
 

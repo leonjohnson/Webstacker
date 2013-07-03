@@ -33,6 +33,8 @@ SetAttributeDelegate
 	IBOutlet NSStepper				*hStepper;
 	IBOutlet NSTextField			*hTextField;
     
+    IBOutlet NSTextField			*urlTextField;
+    
     //Layout type - px or %
     IBOutlet NSPopUpButton *layoutTypeDisplay;
 	
@@ -109,6 +111,7 @@ SetAttributeDelegate
  @purpos:		This function set the value of the steppers
  */
 - (void)SetStepperValue:(CGFloat)x yPos:(CGFloat)y Width:(CGFloat)w Height:(CGFloat)h;
+
 
 
 /*

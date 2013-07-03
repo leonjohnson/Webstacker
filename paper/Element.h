@@ -48,10 +48,13 @@ typedef NSInteger LayoutTag;
 // If the bit AND operation of the hit test value and SHT_HANDLESIZING is following resizing flag,
 // shape is resizing.
 
+#define SHT_HANDURLMASK			0xFFF000
+
 // shape moving flage
 #define SHT_NONE				0x00000 // Shape's normal state.
 #define SHT_MOVING				0x01000 // Shape's moving state.
 #define SHT_PTINELEMENT			0x10000 // Point is beside in shape.
+#define SHT_HAVEURL				0x100000 // Shape have URL string.
 
 
 // shape resizing flag
@@ -136,8 +139,8 @@ typedef NSInteger LayoutTag;
     //NSNumber            *borderWidth;
     
     NSMutableAttributedString *contentText;
+        
     
-    NSString *contentURL;
     
     /****     Needed for the markup conversion ****/
     NSString *spanGrouping;
@@ -210,7 +213,7 @@ typedef NSInteger LayoutTag;
 @property (assign, nonatomic) NSMutableAttributedString *contentText;
 @property (assign, nonatomic) NSString *spanGrouping;
 
-@property (assign, nonatomic) NSString *contentURL;
+@property (assign, nonatomic) NSString *URLString;
 
 @property (assign, nonatomic) NSString *imgName;
 
@@ -229,6 +232,7 @@ typedef NSInteger LayoutTag;
 @property (assign, nonatomic) NSString *jsid;
 @property (assign, nonatomic) NSString *topMarginForRow;
 
+@property (nonatomic) BOOL							canMove;
 
 - (void)dealloc;
 

@@ -343,6 +343,12 @@
 	
 	NSLog( @"%@", strLog );
     
+    // communicate that the save was succesful
+    NSAlert *alert = [NSAlert alertWithMessageText:@"Data saved" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+    [alert runModal];
+    
+    
+    // close the window
     [[self window]performClose:self];
 }
 
