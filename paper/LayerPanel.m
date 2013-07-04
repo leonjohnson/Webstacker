@@ -123,7 +123,8 @@
 		[viewName setBordered:NO];
 		[viewName setEditable:NO];
 		[viewName setBackgroundColor:[NSColor clearColor]];
-		
+        [viewName setTextColor:[NSColor whiteColor]];
+
 		switch (shape.uType) {
 			case SHAPE_CIRCLE:
 				viewName.stringValue = @"Circle";
@@ -178,7 +179,7 @@
 			default:
 				break;
 		}
-		viewName.stringValue = [NSString stringWithFormat:@"%@ - %@", shape.elementid, viewName.stringValue];
+        viewName.stringValue = [NSString stringWithFormat:@"%@ - (%@)", shape.elementid, viewName.stringValue];
 		return viewName;
 	} else if ([[tableColumn identifier] isEqualToString:@"Visibility"]) {
 		
