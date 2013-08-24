@@ -49,13 +49,4 @@
 #import <Cocoa/Cocoa.h>
 
 @interface ImageAndTextCell : NSTextFieldCell
-{
-    NSImage *image;
-}
-
-@property (readwrite, strong) NSImage *image;
-
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
-- (NSSize)cellSize;
-
 @end

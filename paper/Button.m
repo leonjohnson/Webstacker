@@ -148,6 +148,21 @@
         [roundedRectangle2Path closePath];
     }
     
+    CGContextSetRGBStrokeColor( context, 0.0, 0.0, 0.0, 1.0 );
+    
+    CGContextSetRGBFillColor(
+                             context, //Change to cd when BINGDING.
+                             [colorAttributes redComponent],   //Red
+                             [colorAttributes greenComponent], //Green
+                             [colorAttributes blueComponent],  //Blue
+                             [colorAttributes alphaComponent]  //Alpha value
+                             
+                             );// color parameter
+    //CGContextFillRect(context, CGRectMake(2, 2, rtFrame.size.width, rtFrame.size.height));
+    [roundedRectangle2Path fill];
+    [roundedRectangle2Path setLineWidth:[borderWidth floatValue]];
+    
+    /*
     //// Color Declarations
     NSColor* twitterDarkBlue = [NSColor colorWithCalibratedRed: 0.02 green: 0.24 blue: 0.75 alpha: 1];
     NSColor* twitterLightBlue = [NSColor colorWithCalibratedRed: 0.05 green: 0.44 blue: 0.75 alpha: 1];
@@ -195,12 +210,12 @@
     
     //[roundedRectangle2Path fill];
     [twitterBorderColor setStroke];
-	/*
+	//
 	if (self.isPtInElement == YES) { // highlight shape when the mouse is over the shape.
 		[[NSColor colorWithCalibratedRed:1 green:0.3 blue:0.2 alpha:1.0] set];
 	}
-     */
-    
+     //
+    */
     if (self.isPtInElement == YES) { // highlight shape when the mouse is over the shape.
         [self.elementHighlightColor set];
         if ([borderWidth floatValue] == 0) {
@@ -238,8 +253,8 @@
     
     
     //// Cleanup
-    [shadow release];
-    [gradient release];
+    //[shadow release];
+    //[gradient release];
     
     
     /*

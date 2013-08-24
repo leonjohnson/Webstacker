@@ -2199,7 +2199,7 @@ static NSImage *bottomImage;
             break;
             
         case SHAPE_DROPDOWN:
-            defaultSizeOfElement = NSMakeSize(218, 26);
+            defaultSizeOfElement = NSMakeSize(226, 30);
             break;
             
         case SHAPE_PLACEHOLDER_IMAGE:
@@ -2864,8 +2864,9 @@ static NSImage *bottomImage;
 	
 	Element *element = [Element createElement:SHAPE_IMAGE];
 	element.insideOperationElement = self;
-	[((Image *)element) setImageURL:filePath];
+	[((Image *)element) setImageURL:filePath]; // so we have set the url to the image and we have set the bounds accordingly...
 	element.isSelected = YES;
+    [element setNeedsDisplay:YES];
 	
 	[self addSubview:element];
 	[elementArray addObject:element];

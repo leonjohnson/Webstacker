@@ -1894,7 +1894,9 @@ BOOL hasLeadingNumberInString(NSString* s)
                 }
                 
                 // HACK
-                NSUInteger deletionIndexPoint = [whiteSpacesFound indexOfObject: [NSNumber numberWithUnsignedInteger:[tagContent length]+1]]+1;
+                NSUInteger deletionIndexPoint = 10;
+                NSLog(@"Testing it");
+                deletionIndexPoint = [whiteSpacesFound indexOfObject: [NSNumber numberWithUnsignedInteger:[tagContent length]+1]]+1;
                 NSRange deleteRange = NSMakeRange(deletionIndexPoint, [whiteSpacesFound count] - deletionIndexPoint);
                 NSLog(@"The deleteIndexPoint is:%lu", deletionIndexPoint);
                 [whiteSpacesFound removeObjectsInRange:deleteRange];
@@ -4972,7 +4974,11 @@ BOOL hasLeadingNumberInString(NSString* s)
             }
             if (boxShadow !=nil)
             {
-                [styleArray addObjectsFromArray:boxShadow];
+                //[styleArray addObjectsFromArray:boxShadow];
+            }
+            if ([block valueForKey:@"backgroundColor"] !=nil)
+            {
+                [styleArray addObject:[NSString stringWithFormat:@"background-color: %@",[block valueForKey:@"backgroundColor"]]];
             }
             [styleArray addObject:@"\n"];
             [styleArray addObject:@"}"];

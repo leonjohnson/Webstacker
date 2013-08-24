@@ -15,6 +15,7 @@
 
 - (void)awakeFromNib
 {
+    [self setTitle:@"attibrute panel"];
     NSArray *anArray = [NSArray arrayWithObjects:@"Pixel",@"Percentage", nil];
     //popupButton = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(45, 421, 175, 26) pullsDown:NO];
     //[popupButton setAutoresizingMask:(!NSViewMinXMargin | NSViewMinYMargin)];
@@ -34,6 +35,7 @@
 {
 	[_tabView selectTabViewItemAtIndex:index];
 }*/
+
 
 #pragma mark - tab view delegate implementation
 

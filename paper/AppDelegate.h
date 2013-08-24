@@ -6,7 +6,7 @@
 #import "StageView.h"
 #import "Singleton.h"
 #import "DataSourcePanel.h"
-
+#import "ABNotifier.h"
 
 @class DocumentBar;
 
@@ -16,7 +16,7 @@
 #define GRIDLINE_SHOW_MENU				102
 #define RULER_SHOW_MENU					103
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, ABNotifierDelegate>
 {
 
 	Singleton *sg;

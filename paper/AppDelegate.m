@@ -97,7 +97,30 @@
 -(void)applicationWillFinishLaunching:(NSNotification *)notification
 {
     
+    
     NSLog(@"applicationWillFinishLaunching called.");
+    
+    // Check if this trial version of the app has expired and should close
+    NSDateFormatter* df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"MM/dd/yyyy"];
+    NSDate* expiryDate = [df dateFromString:@"12/01/2013"];
+    NSDate * today = [NSDate date];
+    NSComparisonResult result = [today compare:expiryDate];
+    switch (result)
+    {
+        case NSOrderedAscending:
+            NSLog(@"Today is before the expiry date");
+            break;
+        case NSOrderedDescending:
+            NSLog(@"Earlier Date");
+            NSRunAlertPanel(@"Expired app", @"The trial version of this app has expired. Please purchase a full version to access this software.", @"OK", nil, nil);
+            [NSApp terminate:self];
+            break;
+        case NSOrderedSame:
+            NSLog(@"Today/Null Date Passed"); //Not sure why This is case when null/wrong date is passed
+        default:
+            NSLog(@"Error Comparing Dates");
+    }
         
     //// Color Declarations
     NSColor* fillColor = [NSColor colorWithCalibratedRed: 0.9 green: 0.9 blue: 0.9 alpha: 1];
@@ -141,6 +164,12 @@
 		[((Document *)doc).stageView createContainerElement:1024];
 	}*/
     
+    //Airbrake initialisation
+    [ABNotifier startNotifierWithAPIKey:@"key"
+                        environmentName:ABNotifierAutomaticEnvironment
+                                 useSSL:NO // only if your account supports it
+                               delegate:self];
+    
     self.actionsArray = [NSMutableArray array];
 	
     [NSColorPanel setPickerMask:NSColorPanelWheelModeMask];
@@ -158,6 +187,7 @@
 	//HACK / BUG
 	attributePanelVisible = YES;
     [attributePanel setIsVisible:YES];
+    [self.attributePanel setTitle:@"Attributes"];
     
 	alignmentPanelVisible = NO;
     [alignmentPanel setIsVisible:NO];

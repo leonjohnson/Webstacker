@@ -143,6 +143,7 @@
 			shape = [[TextInputField alloc] init];
             [[curDoc stageView] setElementBeenDroppedToStage:YES];
             break;
+            
         case SHAPE_DROPDOWN:
 			shape = [[DropDown alloc] init];
             [[curDoc stageView] setElementBeenDroppedToStage:YES];

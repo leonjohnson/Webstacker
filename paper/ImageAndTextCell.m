@@ -2,7 +2,7 @@
  File: ImageAndTextCell.m
  Abstract: Subclass of NSTextFieldCell which can display text and an image simultaneously.
  
- Version: 1.3
+ Version: 1.4
  
  Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple
  Inc. ("Apple") in consideration of your agreement to the following
@@ -42,7 +42,7 @@
  STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  
- Copyright (C) 2012 Apple Inc. All Rights Reserved.
+ Copyright (C) 2013 Apple Inc. All Rights Reserved.
  
  */
 
@@ -59,12 +59,10 @@
 #define kTextHeightAdjust       4
 
 @interface ImageAndTextCell ()
-
+@property (readwrite, strong) NSImage *image;
 @end
 
 @implementation ImageAndTextCell
-
-@synthesize image;
 
 // -------------------------------------------------------------------------------
 //	init
@@ -76,49 +74,23 @@
     {
         // we want a smaller font
         [self setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
+        
     }
 	return self;
 }
 
-// -------------------------------------------------------------------------------
-//	dealloc
-// -------------------------------------------------------------------------------
-- (void)dealloc
-{
-    [image release];
-    [super dealloc];
-}
 
 // -------------------------------------------------------------------------------
 //	copyWithZone:zone
 // -------------------------------------------------------------------------------
 - (id)copyWithZone:(NSZone *)zone
 {
-    ImageAndTextCell *cell = (ImageAndTextCell*)[super copyWithZone:zone];
-    cell.image = [image retain];
+   
+    ImageAndTextCell *cell = (ImageAndTextCell *)[super copyWithZone:zone];
+    cell.image = self.image;
     return cell;
 }
 
-// -------------------------------------------------------------------------------
-//	setImage:anImage
-// -------------------------------------------------------------------------------
-- (void)setImage:(NSImage *)anImage
-{
-    if (anImage != image)
-	{
-        [image release];
-        image = [anImage retain];
-		[image setSize:NSMakeSize(kIconImageSize, kIconImageSize)];
-    }
-}
-
-// -------------------------------------------------------------------------------
-//	image:
-// -------------------------------------------------------------------------------
-- (NSImage *)image
-{
-    return image;
-}
 
 // -------------------------------------------------------------------------------
 //	isGroupCell:
@@ -139,7 +111,7 @@
 	NSSize imageSize;
 	NSRect imageFrame;
     
-	imageSize = [image size];
+	imageSize = [self.image size];
 	NSDivideRect(cellRect, &imageFrame, &cellRect, 3 + imageSize.width, NSMinXEdge);
     
 	imageFrame.origin.x += kImageOriginXOffset;
@@ -177,58 +149,60 @@
 // -------------------------------------------------------------------------------
 //	drawWithFrame:cellFrame:controlView:
 // -------------------------------------------------------------------------------
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
+- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-	if (self.image != nil)
-	{
-        // the cell has an image: draw the normal item cell
-        NSSize imageSize;
-        NSRect imageFrame;
+    NSRect newCellFrame = cellFrame;
+    [self.image setSize:NSMakeSize(kIconImageSize, kIconImageSize)];
+    
+    if (self.image != nil)
+    {
+        NSSize	imageSize;
+        NSRect	imageFrame;
         
-        imageSize = [image size];
-        NSDivideRect(cellFrame, &imageFrame, &cellFrame, 3 + imageSize.width, NSMinXEdge);
+        imageSize = [self.image size];
+        NSDivideRect(newCellFrame, &imageFrame, &newCellFrame, imageSize.width, NSMinXEdge);
+        if ([self drawsBackground])
+        {
+            [[self backgroundColor] set];
+            NSRectFill(imageFrame);
+        }
         
-        imageFrame.origin.x += kImageOriginXOffset;
-        imageFrame.origin.y -= kImageOriginYOffset;
+        imageFrame.origin.y += 1;
         imageFrame.size = imageSize;
         
-        if ([controlView isFlipped])
-            imageFrame.origin.y += ceil((cellFrame.size.height + imageFrame.size.height) / 2);
-        else
-            imageFrame.origin.y += ceil((cellFrame.size.height - imageFrame.size.height) / 2);
-        [image compositeToPoint:imageFrame.origin operation:NSCompositeSourceOver];
-        
-        NSRect newFrame = cellFrame;
-        newFrame.origin.x += kTextOriginXOffset;
-        newFrame.origin.y += kTextOriginYOffset;
-        newFrame.size.height -= kTextHeightAdjust;
-        
-        [super drawWithFrame:newFrame inView:controlView];
+        [self.image drawInRect:imageFrame
+                      fromRect:NSZeroRect
+                     operation:NSCompositeSourceOver
+                      fraction:1.0
+                respectFlipped:YES
+                         hints:nil];
     }
-	else
+    else
 	{
-		if ([self isGroupCell])
+        if ([self isGroupCell])
 		{
-            // Center the text in the cellFrame, and call super to do thew ork of actually drawing.
-            CGFloat yOffset = floor((NSHeight(cellFrame) - [[self attributedStringValue] size].height) / 2.0);
+            // center the text in the cellFrame, and call super to do the work of actually drawing
+            CGFloat yOffset = floor((NSHeight(newCellFrame) - [[self attributedStringValue] size].height) / 2.0);
             
-            cellFrame.origin.y += yOffset;
-            cellFrame.size.height -= (kTextOriginYOffset*yOffset);
-            
-            [super drawWithFrame:cellFrame inView:controlView];
+            newCellFrame.origin.y += yOffset;
+            newCellFrame.size.height -= (kTextOriginYOffset*yOffset);
 		}
 	}
+    
+    [super drawWithFrame:newCellFrame inView:controlView];
 }
 
 // -------------------------------------------------------------------------------
-//	cellSize:
+//	cellSize
 // -------------------------------------------------------------------------------
 - (NSSize)cellSize
 {
     NSSize cellSize = [super cellSize];
-    cellSize.width += (image ? [image size].width : 0) + 3;
+    cellSize.width += (self.image ? [self.image size].width : 0) + 3;
     return cellSize;
 }
+
+
 
 - (NSRect)drawingRectForBounds:(NSRect)theRect
 {

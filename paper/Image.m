@@ -13,7 +13,9 @@
 		self.filePath = nil;
 		imageView = [[NSImageView alloc] init];
 		[imageView setAcceptsTouchEvents:NO];
-		[self addSubview:imageView];
+		//[self addSubview:imageView];
+        //[self addSubview:imageView positioned:NSWindowBelow relativeTo:self];
+        
 	}
 	
 	return self;
@@ -81,6 +83,49 @@
  */
 - (void)setImageURL:(NSURL*)name
 {
+    image = NULL;
+    CGImageSourceRef imageSource = NULL;
+    CFDictionaryRef properties = NULL;
+    CFNumberRef val;
+    
+    float *xdpiP = 0;
+    float *ydpiP = 0;
+    
+    CFURLRef url = (CFURLRef)name;
+    imageSource = CGImageSourceCreateWithURL(url, NULL);
+    if (imageSource == NULL)
+    {
+        fprintf(stderr, "Couldn't create image source from URL!\n");
+        return;
+    }
+    
+    properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+    if (properties != NULL)
+    {
+        val = CFDictionaryGetValue(properties, kCGImagePropertyDPIWidth);
+        if (val != NULL) {
+            CFNumberGetValue(val, kCFNumberCGFloatType, xdpiP);
+            val = CFDictionaryGetValue(properties, kCGImagePropertyDPIHeight);
+        }
+        if (val != NULL) {
+            CFNumberGetValue(val, kCFNumberCGFloatType, ydpiP);
+            CFRelease(properties);
+        }
+    }
+    
+    image = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
+    
+    CFRelease(imageSource);
+    
+    if (image == NULL) {
+        fprintf(stderr, "couldn't create image from image source !\n");
+        return;
+    }
+    
+    
+    
+    
+    
     self.filePath = name;
     NSImage *img = [[NSImage alloc] initWithContentsOfURL:filePath];
 	//NSImage* img = [[NSImage alloc] initWithContentsOfFile:name];
@@ -89,6 +134,7 @@
 	
 	[self setBoundRect:NSMakeRect(rtFrame.origin.x, rtFrame.origin.y, [img size].width, [img size].height)];
 	[img release];
+    NSLog(@"IS THIS AFTER DRAW BORDERS? 2");
 }
 
 
@@ -104,6 +150,7 @@
 	
 	[self setBoundRect:NSMakeRect(rtFrame.origin.x, rtFrame.origin.y, [img size].width, [img size].height)];
 	[img release];
+    NSLog(@"IS THIS AFTER DRAW BORDERS?");
 }
 
 
@@ -115,9 +162,13 @@
  */
 - (void)setBoundRect:(NSRect)rt
 {
-	rtFrame = CGRectStandardize(rt);
-    [self setFrame:CGRectMake(rtFrame.origin.x - 2, rtFrame.origin.y - 2, rtFrame.size.width + 4, rtFrame.size.height + 4)];
-	[imageView setFrame:CGRectMake(2, 2, rtFrame.size.width, rtFrame.size.height)];
+	//rtFrame = CGRectStandardize(rt);
+    //[self setFrame:CGRectMake(rtFrame.origin.x - 2, rtFrame.origin.y - 2, rtFrame.size.width + 4, rtFrame.size.height + 4)];
+	[imageView setFrame:CGRectMake(2, 2, rtFrame.size.width+2, rtFrame.size.height+2)];
+    
+    [super setBoundRect:rt];
+    NSLog(@"setting the bound rect");
+    
 }
 
 
@@ -128,25 +179,36 @@
 {
 	NSGraphicsContext *tvarNSGraphicsContext = [NSGraphicsContext currentContext];
 	CGContextRef ctx = (CGContextRef) [tvarNSGraphicsContext graphicsPort];
-    CGContextSetRGBStrokeColor( ctx, 1.0, 0.0, 0.0, 1.0 );
+    [self DrawElement:ctx];
     
+}
+
+-(void) DrawElement:(CGContextRef)context
+{
+    CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0 );
+    /*
     if ([imageView image] == nil)
     {
         NSLog(@"nil");
         NSBezierPath *rectanglePath = [NSBezierPath bezierPath];
-        NSRect rectangleFrame = NSMakeRect(2, 2, rtFrame.size.width, rtFrame.size.height);
+        NSRect rectangleFrame = NSMakeRect(2, 2, rtFrame.size.width+4, rtFrame.size.height+4);
         rectanglePath = [NSBezierPath bezierPathWithRect:rectangleFrame];
         [rectanglePath setLineWidth:[borderWidth floatValue]];
         [rectanglePath stroke];
     }
-     
     
+    [[self imageView] setNeedsDisplay:YES];
+    */
     
+    CGRect imageRect = CGRectMake(0., 0., CGImageGetWidth(image), CGImageGetHeight(image));
+    CGContextDrawImage(context, imageRect, image);
     
 	if (isSelected == YES) {
-		[self DrawBorderFrame:ctx];
+		NSLog(@"drawing border");
+        [self DrawBorderFrame:context];
 	}
 }
+
 
 - (NSInteger)IsPointInElement:(NSPoint)pt
 {

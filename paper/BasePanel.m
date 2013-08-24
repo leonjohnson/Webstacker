@@ -8,6 +8,7 @@
 
 #import "BasePanel.h"
 #import "Common.h"
+#import "AppDelegate.h"
 
 /** Corner clipping radius **/
 const CGFloat BasePanelCornerClipRadius = 8.0;
@@ -492,6 +493,19 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
 
 #pragma mark -
 #pragma mark Initialization
+
+- (BOOL)windowShouldClose:(id)sender
+{
+    NSLog(@"Delegate method called");
+    [[NSApp delegate] validateMenuItem:(NSMenuItem*)sender];
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    if ([[sender title] isEqualToString:@"Attributes"]) {
+        [sender setTitle:SHOW_ATTRIBUTES_PANEL];
+        NSLog(@"yep!");
+    }
+    [appDelegate togglePanelVisibility:sender];
+    return YES;
+}
 
 - (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag
 {

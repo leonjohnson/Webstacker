@@ -31,38 +31,36 @@
     context = [[NSGraphicsContext currentContext] graphicsPort];
     
     //// Color Declarations
-    NSColor* gradientColor = [NSColor colorWithCalibratedRed: 0.92 green: 0.92 blue: 0.92 alpha: 1];
-    NSColor* gradientColor2 = [NSColor colorWithCalibratedRed: 1 green: 1 blue: 1 alpha: 1];
-    NSColor* aColor = [NSColor colorWithCalibratedRed: 0.76 green: 0.76 blue: 0.76 alpha: 1];
-    NSColor* arrowColor = [NSColor colorWithCalibratedRed: 0.27 green: 0.27 blue: 0.27 alpha: 1];
-    NSColor* dropShadowColor = [NSColor colorWithCalibratedRed: 0.88 green: 0.88 blue: 0.88 alpha: 1];
+    NSColor* fillColor = [NSColor colorWithCalibratedRed: 0.96 green: 0.961 blue: 0.96 alpha: 1];
+    NSColor* strokeColor = [NSColor colorWithCalibratedRed: 0.8 green: 0.8 blue: 0.8 alpha: 1];
+    NSColor* shadowColor2 = [NSColor colorWithCalibratedRed: 0.859 green: 0.859 blue: 0.859 alpha: 1];
+    NSColor* gradientColor = [NSColor colorWithCalibratedRed: 0.755 green: 0.756 blue: 0.755 alpha: 1];
+    NSColor* fillColor3 = [NSColor colorWithCalibratedRed: 0.264 green: 0.264 blue: 0.264 alpha: 1];
     
     //// Gradient Declarations
-    NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:
-                            gradientColor, 0.16,
-                            [NSColor colorWithCalibratedRed: 0.96 green: 0.96 blue: 0.96 alpha: 1], 0.39,
-                            gradientColor2, 0.58, nil];
+    NSGradient* topGradient = [[NSGradient alloc] initWithColorsAndLocations:
+                               fillColor, 0.41,
+                               [NSColor colorWithCalibratedRed: 0.91 green: 0.91 blue: 0.91 alpha: 1], 0.78,
+                               shadowColor2, 1.0, nil];
     
     //// Shadow Declarations
-    NSShadow* shadow = [[NSShadow alloc] init];
-    [shadow setShadowColor: dropShadowColor];
-    [shadow setShadowOffset: NSMakeSize(0, -1)];
-    [shadow setShadowBlurRadius: 3];
-    
-    //// Abstracted Graphic Attributes
-    NSString* textContent = @"";
-    
+    NSShadow* innerShadow = [[NSShadow alloc] init];
+    [innerShadow setShadowColor: strokeColor];
+    [innerShadow setShadowOffset: NSMakeSize(2.1, 0.1)];
+    [innerShadow setShadowBlurRadius: 2];
     
     //// Rounded Rectangle Drawing
-    NSBezierPath* roundedRectanglePath = [NSBezierPath bezierPathWithRoundedRect: NSMakeRect(3, 3, 218, 25) xRadius: 6 yRadius: 6];
-    [NSGraphicsContext saveGraphicsState];
-    [shadow set];
-    CGContextBeginTransparencyLayer(context, NULL);
-    [gradient drawInBezierPath: roundedRectanglePath angle: -90];
-    CGContextEndTransparencyLayer(context);
-    [NSGraphicsContext restoreGraphicsState];
+    NSBezierPath* roundedRectanglePath = [NSBezierPath bezierPathWithRoundedRect: NSMakeRect(6, 6, 220, 28) xRadius: 3 yRadius: 3];
+    [topGradient drawInBezierPath: roundedRectanglePath angle: 90];
     
-    [aColor setStroke];
+    ////// Rounded Rectangle Inner Shadow
+    NSRect roundedRectangleBorderRect = NSInsetRect([roundedRectanglePath bounds], -innerShadow.shadowBlurRadius, -innerShadow.shadowBlurRadius);
+    roundedRectangleBorderRect = NSOffsetRect(roundedRectangleBorderRect, -innerShadow.shadowOffset.width, innerShadow.shadowOffset.height);
+    roundedRectangleBorderRect = NSInsetRect(NSUnionRect(roundedRectangleBorderRect, [roundedRectanglePath bounds]), -1, -1);
+    
+    NSBezierPath* roundedRectangleNegativePath = [NSBezierPath bezierPathWithRect: roundedRectangleBorderRect];
+    [roundedRectangleNegativePath appendBezierPath: roundedRectanglePath];
+    [roundedRectangleNegativePath setWindingRule: NSEvenOddWindingRule];
 	
 	if (self.isPtInElement == YES) { // highlight shape when the mouse is over the shape.
 		[self.elementHighlightColor set];
@@ -82,28 +80,66 @@
                                         [NSColor blackColor], NSForegroundColorAttributeName,
                                         textStyle, NSParagraphStyleAttributeName, nil];
     
-    [textContent drawInRect: textRect withAttributes: textFontAttributes];
+    //[textContent drawInRect: textRect withAttributes: textFontAttributes];
+    
+    
+    
+    [NSGraphicsContext saveGraphicsState];
+    {
+        NSShadow* innerShadowWithOffset = [innerShadow copy];
+        CGFloat xOffset = innerShadowWithOffset.shadowOffset.width + round(roundedRectangleBorderRect.size.width);
+        CGFloat yOffset = innerShadowWithOffset.shadowOffset.height;
+        innerShadowWithOffset.shadowOffset = NSMakeSize(xOffset + copysign(0.1, xOffset), yOffset + copysign(0.1, yOffset));
+        [innerShadowWithOffset set];
+        [[NSColor grayColor] setFill];
+        [roundedRectanglePath addClip];
+        NSAffineTransform* transform = [NSAffineTransform transform];
+        [transform translateXBy: -round(roundedRectangleBorderRect.size.width) yBy: 0];
+        [[transform transformBezierPath: roundedRectangleNegativePath] fill];
+    }
+    [NSGraphicsContext restoreGraphicsState];
+    
+    
+    [strokeColor setStroke];
+    [roundedRectanglePath setLineWidth: 1.5];
+    [roundedRectanglePath stroke];
+    
+    //// Bezier Drawing
+    NSBezierPath* bezierPath = [NSBezierPath bezierPath];
+    [bezierPath moveToPoint: NSMakePoint(206, 5.5)];
+    [bezierPath lineToPoint: NSMakePoint(206, 33.5)];
+    [strokeColor setStroke];
+    [bezierPath setLineWidth: 1];
+    [bezierPath stroke];
     
     
     //// Bezier 2 Drawing
     NSBezierPath* bezier2Path = [NSBezierPath bezierPath];
-    [bezier2Path moveToPoint: NSMakePoint(201.41, 4)];
-    [bezier2Path curveToPoint: NSMakePoint(205, 9) controlPoint1: NSMakePoint(205.19, 9) controlPoint2: NSMakePoint(205, 9)];
-    [bezier2Path lineToPoint: NSMakePoint(198, 9)];
-    [bezier2Path lineToPoint: NSMakePoint(201.41, 4)];
-    [arrowColor setFill];
-    [bezier2Path fill];
+    [gradientColor setStroke];
+    [bezier2Path setLineWidth: 1];
+    [bezier2Path stroke];
     
     
+    //// Bezier 3 Drawing
+    NSBezierPath* bezier3Path = [NSBezierPath bezierPath];
+    [bezier3Path moveToPoint: NSMakePoint(212.5, 18.5)];
+    [bezier3Path lineToPoint: NSMakePoint(215.5, 12.5)];
+    [bezier3Path lineToPoint: NSMakePoint(218.5, 18.5)];
+    [bezier3Path lineToPoint: NSMakePoint(212.5, 18.5)];
+    [bezier3Path closePath];
+    [fillColor3 setFill];
+    [bezier3Path fill];
     
-    //// Bezier Drawing
-    NSBezierPath* bezierPath = [NSBezierPath bezierPath];
-    [bezierPath moveToPoint: NSMakePoint(201.71, 17)];
-    [bezierPath curveToPoint: NSMakePoint(198, 12) controlPoint1: NSMakePoint(198, 12) controlPoint2: NSMakePoint(198, 12)];
-    [bezierPath lineToPoint: NSMakePoint(205, 12)];
-    [bezierPath lineToPoint: NSMakePoint(201.71, 17)];
-    [arrowColor setFill];
-    [bezierPath fill];
+    
+    //// Bezier 4 Drawing
+    NSBezierPath* bezier4Path = [NSBezierPath bezierPath];
+    [bezier4Path moveToPoint: NSMakePoint(212.5, 20.5)];
+    [bezier4Path lineToPoint: NSMakePoint(218.5, 20.5)];
+    [bezier4Path lineToPoint: NSMakePoint(215.7, 26.5)];
+    [bezier4Path lineToPoint: NSMakePoint(212.5, 20.5)];
+    [bezier4Path closePath];
+    [fillColor3 setFill];
+    [bezier4Path fill];
     
     
 

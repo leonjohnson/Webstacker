@@ -10,6 +10,7 @@
 	NSURL               *filePath;
 	NSImageView			*imageView;
     NSString            *imgPath;
+    CGImageRef          image;
 }
 
 @property (nonatomic, assign) NSURL *filePath;
