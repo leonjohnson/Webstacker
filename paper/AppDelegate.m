@@ -165,7 +165,7 @@
 	}*/
     
     //Airbrake initialisation
-    [ABNotifier startNotifierWithAPIKey:@"key"
+    [ABNotifier startNotifierWithAPIKey:@"208f2b2774afeb70cc750a0b7c8d655d"
                         environmentName:ABNotifierAutomaticEnvironment
                                  useSSL:NO // only if your account supports it
                                delegate:self];
