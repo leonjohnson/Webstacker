@@ -4110,26 +4110,49 @@ BOOL hasLeadingNumberInString(NSString* s)
             }
             
             
-            //NSString *imageID = [@"groupBox" stringByAppendingFormat:@"%i", CblockCount];
-            NSArray *codeArray = [NSArray arrayWithObjects:
-                                  @"\n        ",
-                                  @"<div id=\"",
-                                  blockidAsString,
-                                  @"\">",
-                                  @"<img src=\"",
-                                  [block valueForKey:@"content"],
-                                  @"\" ",
-                                  @"width=\"",
-                                  widthAsANumber,
-                                  @"\" height=\"",
-                                  heightAsAString,
-                                  @"\"",
-                                  @" alt=\"",
-                                  [block valueForKey:@"alt"],
-                                  @"\"/>",
-                                  @"</div>",
-                                  @"\n",
-                                  nil];
+                // put it all together
+            NSArray *codeArray = [NSArray array];
+            
+            if (widthAsANumber && heightAsAString)
+            {
+                codeArray = [NSArray arrayWithObjects:
+                             @"\n        ",
+                             @"<div id=\"",
+                             blockidAsString,
+                             @"\">",
+                             @"<img src=\"",
+                             [block valueForKey:@"content"],
+                             @"\" ",
+                             @" alt=\"",
+                             [block valueForKey:@"alt"],
+                             @"\"/>",
+                             @"</div>",
+                             @"\n",
+                             nil];
+            }
+            else
+            {
+                codeArray = [NSArray arrayWithObjects:
+                             @"\n        ",
+                             @"<div id=\"",
+                             blockidAsString,
+                             @"\">",
+                             @"<img src=\"",
+                             [block valueForKey:@"content"],
+                             @"\" ",
+                             @"width=\"",
+                             widthAsANumber,
+                             @"\" height=\"",
+                             heightAsAString,
+                             @"\"",
+                             @" alt=\"",
+                             [block valueForKey:@"alt"],
+                             @"\"/>",
+                             @"</div>",
+                             @"\n",
+                             nil];
+            }
+            
             NSLog(@" CODE ARRAY : %@", codeArray);
             NSString * tempString = [codeArray componentsJoinedByString:@""];
             code = [NSMutableString stringWithString:tempString];
@@ -4225,6 +4248,7 @@ BOOL hasLeadingNumberInString(NSString* s)
             
             NSLog(@"in para");
             NSLog(@"%@", self.textStyles);
+            NSString *floatType = @"left";
             //if "marginTop" in block:
             if ([block valueForKey:@"marginTop"] != nil)
             {
@@ -4400,11 +4424,24 @@ BOOL hasLeadingNumberInString(NSString* s)
             code = [NSMutableString stringWithString:[arrayF componentsJoinedByString:@""]];
             
             NSLog(@"after concatenating : %@", code);
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             //width
             NSNumber *widthAsANumber = nil;
-            if ([block objectForKey:@"widthAsPercentage"])
+            if ([block objectForKey:WIDTH_AS_A_PERCENTAGE])
             {
-                CWidth = [[block objectForKey:@"widthAsPercentage"]floatValue];
+                CWidth = [[block objectForKey:WIDTH_AS_A_PERCENTAGE]floatValue];
                 widthAsANumber = [NSNumber numberWithFloat:CWidth];
             }
             else
@@ -4425,32 +4462,84 @@ BOOL hasLeadingNumberInString(NSString* s)
                 heightAsAString = @"auto";
             }
             
+            CmarginTop = [[block valueForKey:@"marginTop"]intValue];
+            CmarginBottom = [[block valueForKey:@"marginBottom"]intValue];
+            CmarginLeft = [[block valueForKey:@"marginLeft"]intValue];
+            CmarginRight = [[block valueForKey:@"marginRight"]intValue];
+            
+            if ([block objectForKey:TOP_MARGIN_FOR_ROW] != nil) {
+                CmarginTop = [[block objectForKey:TOP_MARGIN_FOR_ROW] integerValue] + CmarginTop;
+            }
+            
+            //margin Left
+            NSNumber *marginLeftAsANumber = [NSNumber numberWithInt:0];
+            if ([block objectForKey:MARGIN_LEFT_AS_A_PERCENTAGE])
+            {
+                marginLeftAsANumber = [block objectForKey:MARGIN_LEFT_AS_A_PERCENTAGE];
+            }
+            if ([block objectForKey:@"marginLeft"] && ![block objectForKey:MARGIN_LEFT_AS_A_PERCENTAGE])
+            {
+                marginLeftAsANumber = [NSNumber numberWithInt:CmarginLeft];
+            }
+            
+            //margin Right
+            NSNumber *marginRightAsANumber = [NSNumber numberWithInt:0];
+            if ([block objectForKey:MARGIN_RIGHT_AS_A_PERCENTAGE])
+            {
+                marginRightAsANumber = [block objectForKey:MARGIN_RIGHT_AS_A_PERCENTAGE];
+            }
+            if ([block objectForKey:@"marginRight"] && ![block objectForKey:MARGIN_RIGHT_AS_A_PERCENTAGE])
+            {
+                marginRightAsANumber = [NSNumber numberWithInt:CmarginRight];
+            }
+            
+            
+            
+            
+            
+            backgroundColor = [block valueForKey:@"backgroundColor"];
+            NSMutableArray *arrayG = [NSMutableArray arrayWithObjects:
+                                      [block objectForKey:CLASS_OR_ID_SYMBOL],
+                                      blockidAsString,
+                                      @"{",
+                                      @"\n",
+                                      @"  margin: ",
+                                      [NSNumber numberWithInt:CmarginTop],
+                                      @"px ",
+                                      marginRightAsANumber,
+                                      elementLayoutType,
+                                      @" ",
+                                      [NSNumber numberWithInt:CmarginBottom],
+                                      @"px ",
+                                      marginLeftAsANumber,
+                                      elementLayoutType,
+                                      @";",
+                                      @"\n",
+                                      //@"  background-color: ",
+                                      //backgroundColor,
+                                      //@";",
+                                      //@"\n",
+                                      @"  width: ",
+                                      widthAsANumber,
+                                      elementLayoutType,
+                                      @";",
+                                      @"\n",
+                                      @"  height: ",
+                                      heightAsAString,
+                                      @"px;",
+                                      @"\n",
+                                      @"  float:",
+                                      floatType,
+                                      @"; ",
+                                      @"\n",
+                                      shadowCSS,
+                                      @"\n",
+                                      nil];
+            
+            [arrayG addObject:@"}\n\n"];
+            
             NSLog(@"At step : 10 with classorid as : %@", [block objectForKey:CLASS_OR_ID_WORD]);
-            NSArray *arrayG = [NSArray arrayWithObjects:
-                               [block objectForKey:CLASS_OR_ID_SYMBOL],
-                               blockidAsString,
-                               @" {",
-                               @"  margin: ",
-                               [NSNumber numberWithInt:CmarginTop],
-                               @"px ",
-                               [NSNumber numberWithInt:CmarginRight],
-                               @"px ",
-                               [NSNumber numberWithInt:CmarginBottom],
-                               @"px ",
-                               [NSNumber numberWithInt:CmarginLeft],
-                               @"px;",
-                               @"\n",
-                               @"  width: ",
-                               widthAsANumber,
-                               @"px;"
-                               @"\n",
-                               @"  height: ",
-                               heightAsAString,
-                               @"px;",
-                               @"  float: left;",
-                               @"}",
-                               @"\n",
-                               nil];
+
             Cstyle = [NSMutableString stringWithString:[Cstyle stringByAppendingString:[[arrayG componentsJoinedByString:@""] stringByAppendingString:styleString]]];
             
         }
