@@ -1183,9 +1183,9 @@
             [gb setBoundRect:NSMakeRect(firstX, topY, width, height)];
             [gb setValue:[NSNumber numberWithFloat:firstX] forKey:xcoordinate];
             [gb setValue:[NSNumber numberWithFloat:topY] forKey:ycoordinate];
-            [gb setValue:[NSNumber numberWithInt:width] forKey:@"width"];
-            [gb setValue:[NSNumber numberWithInt:height] forKey:@"height"];
-            [gb setRtFrame:NSMakeRect(firstX, topY, width, height)];
+            [gb setValue:[NSNumber numberWithFloat:ceil(width)] forKey:@"width"];
+            [gb setValue:[NSNumber numberWithFloat:ceil(height)] forKey:@"height"];
+            [gb setRtFrame:NSMakeRect(firstX, topY, ceil(width), ceil(height))];
             NSLog(@"rtFrame : %@", NSStringFromRect(gb.rtFrame) );
             
         }
@@ -3553,12 +3553,12 @@ BOOL hasLeadingNumberInString(NSString* s)
             GroupingBox *imInAGroupingBox = [self whichGroupingBoxIsElementIn:dc];
             if (flexibleWidth && imInAGroupingBox)
             {
-                NSLog(@"AH!");
+                NSLog(@"AH! Speaking to id: %@", [dc objectForKey:@"elementid"]);
                 CGFloat target = [[dc objectForKey:@"width"]floatValue];
                 CGFloat context = [[[[imInAGroupingBox insideTheBox] objectAtIndex:0] objectForKey:@"width"] floatValue]; // get it's width
                 CGFloat flexibleWidthWhenInsideGroupingBox = (target/context)*100;
                 [dc setObject:[NSNumber numberWithFloat:flexibleWidthWhenInsideGroupingBox] forKey:WIDTH_AS_A_PERCENTAGE];
-                
+                NSLog(@"Just set: %@ with a new flexWidth of: %f", [dc objectForKey:@"elementid"], flexibleWidthWhenInsideGroupingBox);
             }
             
             
@@ -3605,6 +3605,28 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSLog(@"GOT HERE THREE.. trying to add %@... to %@", newFlexibleWidth, header);
             [header setObject:newFlexibleWidth forKey:WIDTH_AS_A_PERCENTAGE];
             NSLog(@"WE OUT");
+        }
+    }
+    else
+    {
+        for (GroupingBox *g in groupingBoxes)
+        {
+            NSMutableDictionary *header = [g.insideTheBox objectAtIndex:0]; // get the header inforation as each groupingBox now has item 0 as
+            
+            for (NSDictionary *d in g.insideTheBox)
+            {
+                if ([[d objectForKey:LAYOUT_KEY] isEqualToString:@"%"])
+                {
+                    
+                    //Set the flexible width of the element
+                    CGFloat fw = [self sizeAsPercentageOfHighestContainingElement:g].width; // Get the width as a percentage of it's parent
+                    NSNumber *newFlexibleWidth = [NSNumber numberWithFloat:fw];
+                    NSLog(@"GOT HERE Setting flexible width to GROUPINGBOX.. Flexi width: %@... header: %@", newFlexibleWidth, header);
+                    
+                    [header setObject:newFlexibleWidth forKey:WIDTH_AS_A_PERCENTAGE]; // Set the groupingBoxes width as flexible
+                }
+            }
+            
         }
     }
     
@@ -3797,7 +3819,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         if (![formatter numberFromString:[block objectForKey:@"id"]]) //if I can't get a number from the then it must be a user entered ID
             //BUG: numberFromString will parse 6men as a number so I need to correct this code.
         {
-            blockidAsString = [[block objectForKey:@"id"] lowercaseString];
+            blockidAsString = [block objectForKey:@"id"]; // was lowercase, but not sure why
         }
         else
         {
