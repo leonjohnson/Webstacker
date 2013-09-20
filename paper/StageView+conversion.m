@@ -591,6 +591,7 @@
     
     //which grouping box is this element in
     GroupingBox *myGroupingBox = [self whichGroupingBoxIsElementIn:element];
+    NSLog(@"Element: %@ is inside groupingBox: %@", [element objectForKey:ID_KEYWORD], myGroupingBox.elementid);
     
     
     //what is the NSRect from this element to the end of the grouping box
@@ -822,11 +823,12 @@
 }
 
 
--(GroupingBox*)whichGroupingBoxIsElementIn:(NSDictionary*)elementBeingTested
+-(GroupingBox*)whichGroupingBoxIsElementIn:(NSDictionary*)elementBeingTested // update this so that it returns the gb closest to it
 {
     
     NSArray *ag = nil;
-    GroupingBox *groupingb = nil;
+    GroupingBox *closestGB = nil;
+    NSMutableArray *gbCandidates = [NSMutableArray array];
     
     for (GroupingBox *box in groupingBoxes)
     {
@@ -835,12 +837,25 @@
         {
             if ([elementBeingTested isEqualToDictionary:dict] == YES)
             {
-                return box;
+                [gbCandidates addObject:box];
+                //return box;
             }
         }
         
+        
     }
-    return groupingb;
+    
+    NSSortDescriptor *horizontalSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"xcoordinate" ascending:YES];
+    NSArray *horizontally = [NSArray arrayWithObject: horizontalSortDescriptor];
+    
+    if (gbCandidates.count >0)
+    {
+        closestGB = [[NSArray arrayWithArray:[gbCandidates sortedArrayUsingDescriptors:horizontally]] lastObject];
+    }
+        
+    
+    
+    return closestGB;
 }
 
 
@@ -1908,7 +1923,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 currentPoint = longestEffectiveRange.location + longestEffectiveRange.length;
                 loopCount+=1;
                 NSLog(@"Loop Count : %i", loopCount);
-                NSString *subStringName = [NSString stringWithFormat:@"substring-%i",loopCount];
+                NSString *subStringName = [NSString stringWithFormat:@"%@-substring-%i",ele.elementid,loopCount];
                 [self.textStyles setObject:subStringName forKey:@"styleid"];
                 newDict = [NSDictionary dictionaryWithDictionary:self.textStyles];
                 //Dictionary and not Mutable dictionary so once it's in the daddy dictionary it doesn't change - which was annoying and a bug!
@@ -3753,7 +3768,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSMutableString *groupBoxIDCode = [NSMutableString string];
     NSMutableArray *groupBoxMarginTop = [NSMutableArray array];
     NSMutableArray *groupBoxMarginRight = [NSMutableArray array];
-    NSMutableArray *groupBoxWidth = [NSMutableArray array];
+    NSString *groupBoxWidth = @"";
     
     
     NSMutableArray *firstObjectsInGroups = [NSMutableArray array]; // We need to know when to open a groupbox div...
@@ -3839,8 +3854,18 @@ BOOL hasLeadingNumberInString(NSString* s)
             }
             //[groupBoxOpeningDiv appendString:@"class=\"groupBox\" "];
             NSMutableDictionary *groupingBoxInQuestion = [NSMutableDictionary dictionary];
-            for (NSArray *each in groupings)
-            {
+            __block NSArray *each = [NSArray array];
+            
+            [groupings enumerateObjectsUsingBlock:^(id groupB, NSUInteger index, BOOL *stop)
+             {
+                 if ([[[groupB objectAtIndex:0]valueForKey:@"firstObject"] isEqualToString:blockid] )
+                 {
+                     each = groupB;
+                 }
+             } ];
+            
+            //for (NSArray *each in groupings)
+            //{
                 NSLog(@"EACH CONTAINS : %@", each);
                 if ([[[each objectAtIndex:0]valueForKey:@"firstObject"] isEqualToString:blockid] )
                 {
@@ -3854,88 +3879,98 @@ BOOL hasLeadingNumberInString(NSString* s)
                     }
                     else
                     {
-                        groupBoxWidth = [[each objectAtIndex:0] valueForKey:@"width"];
-                        groupingBoxLayoutType = @"px";
+                        if ([[each objectAtIndex:0] valueForKey:WIDTH_AS_A_PERCENTAGE] != nil) // if the groupingBox has a value for the width_as_% attribute, then use that.
+                        {
+                            groupBoxWidth = [[each objectAtIndex:0] valueForKey:WIDTH_AS_A_PERCENTAGE]; // so each has a valueforkey of widthas% but each[0] doe not. Check this
+                            groupingBoxLayoutType = @"%";
+                            NSLog(@"in it");
+                        }
+                        else
+                        {
+                            groupBoxWidth = [[each objectAtIndex:0] valueForKey:@"width"];
+                            groupingBoxLayoutType = @"px";
+                        }
+                        
                     }
                     
                     groupingBoxInQuestion = [each objectAtIndex:0];
                     NSLog(@"NOW : %i", CblockCount);
+                    
+                    
+                    if ([groupingBoxInQuestion objectForKey:@"idPreviouslyKnownAs"])
+                    {
+                        NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+                        [f setNumberStyle:NSNumberFormatterDecimalStyle];
+                        NSNumber * myNumber = [f numberFromString:[groupingBoxInQuestion objectForKey:@"idPreviouslyKnownAs"]];
+                        
+                        if (myNumber != nil) // so it's a number as a NSString
+                        {
+                            groupBoxID = [NSMutableString stringWithString:previousElementId];
+                        }
+                        else // its an NSString with letters not just numbers
+                        {
+                            groupBoxID = [groupingBoxInQuestion objectForKey:@"idPreviouslyKnownAs"];
+                        }
+                        
+                        
+                    }
+                    else
+                    {
+                        groupBoxID = [NSMutableString stringWithString:[@"groupBox" stringByAppendingFormat:@"%i", CblockCount]];
+                    }
+                    
+                    
+                    
+                    // keypaths below needed?
+                    keyPathMarginTop = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@.GroupBoxMarginTop", blockid]];
+                    keyPathMarginRight = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@.GroupBoxMarginRight", blockid]];
+                    keyPathWidth = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@.Width", blockid]];
+                    NSLog(@"At step : 5 gbiq = %@", groupingBoxInQuestion);
+                    
+                    if ([groupingBoxInQuestion objectForKey:@"idPreviouslyKnownAs"])
+                    {
+                        //
+                    }
+                    else
+                    {
+                        NSLog(@"GROUPINGBOX IN HERE!! : %@ and %@ ! and width: %@", groupBoxMarginTop, groupBoxMarginRight, groupBoxWidth);
+                        groupBoxBits = [NSMutableArray arrayWithObjects:
+                                        @"#",
+                                        groupBoxID,
+                                        @"{",
+                                        @"\n",
+                                        @"  margin:",
+                                        groupBoxMarginTop,
+                                        @"px",
+                                        @" ",
+                                        groupBoxMarginRight,
+                                        @"px",
+                                        @" ",
+                                        @"0 0;",
+                                        @"\n",
+                                        @"  width: ",
+                                        groupBoxWidth,
+                                        groupingBoxLayoutType,
+                                        @";",
+                                        @"\n",
+                                        @"  float: left;",
+                                        @"\n",
+                                        @"}",
+                                        @"\n",
+                                        
+                                        nil];
+                    }
+                    
+                    
+                    groupBoxIDCode = [NSMutableString stringWithString:[groupBoxBits componentsJoinedByString:@""]];
+                    NSLog(@"TEST 4. Which is %@", groupBoxIDCode);
+                    Cstyle = [NSMutableString stringWithString:[Cstyle stringByAppendingString:groupBoxIDCode]];
+                    NSLog(@"CSTYLE AT THIS POINT SHOULD CONTAIN GB1 : %@",Cstyle);
                 }
-            }
+            //}
             
-            if ([groupingBoxInQuestion objectForKey:@"idPreviouslyKnownAs"])
-            {
-                NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
-                [f setNumberStyle:NSNumberFormatterDecimalStyle];
-                NSNumber * myNumber = [f numberFromString:[groupingBoxInQuestion objectForKey:@"idPreviouslyKnownAs"]];
-                
-                if (myNumber != nil) // so it's a number as a NSString
-                {
-                    groupBoxID = [NSMutableString stringWithString:previousElementId];
-                }
-                else // its an NSString with letters not just numbers
-                {
-                    groupBoxID = [groupingBoxInQuestion objectForKey:@"idPreviouslyKnownAs"];
-                }
-                
-                
-            }
-            else
-            {
-                groupBoxID = [NSMutableString stringWithString:[@"groupBox" stringByAppendingFormat:@"%i", CblockCount]];
-            }
-            
-            
-            
-            // keypaths below needed?
-            keyPathMarginTop = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@.GroupBoxMarginTop", blockid]];
-            keyPathMarginRight = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@.GroupBoxMarginRight", blockid]];
-            keyPathWidth = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@.Width", blockid]];
-            NSLog(@"At step : 5 gbiq = %@", groupingBoxInQuestion);
-            
-            if ([groupingBoxInQuestion objectForKey:@"idPreviouslyKnownAs"])
-            {
-                //
-            }
-            else
-            {
-                NSLog(@"GROUPINGBOX IN HERE!! : %@ and %@ !", groupBoxMarginTop, groupBoxMarginRight);
-                groupBoxBits = [NSMutableArray arrayWithObjects:
-                                @"#",
-                                groupBoxID,
-                                @"{",
-                                @"\n",
-                                @"  margin:",
-                                groupBoxMarginTop,
-                                @"px",
-                                
-                                @" ",
-                                groupBoxMarginRight,
-                                @"px",
-                                @" ",
-                                @"0 0;",
-                                @"\n",
-                                
-                                @"  width: ",
-                                groupBoxWidth,
-                                groupingBoxLayoutType,
-                                @";",
-                                @"\n",
-                                
-                                @"  float: left;",
-                                @"\n",
-                                @"}",
-                                @"\n",
-                                
-                                nil];
-            }
-            
-            
-            groupBoxIDCode = [NSMutableString stringWithString:[groupBoxBits componentsJoinedByString:@""]];
-            NSLog(@"TEST 4. Which is %@", groupBoxIDCode);
-            Cstyle = [NSMutableString stringWithString:[Cstyle stringByAppendingString:groupBoxIDCode]];
-            NSLog(@"CSTYLE AT THIS POINT SHOULD CONTAIN GB1 : %@",Cstyle);
-        }
+
+        } // end of if ([firstObjectsInGroups containsObject:blockid])
         
         //  Set the end of the GrouupBox code
         if ([lastObjectsInGroups containsObject:blockid])
@@ -4554,10 +4589,12 @@ BOOL hasLeadingNumberInString(NSString* s)
                                       floatType,
                                       @"; ",
                                       @"\n",
-                                      shadowCSS,
-                                      @"\n",
                                       nil];
             
+            if (shadowCSS != nil) {
+                [arrayG addObject:shadowCSS];
+                [arrayG addObject:@"\n"];
+            }
             [arrayG addObject:@"}\n\n"];
             
             NSLog(@"At step : 10 with classorid as : %@", [block objectForKey:CLASS_OR_ID_WORD]);
@@ -4713,7 +4750,10 @@ BOOL hasLeadingNumberInString(NSString* s)
                                       shadowCSS,
                                       @"\n",
                                       nil];
-            
+            if (shadowCSS != nil)
+            {
+                [arrayI addObjectsFromArray:@[shadowCSS, @"\n"]];
+            }
             NSArray *borderStrokeArray = [NSArray arrayWithObjects:
                                           @"  border: ",
                                           borderStrokeString,
