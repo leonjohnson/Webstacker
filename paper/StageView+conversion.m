@@ -590,8 +590,25 @@
     int borderDistance;
     
     //which grouping box is this element in
-    GroupingBox *myGroupingBox = [self whichGroupingBoxIsElementIn:element];
-    NSLog(@"Element: %@ is inside groupingBox: %@", [element objectForKey:ID_KEYWORD], myGroupingBox.elementid);
+    __block GroupingBox *myGroupingBox = nil;
+    
+    [self.groupingBoxes enumerateObjectsUsingBlock:^(GroupingBox *box, NSUInteger index, BOOL *stop)
+     {         
+         if ([box.idPreviouslyKnownAs isEqualToString:[[element objectForKey:PARENT_ID] objectForKey:DIV_TAG]])
+         {
+             NSLog(@"%@ Found his daddy: %@", [element valueForKey:ID_KEYWORD], box.idPreviouslyKnownAs);
+             myGroupingBox = box;
+             *stop = YES;
+         }
+         
+     } ];
+    
+    
+    if (myGroupingBox == nil)
+    {
+        myGroupingBox = [self whichGroupingBoxIsElementIn:element];
+    }
+    NSLog(@"Element: %@ is inside groupingBox: %@", [element objectForKey:ID_KEYWORD], myGroupingBox.idPreviouslyKnownAs);
     
     
     //what is the NSRect from this element to the end of the grouping box
@@ -631,9 +648,8 @@
                                 ([[element objectForKey:ycoordinate]floatValue] - myGroupingBox.rtFrame.origin.y)
                                 );
         borderDistance = ( [[element objectForKey:ycoordinate]intValue] - myGroupingBox.rtFrame.origin.y );
-        NSLog(@"Element object is : %@. GroupingBox is y: %f, x:%f, w:%f", element, myGroupingBox.rtFrame.origin.y, myGroupingBox.rtFrame.origin.x, myGroupingBox.rtFrame.size.width );
+        NSLog(@"Element object is : %@. GroupingBox is y: %f, x:%f, w:%f", [element objectForKey:ID_KEYWORD], myGroupingBox.rtFrame.origin.y, myGroupingBox.rtFrame.origin.x, myGroupingBox.rtFrame.size.width );
         NSLog(@"Border distance to the TOP is :%i", borderDistance);
-        NSLog(@"TOP RECT : %@", NSStringFromRect(rectToTest));
     }
     
     if (sideToTest == BOTTOM)
@@ -651,7 +667,6 @@
     
     
     
-    NSLog(@"this far0");
     //are there grouping boxes in this rect, order them by closest distance
     BOOL contained;
     int nearest;
@@ -665,16 +680,13 @@
             [groubingBoxesInPath addObject:gb];
         }
     }
-    NSLog(@"this far1");
     NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:ycoordinate ascending:YES];
     NSSortDescriptor *horizontally = [[NSSortDescriptor alloc] initWithKey:xcoordinate ascending:YES];
     NSArray *horizontalSortDescriptor = [NSArray arrayWithObject: horizontally];
     NSArray *verticalSortDescriptor = [NSArray arrayWithObject: vertically];
     if ([groubingBoxesInPath count] > 0)
     {
-        NSLog(@"this far2");
         [groubingBoxesInPath sortedArrayUsingDescriptors:horizontalSortDescriptor];
-        NSLog(@"this far3");
     }
     
     
@@ -682,10 +694,8 @@
     //are there other elements in this rect, order them by closest distance
     for (NSDictionary *dc in myGroupingBox.insideTheBox)
     {
-        NSLog(@"this far4");
         if ([dc isEqualToDictionary:element] == NO)
         {
-            NSLog(@"this far5");
             NSRect dcRect = NSMakeRect([[dc objectForKey:xcoordinate]floatValue],
                                        [[dc objectForKey:ycoordinate]floatValue],
                                        [[dc objectForKey:@"width"] floatValue],
@@ -695,17 +705,13 @@
             {
                 NSLog(@"IT intersects");
                 [elementsInPath addObject:dc];
-                NSLog(@"ADDED IT TO ELEMENTSINPATH ARRAY.");
             }
         }
-        NSLog(@"this far6");
         
     }
     if ([elementsInPath count] > 0)
     {
-        NSLog(@"this far7");
         elementsInPath = [NSMutableArray arrayWithArray: [elementsInPath sortedArrayUsingDescriptors:horizontalSortDescriptor]];
-        NSLog(@"this far8");
         if ([groubingBoxesInPath count] > 0)
         {
             NSLog(@"ERROR IN 1");
@@ -736,7 +742,6 @@
             NSLog(@"Nope");
         }
         
-        NSLog(@"this far9");
     }
     else
     {
@@ -828,7 +833,6 @@
     
     NSArray *ag = nil;
     GroupingBox *closestGB = nil;
-    NSMutableArray *gbCandidates = [NSMutableArray array];
     
     for (GroupingBox *box in groupingBoxes)
     {
@@ -837,22 +841,12 @@
         {
             if ([elementBeingTested isEqualToDictionary:dict] == YES)
             {
-                [gbCandidates addObject:box];
-                //return box;
+                return box;
             }
         }
         
         
     }
-    
-    NSSortDescriptor *horizontalSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"xcoordinate" ascending:YES];
-    NSArray *horizontally = [NSArray arrayWithObject: horizontalSortDescriptor];
-    
-    if (gbCandidates.count >0)
-    {
-        closestGB = [[NSArray arrayWithArray:[gbCandidates sortedArrayUsingDescriptors:horizontally]] lastObject];
-    }
-        
     
     
     return closestGB;
@@ -865,7 +859,7 @@
 -(BOOL)isClosestObjectToMyLeftAnElement: (NSDictionary *)elementBeingTested
 {
     //This method is used to determine whether or not
-    NSLog(@"isClosestObjectToMyLeftAnElement just got %@", elementBeingTested);
+    NSLog(@"isClosestObjectToMyLeftAnElement just got %@", [elementBeingTested objectForKey:ID_KEYWORD]);
     BOOL overlap,isElementClosest;
     NSMutableArray *overlappingItems = [NSMutableArray array];
     GroupingBox *grb = [self whichGroupingBoxIsElementIn:elementBeingTested];
@@ -1093,7 +1087,6 @@
 
 -(NSMutableArray*)arrayOfSoloItems: (NSArray *)initalSorting
 {
-    NSLog(@"Received : %@", initalSorting);
     self.solos = [NSMutableArray array];
     for (NSDictionary *elementia in initalSorting)
     {
@@ -1125,7 +1118,7 @@
         if ([inMyRightRange count] == 0)
         {
             [self.solos addObject:elementia];
-            NSLog(@"SOLO IS: %@", elementia);
+            NSLog(@"SOLO IS: %@", [elementia objectForKey:ID_KEYWORD]);
         }
     }
     
@@ -1227,6 +1220,13 @@
     for (GroupingBox *box in groupingBoxes)
     {
         NSLog(@"previously know as: %@", box.idPreviouslyKnownAs);
+        
+        for (NSDictionary *ele in self.sortedArray)
+        {
+            NSLog(@"2. sorted array marginTop: %@", [ele objectForKey:@"marginTop"]);
+        }
+        
+        
         AG = [box insideTheBox];
         NSMutableDictionary *highest = [[AG sortedArrayUsingDescriptors:verticalSortDescriptor] lastObject];
         
@@ -1234,16 +1234,20 @@
         int boxMarginTop = [[box valueForKey:ycoordinate]intValue] - [[self highestYcoordinateInMyRow:highest] intValue]; //was [self marginToElementAboveMe:highest];
         NSLog(@"TEST3 TEST3 : %i and %i", boxMarginTop, [[box valueForKey:ycoordinate]intValue] );
         [box setMarginTop:boxMarginTop];
-        NSLog(@"pla2");
+        NSLog(@"pla2: %i", boxMarginTop);
         [highest setObject:[NSNumber numberWithInt:0] forKey:@"marginTop"]; //The row will take care of marginTops for me
         // PLACE ELSEWHERE IN SCRIPT - WRONG METHOD.
         
+        for (NSDictionary *ele in self.sortedArray)
+        {
+            NSLog(@"3. sorted array marginTop: %@", [ele objectForKey:@"marginTop"]);
+        }
         
         
         if ([box idPreviouslyKnownAs] == nil)
         {
             // GET THE HIGHEST OBJECT and use its Y Coordinate to set the highest y coordinate of the grouping box
-            
+            NSLog(@"idPreviouslyKnownAs = NIL");
             
             if ([AG count] > 0)
             {
@@ -1305,14 +1309,28 @@
                      [element setObject:marginTop forKey:@"marginTop"];
                      }
                      */
-                    marginTop = [NSNumber numberWithInt: [self marginToObjectWithinTransformedGroupingBox:element onSide:TOP]];
-                    [element setObject:marginTop forKey:@"marginTop"];
+                    if ([element objectForKey:PARENT_ID] != nil)
+                    {
+                        NSLog(@"Element %@ has a parent id of : %@", [element objectForKey:ID_KEYWORD], [element objectForKey:PARENT_ID]);
+                        marginTop = [NSNumber numberWithInt: [self marginToObjectWithinTransformedGroupingBox:element onSide:TOP]];
+                    }
+                    
+                    /*
+                    if (marginTop != nil)
+                    {
+                        [element setObject:marginTop forKey:@"marginTop"];
+                    }
+                     */
+                
                     
                 }
             }
         }
         
-        
+        for (NSDictionary *ele in self.sortedArray)
+        {
+            NSLog(@"4. sorted array marginTop: %@", [ele objectForKey:@"marginTop"]);
+        }
         
         //  Set all objects within this Grouping that does not have anything above it (thats inside the Grouping) to have the necessary marginTops
         if ( ([box idPreviouslyKnownAs] != nil) )
@@ -1322,15 +1340,26 @@
             // get the objects to their right
             // get the next one highest with an empty left
             // set its margin top right and possibly left if its closest left object is the wall
+            
+            NSLog(@"idPreviouslyKnownAs != NIL");
+            
+            
             NSMutableArray *sortedArrayInsideGroupingBox = [NSMutableArray array];
             self.solos = [[NSMutableArray alloc]init];
             box.insideTheBox = [NSMutableArray arrayWithArray:[box.insideTheBox sortedArrayUsingDescriptors:verticalSortDescriptor]];
+            
+            for (NSDictionary *ele in self.sortedArray)
+            {
+                NSLog(@"1. sorted array marginTop: %@", [ele objectForKey:@"marginTop"]);
+            }
             
             
             
             self.solos = [self arrayOfSoloItems:box.insideTheBox];
             for (NSMutableDictionary *g in self.solos)
             {
+                
+                NSLog(@"Just checking. But id = %@", [g objectForKey:ID_KEYWORD]);
                 
                 int marginTop = [self marginToObjectWithinTransformedGroupingBox:g onSide:TOP];
                 int marginRight = [self marginToObjectWithinTransformedGroupingBox:g onSide:RIGHT];
@@ -1420,20 +1449,27 @@
                     
                     if (marginLeft2)
                         [next setObject:[NSNumber numberWithInt:marginLeft2] forKey:@"marginLeft"];
+                    
                 }
                 
             }
             
         }
         
+        for (NSDictionary *ele in self.sortedArray)
+        {
+            NSLog(@"100. Element %@ has a marginTop of: %@", [ele objectForKey:ID_KEYWORD], [ele objectForKey:@"marginTop"]);
+        }
         
     }
+    
+    
 }
 
 
 -(void)setGroupingBoxMargin: (GroupingBox*)g
 {
-    NSLog(@"ADJUSTMENTS SECTION. CURRENT MARGINTOP : %d FOR OBJECT WITH ID :%@", g.marginTop, [g valueForKey:ycoordinate] );
+    NSLog(@"ADJUSTMENTS SECTION. CURRENT MARGINTOP : %d FOR OBJECT WITH ID :%@", g.marginTop, g.idPreviouslyKnownAs );
     
     // find the closest element above me in this row
     int offset;
@@ -2527,10 +2563,12 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     NSLog(@"page title is : %@", self.pageTitle);
     
-    NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:@"ycoordinate" ascending:NO];
-    NSSortDescriptor *horizontally = [[NSSortDescriptor alloc] initWithKey:@"xcoordinate" ascending:YES];
+    NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:ycoordinate ascending:NO];
+    NSSortDescriptor *horizontally = [[NSSortDescriptor alloc] initWithKey:xcoordinate ascending:YES];
+    NSSortDescriptor *horizontallyFar = [[NSSortDescriptor alloc] initWithKey:FAR_RIGHT_X ascending:YES];
     
     NSArray *horizontalSortDescriptor = [NSArray arrayWithObject: horizontally];
+    NSArray *horizontalFarSortDescriptor = [NSArray arrayWithObject: horizontallyFar];
     NSArray *verticalSortDescriptor = [NSArray arrayWithObject: vertically];
     
     
@@ -2547,6 +2585,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSUInteger indexCount = 0;
     for (NSMutableDictionary *dc in self.sortedArray) //  Was LeftToRightTopToBottom
     {
+        NSLog(@"I am : %@", [dc objectForKey:ID_KEYWORD]);
         NSLog(@"Index =%lu and count=%lu", indexCount+1, [self.sortedArray count]); //  Was LeftToRightTopToBottom
         NSUInteger myXlength = [[dc valueForKey:@"width"] unsignedIntegerValue];
         NSUInteger myYlength = [[dc valueForKey:@"height"] unsignedIntegerValue];
@@ -2585,11 +2624,14 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         for (NSMutableDictionary *item in self.sortedArray)
         {
-            if ( [[item valueForKey:bottomYcoordinate] intValue]  < [[dc valueForKey:bottomYcoordinate] intValue] && ![[item objectForKey:@"tag"] isEqual:CONTAINER_TAG]) //   if it's Y coordinate is above me (and in my northern range, see below)
+            NSLog(@"ITEM = %f", [[item valueForKey:bottomYcoordinate] floatValue]);
+            NSLog(@"DC = %f", [[dc valueForKey:bottomYcoordinate] floatValue]);
+            
+            if ( [[item valueForKey:bottomYcoordinate] floatValue] < [[dc valueForKey:bottomYcoordinate] floatValue] && ![[item objectForKey:@"tag"] isEqual:CONTAINER_TAG]) //   if it's Y coordinate is above me (and in my northern range, see below)
             {
                 
                 //  Check if its in my Northern Range
-                NSUInteger compareToXCoordinate = [[item valueForKey:@"xcoordinate"] unsignedIntegerValue];
+                NSUInteger compareToXCoordinate = [[item valueForKey:xcoordinate] unsignedIntegerValue];
                 NSUInteger compareToXlength = [[item valueForKey:@"width"] unsignedIntegerValue];
                 NSRange compareToXranges = NSMakeRange(compareToXCoordinate, compareToXlength);
                 
@@ -2600,14 +2642,15 @@ BOOL hasLeadingNumberInString(NSString* s)
                 {
                     //  So the two X coordinate ranges do have an overlap - they share x coordinates
                     [elementsAboveMe addObject:item];
+                    NSLog(@"Found an element above me");
                     
                 }
             }
             
-            if ( [[item valueForKey:bottomYcoordinate] intValue] <  [[dc valueForKey:bottomYcoordinate] intValue] && ![[item objectForKey:@"tag"] isEqual:CONTAINER_TAG]) //if it's Y coordinate is below mine
+            if ( [[item valueForKey:bottomYcoordinate] floatValue] > [[dc valueForKey:bottomYcoordinate] floatValue] && ![[item objectForKey:@"tag"] isEqual:CONTAINER_TAG]) //if it's Y coordinate is below mine
             {
                 
-                NSUInteger compareToXCoordinate = [[item valueForKey:@"xcoordinate"] unsignedIntegerValue];
+                NSUInteger compareToXCoordinate = [[item valueForKey:xcoordinate] unsignedIntegerValue];
                 NSUInteger compareToXlength = [[item valueForKey:@"width"] unsignedIntegerValue];
                 NSRange compareToXranges = NSMakeRange(compareToXCoordinate, compareToXlength);
                 
@@ -2763,8 +2806,13 @@ BOOL hasLeadingNumberInString(NSString* s)
             
         }
         NSLog(@"About to set id: %@ with marginTop:%i", [dc valueForKey:@"id"], marginTop);
-        NSLog(@"Better  : %i", [self marginToObjectWithinTransformedGroupingBox:dc onSide:TOP]);
+        if ([dc objectForKey:PARENT_ID] != nil)
+        {
+            NSLog(@"Better  : %i", [self marginToObjectWithinTransformedGroupingBox:dc onSide:TOP]);
+        }
+        
         [dc setValue:[NSNumber numberWithInt:marginTop] forKey:@"marginTop"];
+        NSLog(@"dc has margintop of : %@", [dc objectForKey:@"marginTop"]);
         
         // **** @@ END OF QUESTION TO DELETE THE ABOVE ******** //
         
@@ -2786,11 +2834,11 @@ BOOL hasLeadingNumberInString(NSString* s)
         righties = [NSMutableArray array];
         for (NSMutableDictionary *objectToTheRight in self.sortedArray) //  Was LeftToRightTopToBottom
         {
-            if ([objectToTheRight isEqualToDictionary:dc] == NO && [objectToTheRight objectForKey:@"tag"] != [Container class]) // If it's not me
+            if ([objectToTheRight isEqualToDictionary:dc] == NO && [objectToTheRight objectForKey:@"tag"] != [Container class]) // If it's not me, nor a container
             {
                 
-                //  If the object is t the right of me
-                if ([[objectToTheRight valueForKey:@"xcoordinate"] intValue] > ( [[dc valueForKey:@"xcoordinate"] intValue] +[[dc valueForKey:@"width"] intValue]) )
+                //  If the object is to the right of me
+                if ([[objectToTheRight valueForKey:@"xcoordinate"] floatValue] > ( [[dc valueForKey:@"xcoordinate"] floatValue] +[[dc valueForKey:@"width"] floatValue]) )
                 {
                     NSUInteger yLocation = [[objectToTheRight valueForKey:ycoordinate] unsignedIntegerValue];
                     NSUInteger yLength = [[objectToTheRight valueForKey:@"height"] unsignedIntegerValue];
@@ -2853,7 +2901,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                     if (comparison.length !=0)
                     {
                         [lefties addObject:objectToTheLeft];
-                        NSLog(@"Width: %d is next to me with width: %d",[[objectToTheLeft valueForKey:@"width"] intValue], [[dc valueForKey:@"width"] intValue] );
+                        NSLog(@"elenetid. To the left of %@ is: %@", [dc valueForKey:ID_KEYWORD], [objectToTheLeft valueForKey:ID_KEYWORD] );
                     }
                 }
                 
@@ -2917,6 +2965,7 @@ BOOL hasLeadingNumberInString(NSString* s)
                 {
                     NSLog(@"Using MARGINRIGHT : %d", marginRight);
                     [dc setValue:[NSNumber numberWithInt:marginRight] forKey:@"marginRight"];
+                    NSLog(@"just set %@ with marginRIGHT of %@", [dc objectForKey:ID_KEYWORD], [NSNumber numberWithInt:marginLeft]);
                 }
                 
                 
@@ -2927,12 +2976,12 @@ BOOL hasLeadingNumberInString(NSString* s)
         if (objectToMyLeft == YES)
         {
             //NSArray *horizontalSortDescriptor = [NSArray arrayWithObject: horizontally];
-            NSArray *horizontallySortedArray = [lefties sortedArrayUsingDescriptors:horizontalSortDescriptor];
+            NSArray *horizontallySortedArray = [lefties sortedArrayUsingDescriptors:horizontalFarSortDescriptor];
             //NSDictionary *shapeToMyImmediateLeft = [verticallyAboveMeSortedArray lastObject]; //    If there are multiple objects above me, get the one lowest on the y coordinate axis
             
             //  Find the closest item in my leftRange
             NSDictionary *closest = [horizontallySortedArray lastObject];   //THIS IS THE CLOSEST OBJECT TO MY LEFT THAT IS IN MY RANGE
-            NSLog(@"Closest object to me has a width of: %d and my width is: %d", [[closest valueForKey:@"width"] intValue], [[dc valueForKey:@"width"] intValue]);
+            NSLog(@"Closest object to me is id %@ and my width is: %d", [closest valueForKey:ID_KEYWORD], [[dc valueForKey:@"width"] intValue]);
             
             for (NSDictionary *l in lefties)
             {
@@ -2952,9 +3001,21 @@ BOOL hasLeadingNumberInString(NSString* s)
                             NSLog(@"MRight is:%d and offset is:%d", mRight, offset);
                             marginLeft = offset - mRight;
                             [dc setValue:[NSNumber numberWithInt:marginLeft] forKey:@"marginLeft"];
+                            NSLog(@"just set %@ with marginleft of %@", [dc objectForKey:ID_KEYWORD], [NSNumber numberWithInt:marginLeft]);
                             //}
                             
                         }
+                    }
+                    
+                    NSLog(@"%@ parent is: %@", [dc objectForKey:PARENT_ID], [[dc objectForKey:PARENT_ID] objectForKey:DIV_TAG]);
+                    
+                    NSLog(@"closest is: %@", [closest objectForKey:ID_KEYWORD]);
+                    
+                    if ([[[dc objectForKey:PARENT_ID] objectForKey:DIV_TAG] isEqualTo:[closest objectForKey:ID_KEYWORD]])
+                    {
+                        float marginInsideGB = [[dc objectForKey:xcoordinate] floatValue] - [[closest objectForKey:xcoordinate] floatValue];
+                        [dc setValue:[NSNumber numberWithInt:marginInsideGB] forKey:@"marginLeft"];
+                        NSLog(@"trying it.");
                     }
                     
                 }
