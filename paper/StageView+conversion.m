@@ -31,6 +31,16 @@
 
 #pragma mark - ASSOCIATIVE GENERATION METHODS
 
+-(NSMutableDictionary*)dcWithID: (NSString *)stringID
+{
+    for (NSMutableDictionary *e in self.sortedArray)
+    {
+        if ([stringID isEqualToString:[e objectForKey:ID_KEYWORD]])
+            return e;
+    }
+    return nil;
+}
+
 -(NSArray *)elementsToMyRightInGroupingBox:(NSDictionary *)element
 {
     // Takes an element and finds all other elements in the same groupingBox as it and orders it by xcoordinate.
@@ -593,7 +603,7 @@
     __block GroupingBox *myGroupingBox = nil;
     
     [self.groupingBoxes enumerateObjectsUsingBlock:^(GroupingBox *box, NSUInteger index, BOOL *stop)
-     {         
+     {
          if ([box.idPreviouslyKnownAs isEqualToString:[[element objectForKey:PARENT_ID] objectForKey:DIV_TAG]])
          {
              NSLog(@"%@ Found his daddy: %@", [element valueForKey:ID_KEYWORD], box.idPreviouslyKnownAs);
@@ -910,7 +920,8 @@
 
 -(NSMutableDictionary *)nearestElementDirectlyAboveMeInMyRow: (NSDictionary *)elementBeingTested
 {
-    NSLog(@"start 0");
+    // This gets elements above me based on the bottom y-coordinate.
+    
     NSUInteger elementBeingTestedY = [[elementBeingTested valueForKey:bottomYcoordinate] unsignedIntegerValue];
     NSUInteger elementBeingTestedW = [[elementBeingTested valueForKey:@"width"] unsignedIntegerValue];
     NSUInteger elementBeingTestedX = [[elementBeingTested valueForKey:@"xcoordinate"] unsignedIntegerValue];
@@ -984,11 +995,99 @@
         NSLog(@"start 12");
     }
     NSLog(@"start 13");
+    NSLog(@"lowest element id : %@", [lowestElement objectForKey:ID_KEYWORD]);
     NSLog(@"yCoordinateOfLowestElement : %@", yCoordinateOfLowestElement);
     return lowestElement;
     
     
 }
+
+
+
+-(NSMutableDictionary *)nearestElementDirectlyCleanAboveMeInMyRow: (NSDictionary *)elementBeingTested
+{
+    // This gets elements above me based on the bottom y-coordinate.
+    
+    NSUInteger elementBeingTestedY = [[elementBeingTested valueForKey:ycoordinate] unsignedIntegerValue];
+    NSUInteger elementBeingTestedW = [[elementBeingTested valueForKey:@"width"] unsignedIntegerValue];
+    NSUInteger elementBeingTestedX = [[elementBeingTested valueForKey:@"xcoordinate"] unsignedIntegerValue];
+    NSRange elementBeingTestedRange = NSMakeRange(elementBeingTestedX, elementBeingTestedW);
+    NSUInteger rowImIn = nil;
+    NSLog(@"start 1");
+    for (NSArray *r in self.rows)
+    {
+        if ([r containsObject:elementBeingTested])
+        {
+            rowImIn = [self.rows indexOfObject:r];
+        }
+    }
+    NSLog(@"start 2: ROW I'M IN: %lu and row count is: %lu", rowImIn, self.rows.count);
+    if ([NSNumber numberWithInteger:rowImIn] == nil)
+    {
+        NSLog(@"NearestElementDirectlyAboveMeInMyRow RETURNED NIL");
+        return nil;
+    }
+    
+    NSMutableArray *itemsInMyRow = [NSMutableArray array];
+    itemsInMyRow = [self.rows objectAtIndex:rowImIn];
+    NSMutableArray *elementsChecked = [NSMutableArray array];
+    NSMutableArray *inMyRange = [NSMutableArray array];
+    NSLog(@"start 3");
+    
+    for (NSDictionary *compare in itemsInMyRow)
+    {
+        if ([compare isEqualToDictionary:elementBeingTested] == NO)    //  If not me
+        {
+            if ([elementsChecked containsObject:compare] == NO) //  if this object hasn't been checked
+            {
+                NSUInteger compareY = [[compare valueForKey:ycoordinate] unsignedIntegerValue];
+                NSUInteger compareW = [[compare valueForKey:@"width"] unsignedIntegerValue];
+                NSUInteger compareX = [[compare valueForKey:@"xcoordinate"] unsignedIntegerValue];
+                NSRange compareWidthRange = NSMakeRange(compareX, compareW); //X location and the length
+                
+                NSRange comparison = NSIntersectionRange(elementBeingTestedRange, compareWidthRange);
+                
+                if ((compareY < elementBeingTestedY) & (comparison.length!=0)) //    We have a match
+                {
+                    NSLog(@"start 4");
+                    [inMyRange addObject:compare]; //   Add the comparison object so it now has an order.
+                    [elementsChecked addObject:compare]; // So we don't check it again
+                    
+                }
+                else
+                {
+                    NSLog(@"start 5");
+                    [elementsChecked addObject:compare];
+                }
+            }
+        }
+    } //    Closes the for loop
+    
+    NSLog(@"start 6");
+    NSNumber *yCoordinateOfLowestElement = [NSNumber new];
+    NSMutableDictionary *lowestElement = nil;
+    NSLog(@"start 7");
+    if ([inMyRange count] > 0)
+    {
+        NSSortDescriptor *vertically = [[NSSortDescriptor alloc] initWithKey:bottomYcoordinate ascending:NO];
+        NSLog(@"start 8");
+        NSArray *verticalSortDescriptor = [NSArray arrayWithObject: vertically];
+        NSLog(@"start 9");
+        NSArray *sorteditemsInRowAboveMe = [inMyRange sortedArrayUsingDescriptors:verticalSortDescriptor];
+        NSLog(@"start 10");
+        lowestElement = [sorteditemsInRowAboveMe objectAtIndex:0];
+        NSLog(@"start 11");
+        yCoordinateOfLowestElement = [lowestElement valueForKey:bottomYcoordinate];
+        NSLog(@"start 12");
+    }
+    NSLog(@"start 13");
+    NSLog(@"lowest element id : %@", [lowestElement objectForKey:ID_KEYWORD]);
+    NSLog(@"yCoordinateOfLowestElement : %@", yCoordinateOfLowestElement);
+    return lowestElement;
+    
+    
+}
+
 
 
 -(NSDictionary *)highestElementInMyRow: (NSDictionary *)elementBeingTested
@@ -1238,6 +1337,15 @@
         [highest setObject:[NSNumber numberWithInt:0] forKey:@"marginTop"]; //The row will take care of marginTops for me
         // PLACE ELSEWHERE IN SCRIPT - WRONG METHOD.
         
+        /*
+        
+         ** ** NOW ADD CODE HERE THAT SETS THE MARGIN TOP ACCORRDING TO THE GROUPING BOX I'M IN!!
+        
+        
+         ** ** OTHERWISE IT'S JUST THE ROW I'M IN
+         
+         */
+        
         for (NSDictionary *ele in self.sortedArray)
         {
             NSLog(@"3. sorted array marginTop: %@", [ele objectForKey:@"marginTop"]);
@@ -1479,7 +1587,8 @@
     
     NSMutableDictionary *firstObjectinGroupBox =[vSortedArrayOfGroupingBoxElements lastObject];
     NSLog(@"The highest box in the gb has id of: %@", [firstObjectinGroupBox objectForKey:@"id"]);
-    NSMutableDictionary *directlyAboveMeInThisRow = [self nearestElementDirectlyAboveMeInMyRow:firstObjectinGroupBox];
+    NSMutableDictionary *directlyAboveMeInThisRow = [self nearestElementDirectlyCleanAboveMeInMyRow:firstObjectinGroupBox];
+    NSLog(@"directlyAboveMeInThisRow is: %@", directlyAboveMeInThisRow);
     
     // either it exists or it doesn't
     if (directlyAboveMeInThisRow == nil)
@@ -1491,7 +1600,13 @@
     else
     {
         // if there is something above me, get its gbox and offset against the lowesty in the gbox.
-        GroupingBox *thegbAboveMe = [self whichGroupingBoxIsElementIn:directlyAboveMeInThisRow];
+        GroupingBox *thegbAboveMe = [self whichGroupingBoxIsElementIn:directlyAboveMeInThisRow]; //lastBox.
+        NSString *a = [firstObjectinGroupBox objectForKey:ID_KEYWORD]; // lastbox.
+        float b = thegbAboveMe.rtFrame.origin.y;
+        float c = thegbAboveMe.rtFrame.size.height;
+        
+        NSLog(@"a = %@. b = %f. c = %f. d = %@", a, b, c, thegbAboveMe.idPreviouslyKnownAs);
+        
         offset = [[firstObjectinGroupBox objectForKey:ycoordinate]intValue] - (thegbAboveMe.rtFrame.origin.y + thegbAboveMe.rtFrame.size.height);
         NSLog(@"else statement : %i", offset);
         
@@ -1799,6 +1914,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         {
             tagContent = @"";
             tagType = CONTAINER_TAG;
+            NSLog(@"Container found with id: %@", ele.elementid);
         }
         
         if (([ele isMemberOfClass:[DropDown class]]))
@@ -2589,7 +2705,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         NSLog(@"Index =%lu and count=%lu", indexCount+1, [self.sortedArray count]); //  Was LeftToRightTopToBottom
         NSUInteger myXlength = [[dc valueForKey:@"width"] unsignedIntegerValue];
         NSUInteger myYlength = [[dc valueForKey:@"height"] unsignedIntegerValue];
-        NSUInteger myXCoordinate = [[dc valueForKey:@"xcoordinate"] unsignedIntegerValue];
+        NSUInteger myXCoordinate = [[dc valueForKey:xcoordinate] unsignedIntegerValue];
         NSUInteger myYCoordinate = [[dc valueForKey:ycoordinate] unsignedIntegerValue];
         NSRange myXranges = NSMakeRange(myXCoordinate, myXlength);
         NSRange myYranges = NSMakeRange(myYCoordinate, myYlength);
@@ -2624,7 +2740,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         for (NSMutableDictionary *item in self.sortedArray)
         {
-            NSLog(@"ITEM = %f", [[item valueForKey:bottomYcoordinate] floatValue]);
+            NSLog(@"ITEM = %@", [item valueForKey:ID_KEYWORD]);
             NSLog(@"DC = %f", [[dc valueForKey:bottomYcoordinate] floatValue]);
             
             if ( [[item valueForKey:bottomYcoordinate] floatValue] < [[dc valueForKey:bottomYcoordinate] floatValue] && ![[item objectForKey:@"tag"] isEqual:CONTAINER_TAG]) //   if it's Y coordinate is above me (and in my northern range, see below)
@@ -2772,6 +2888,14 @@ BOOL hasLeadingNumberInString(NSString* s)
                 int a = [[dc objectForKey:ycoordinate]intValue];
                 int b = [[self highestYcoordinateInMyRow:[[self.rows objectAtIndex:myRowId] objectAtIndex:0] ]intValue];
                 marginTop = a - b;
+                
+                /** WRITE CODE FOR THIS: BUT IF IT'S IN A GROUPING BOX, MARGINTOP IS EQUAL TO DISTANCE FROM ME TO GROUPINGBOX YCOORDINATE **/
+                GroupingBox *gb = [self whichGroupingBoxIsElementIn:dc];
+                if (gb!= nil)
+                {
+                    NSLog(@"In here for : %@", [dc objectForKey:ID_KEYWORD]);
+                    marginTop = [[dc objectForKey:ycoordinate]intValue] - [[gb valueForKey:ycoordinate] intValue];
+                }
                 NSLog(@"Object I'm using to measure against: %@", [[[self.rows objectAtIndex:myRowId] objectAtIndex:0] objectForKey:@"id"]);
                 NSLog(@"Returning: %i", marginTop);
                 NSLog(@"Distance to my margin: %i with id: %@", marginTop, [dc objectForKey:@"id"]);
@@ -3052,7 +3176,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         
         
-        NSLog(@"SORTED ARRAY NOVEMBER 2 : %@", self.sortedArray);
+        //NSLog(@"SORTED ARRAY NOVEMBER 2 : %@", self.sortedArray);
         
         /*
          Make adjustments to marginTops for elements that need to float as their tops need to calc against the lowest in  the minirow above it.
@@ -3776,7 +3900,6 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSMutableDictionary *gs = [NSMutableDictionary dictionary];
     NSMutableArray *codeStore = [NSMutableArray array];
     NSMutableArray *styleStore = [NSMutableArray array];
-    NSString *styleString = [NSString string];
     NSMutableString *s = [NSMutableString string];
     NSArray *groupings = [NSArray arrayWithArray:self.finalGrouping];
     
@@ -3812,7 +3935,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     } ];
     
     
-    
+    NSLog(@"START ROW: %@. END ROWS: %@", startRows, endRows);
     
     
     //  2.The Big Loop
@@ -3838,9 +3961,20 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSString *blockid = [NSString string];
     
     
+    for (NSArray *array in groupings)
+    {
+        [firstObjectsInGroups addObject: [[array objectAtIndex:0] valueForKey:@"firstObject"]];
+        [lastObjectsInGroups addObject:[[array objectAtIndex:0] valueForKey:@"lastObject"]];
+    }
+    NSLog(@"GROUPINGS IN CONVERSION : %@", groupings);
+    NSLog(@"Last objects in groupings : %@", lastObjectsInGroups);
+    
+    
+    
     for (NSMutableDictionary *block in [self.sortedArray copy])
     {
         s = [NSMutableString string];
+        NSString *styleString = [NSString string];
         NSUInteger indexOfLastObject = nil;
         NSUInteger indexOfNextObject = nil;
         if ([self.sortedArray indexOfObject:block] != 0)
@@ -3853,14 +3987,9 @@ BOOL hasLeadingNumberInString(NSString* s)
         
         NSLog(@"THE LAST INDEX WAS : %lu", indexOfLastObject);
         
-        for (NSArray *array in groupings)
-        {
-            [firstObjectsInGroups addObject: [[array objectAtIndex:0] valueForKey:@"firstObject"]];
-            [lastObjectsInGroups addObject:[[array objectAtIndex:0] valueForKey:@"lastObject"]];
-        }
-        NSLog(@"GROUPINGS IN CONVERSION : %@", groupings);
+        
         NSMutableString *groupBoxOpeningDiv = nil;
-        NSMutableString *postCode = nil;
+        NSMutableString *postCode = [NSMutableString string];
         NSMutableString *groupBoxID = [NSMutableString string];
         NSMutableString *keyPathMarginTop = [NSMutableString string];
         NSMutableString *keyPathMarginRight = [NSMutableString string];
@@ -4020,13 +4149,15 @@ BOOL hasLeadingNumberInString(NSString* s)
                                         @"\n",
                                         
                                         nil];
+                        
+                        groupBoxIDCode = [NSMutableString stringWithString:[groupBoxBits componentsJoinedByString:@""]];
+                        NSLog(@"TEST 4. Which is %@", groupBoxIDCode);
+                        Cstyle = [NSMutableString stringWithString:[Cstyle stringByAppendingString:groupBoxIDCode]];
+                        NSLog(@"CSTYLE AT THIS POINT SHOULD CONTAIN GB1 : %@",Cstyle);
                     }
                     
+                    // ABOVE FOUR LINES REMOVED FROM HERE.
                     
-                    groupBoxIDCode = [NSMutableString stringWithString:[groupBoxBits componentsJoinedByString:@""]];
-                    NSLog(@"TEST 4. Which is %@", groupBoxIDCode);
-                    Cstyle = [NSMutableString stringWithString:[Cstyle stringByAppendingString:groupBoxIDCode]];
-                    NSLog(@"CSTYLE AT THIS POINT SHOULD CONTAIN GB1 : %@",Cstyle);
                 }
             //}
             
@@ -4036,11 +4167,46 @@ BOOL hasLeadingNumberInString(NSString* s)
         //  Set the end of the GrouupBox code
         if ([lastObjectsInGroups containsObject:blockid])
         {
-            postCode = [NSMutableString stringWithString:@"\n</div><!-- Closes the GroupBox -->"];
+            
+            bool seen = NO;
+            for (NSString *objid in lastObjectsInGroups)
+            {
+                if ([objid isEqualToString:blockid])
+                {
+                    
+                    if (seen == NO)
+                    {
+                        if ([block valueForKeyPath:@"parentID.div"] != nil) 
+                        {
+                           NSString *str = [block valueForKeyPath:@"parentID.div"];
+                           [postCode appendString:[NSString stringWithFormat:@"\n</div><!-- Closes %@ -->", str]];
+                        }
+                        else
+                        {
+                           [postCode appendString:[NSString stringWithFormat:@"\n</div><!-- Closes %@ -->", blockid]];
+                        }
+                    }
+                        
+                    else
+                    {
+                        [postCode appendString:@"\n</div><!-- Closes groupbox -->"];
+                    }
+                    
+                    seen = YES;
+                    
+                }
+            
+            }
+             
+            
+            
+            
+            //postCode = [NSMutableString stringWithString:@"\n</div><!-- Closes the GroupBox -->"];
             if ([[block objectForKey:@"tag"] isEqualTo:DYNAMIC_ROW_TAG])
             {
                 [postCode appendString:@"\n    </div><!-- Closes the dyRow -->"];
             }
+            
         }
         
         
@@ -5299,6 +5465,8 @@ BOOL hasLeadingNumberInString(NSString* s)
         NSDictionary *codeDictionary = [NSDictionary dictionaryWithObject:code forKey:[NSNumber numberWithInt:CblockCount]];
         NSDictionary *styleDictionary = [NSDictionary dictionaryWithObject:Cstyle forKey:[NSNumber numberWithInt:CblockCount]];
         
+        NSLog(@"JUST ADDED : %@", Cstyle);
+        
         [gc setObject:code forKey:[NSNumber numberWithInt:CblockCount]];
         [gs setObject:Cstyle forKey:[NSNumber numberWithInt:CblockCount]];
         
@@ -5312,6 +5480,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         
     } //end of cycling through each element.
     NSLog(@"CODE STORE HAS : %@", codeStore);
+    
     NSMutableString *html = [NSMutableString string];
     NSMutableString *css = [NSMutableString string];
     NSMutableString *aStyle = [NSMutableString string];
@@ -5344,7 +5513,7 @@ BOOL hasLeadingNumberInString(NSString* s)
         css = [NSMutableString stringWithString:[css stringByAppendingString:rowCodeForNthChild]];
     }
     
-    [css appendString:groupBoxIDCode];
+    //[css appendString:groupBoxIDCode]; THIS HAS BEEN ADDED ALREADY WHEN CHECKING if ([firstObjectsInGroups containsObject:blockid])
     
     for (NSDictionary *d in codeStore)
     {

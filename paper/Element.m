@@ -698,7 +698,7 @@
  */
 + (Element *)createElementFromDictionary:(NSDictionary *)dict
 {
-    NSLog(@"dict is %@", dict);
+    NSLog(@"Creating an element from the dictionary received");
     Element *element = [Element new];
     
     // shape information from dictionary
