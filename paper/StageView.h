@@ -257,6 +257,7 @@ typedef NSInteger		ShapeCutCopyType;
 
 @property (assign, nonatomic) NSMutableArray *idsInsideDyRow;
 
+@property (assign, nonatomic) NSMutableString *currentMessage;
 
 //Font based methods
 -(IBAction)setFontTrait:(id)sender;

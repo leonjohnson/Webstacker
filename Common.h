@@ -11,6 +11,8 @@
 #ifndef DrawShape_Common_h
 #define DrawShape_Common_h
 
+#define UPDATE_CONVERSION_PROGRESS_SCREEN       @"updateConversionProgressScreen"
+
 #define STATEMENT                               @"statement"
 #define DOCUMENTATION                           @"documentation"
 #define ICON                                    @"icon"

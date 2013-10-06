@@ -5204,6 +5204,57 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 			</object>
+			<object class="NSWindowTemplate" id="258434794">
+				<int key="NSWindowStyleMask">8211</int>
+				<int key="NSWindowBacking">2</int>
+				<string key="NSWindowRect">{{131, 159}, {383, 231}}</string>
+				<int key="NSWTFlags">-461896704</int>
+				<string key="NSWindowTitle">Conversion</string>
+				<string key="NSWindowClass">ConversionProgressPanel</string>
+				<nil key="NSViewClass"/>
+				<nil key="NSUserInterfaceItemIdentifier"/>
+				<object class="NSView" key="NSWindowView" id="593205955">
+					<reference key="NSNextResponder"/>
+					<int key="NSvFlags">256</int>
+					<array class="NSMutableArray" key="NSSubviews">
+						<object class="NSTextField" id="910155037">
+							<reference key="NSNextResponder" ref="593205955"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{17, 177}, {349, 34}}</string>
+							<reference key="NSSuperview" ref="593205955"/>
+							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
+							<string key="NSReuseIdentifierKey">_NS:9</string>
+							<string key="NSAntiCompressionPriority">{250, 750}</string>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSTextFieldCell" key="NSCell" id="790237201">
+								<int key="NSCellFlags">67108864</int>
+								<int key="NSCellFlags2">272891904</int>
+								<string key="NSContents">Multiline Label</string>
+								<object class="NSFont" key="NSSupport">
+									<string key="NSName">LucidaGrande</string>
+									<double key="NSSize">13</double>
+									<int key="NSfFlags">16</int>
+								</object>
+								<string key="NSCellIdentifier">_NS:9</string>
+								<reference key="NSControlView" ref="910155037"/>
+								<reference key="NSBackgroundColor" ref="400850299"/>
+								<reference key="NSTextColor" ref="899429147"/>
+							</object>
+							<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
+							<bool key="NSControlAutosetMaxLayoutWidth">YES</bool>
+						</object>
+					</array>
+					<string key="NSFrameSize">{383, 231}</string>
+					<reference key="NSSuperview"/>
+					<reference key="NSWindow"/>
+					<reference key="NSNextKeyView" ref="910155037"/>
+					<string key="NSReuseIdentifierKey">_NS:21</string>
+				</object>
+				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
+				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
+				<bool key="NSWindowIsRestorable">YES</bool>
+			</object>
 		</array>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<array class="NSMutableArray" key="connectionRecords">
@@ -6193,6 +6244,14 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">conversionProgress</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="258434794"/>
+					</object>
+					<int key="connectionID">2305</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">spacingTextField</string>
 						<reference key="source" ref="321156799"/>
 						<reference key="destination" ref="177603317"/>
@@ -6856,6 +6915,14 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="352464791"/>
 					</object>
 					<int key="connectionID">2294</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">statusMessage</string>
+						<reference key="source" ref="258434794"/>
+						<reference key="destination" ref="910155037"/>
+					</object>
+					<int key="connectionID">2306</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -9789,6 +9856,35 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="object" ref="773577039"/>
 						<reference key="parent" ref="11919239"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2296</int>
+						<reference key="object" ref="258434794"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="593205955"/>
+						</array>
+						<reference key="parent" ref="0"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2297</int>
+						<reference key="object" ref="593205955"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="910155037"/>
+						</array>
+						<reference key="parent" ref="258434794"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2300</int>
+						<reference key="object" ref="910155037"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="790237201"/>
+						</array>
+						<reference key="parent" ref="593205955"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2301</int>
+						<reference key="object" ref="790237201"/>
+						<reference key="parent" ref="910155037"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -10140,7 +10236,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string key="2289.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2290.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2291.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2296.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="NO" key="2296.NSWindowTemplate.visibleAtLaunch"/>
+				<string key="2297.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="23.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2300.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2301.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="236.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="239.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -10283,7 +10384,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">2295</int>
+			<int key="maxID">2306</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -10462,6 +10563,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<string key="buttonPanel">NSPanel</string>
 						<string key="buttonURLField">NSTextField</string>
 						<string key="colorHexValue">NSTextField</string>
+						<string key="conversionProgress">ConversionProgressPanel</string>
 						<string key="cssOverride">NSTextView</string>
 						<string key="currentlySelectedLabel">NSTextField</string>
 						<string key="dBar">DocumentBar</string>
@@ -10488,6 +10590,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<string key="pl">NSColorWell</string>
 						<string key="spacingTextField">NSTextField</string>
 						<string key="stageView">StageView</string>
+						<string key="statusMessage">NSTextField</string>
 						<string key="tagLabel">NSTextField</string>
 						<string key="topLeftLabel">NSTextField</string>
 						<string key="topLeftRadius">NSButtonCell</string>
@@ -10588,6 +10691,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="IBToOneOutletInfo" key="colorHexValue">
 							<string key="name">colorHexValue</string>
 							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="conversionProgress">
+							<string key="name">conversionProgress</string>
+							<string key="candidateClassName">ConversionProgressPanel</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="cssOverride">
 							<string key="name">cssOverride</string>
@@ -10692,6 +10799,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="IBToOneOutletInfo" key="stageView">
 							<string key="name">stageView</string>
 							<string key="candidateClassName">StageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="statusMessage">
+							<string key="name">statusMessage</string>
+							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="tagLabel">
 							<string key="name">tagLabel</string>
@@ -10968,6 +11079,25 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/BasePanelContentView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">ConversionProgressPanel</string>
+					<string key="superclassName">BasePanel</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">statusMessage</string>
+						<string key="NS.object.0">NSTextField</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">statusMessage</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">statusMessage</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/ConversionProgressPanel.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

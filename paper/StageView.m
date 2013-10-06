@@ -1,3 +1,5 @@
+#import <Python/Python.h>
+
 #import "AppDelegate.h"
 #import "Document.h"
 #import "StageView.h"
@@ -22,6 +24,9 @@
 
 
 @implementation StageView
+
+
+
 
 @synthesize sortedArray;
 @synthesize jsCode2;
@@ -61,7 +66,6 @@
 @synthesize fontSizeTextField2, kerningField, leadingField, fontColorWell, fontTraitControl;
 
 @synthesize kerningStepper, leadingStepper;
-
 
 
 /* These images are displayed as markers on the rulers. */
@@ -234,6 +238,10 @@ static NSImage *bottomImage;
                                                  selector:@selector(updateElementView:)
                                                      name:REDRAW_ELEMENT_NOTIFICATION
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateConversionProgressScreen:)
+                                                     name:UPDATE_CONVERSION_PROGRESS_SCREEN
+                                                   object:nil];
         
     }
     /* This is not used
@@ -252,6 +260,14 @@ static NSImage *bottomImage;
 -(void)updateElementView:(NSNotification *)notification
 {
     [self setNeedsDisplay:YES];
+}
+
+
+
+-(void)updateConversionProgressScreen:(NSNotification *)notification
+{
+    NSLog(@"Updating brudda! %@", [[notification userInfo] objectForKey:@"string"]);
+    
 }
 
 
@@ -3589,6 +3605,36 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
 												  URL:((Element *)[selElementArray lastObject]).URLString];
         
 	}
+}
+
+
+
+-(BOOL) setupPythonEnvironment
+{
+    /*
+     Flow:
+     Install script window from menu bar.
+     Select the py file and then I take its file name as the menu name.
+     I then check the scripts name in the menu item to state which will be run. Only one script can be run.
+     When I press publish it then produces the JSON, gives it to the python interpreter, returns it to mac app to complete.
+
+     
+     */
+    Py_SetProgramName("/usr/bin/python");
+    Py_Initialize();
+    
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *scriptPath = [bundle pathForResource:@"" ofType:@"py"]; // don't need this. Check flow.
+    
+    char *script_path = (char*)[scriptPath UTF8String];
+    
+    char *script_name = basename(script_path);
+    
+    FILE *mainFile = fopen(script_path, "r");
+    
+    return (PyRun_SimpleFile(mainFile, script_name) == 0);
+    
+    
 }
 
 @end

@@ -100,6 +100,8 @@
     IBOutlet NSComboBox *dataSourceField;
     IBOutlet NSTextField *visibilityField;
     
+    IBOutlet NSTextField *statusMessage;
+    
 	BOOL isRestored;
 }
 
@@ -163,6 +165,7 @@
 @property(assign) IBOutlet LayerPanel *layerPanel;
 @property(assign) IBOutlet AttributePanel *attributePanel;
 @property(assign) IBOutlet AlignmentPanel *alignmentPanel;
+
 @property(assign) IBOutlet NSPanel *buttonPanel;
 
 

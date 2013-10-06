@@ -197,7 +197,10 @@
     
     buttonPanelVisible = NO;
     [buttonPanel setIsVisible:NO];
+    
 	
+    
+    
 	//if (isRestored == YES) {
 		//[self OnNewDocument:nil];
 	//} else {
@@ -277,7 +280,8 @@
     
     [_cssOverride bind:@"attributedString" toObject:self withKeyPath:@"sg.currentElement.extracss" options:nil];
     
-        
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(clearKerningAndLeadingFields) 
                                                  name:UPDATE_KERNING_TEXTFIELD 
@@ -308,7 +312,6 @@
 	NSLog( @"Open New Document in AppDelegate, width: %f", width );
 	
 	//[[NSDocumentController sharedDocumentController] openUntitledDocumentAndDisplay:YES error:nil];
-	
 	[attributePanel setIsVisible:attributePanelVisible];
 	[alignmentPanel setIsVisible:alignmentPanelVisible];
 	[self.layerPanel setIsVisible:YES];
