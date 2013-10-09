@@ -21,6 +21,7 @@
 @implementation StageView (conversion)
 
 
+
 #define STR_LEFT   @"Left Edge"
 #define STR_RIGHT  @"Right Edge"
 #define STR_TOP    @"Top Edge"
@@ -1844,7 +1845,6 @@ BOOL hasLeadingNumberInString(NSString* s)
 {
     
     
-    
     //JS code
     NSMutableString *jsCode = [NSMutableString string];
     
@@ -1862,8 +1862,25 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSString *tagContent = [[NSString alloc]init];
     int span = 0;
     
-    [self.currentMessage setString:@"Locating all the elements on the page..."];
-    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+    
+    int numberOfImages = 0;
+    
+    for (Element *ele in elementArray)
+    {
+        if ([ele isMemberOfClass:[Image class]])
+        {
+            numberOfImages+=1;
+        }
+    }
+    
+    
+    
+    self.totalNumberOfCycles = 9; //(float)(2*elementArray.count) + (float)(1 * numberOfImages) + 5;
+    // 5 steps +  4 cycles, 1 cycle that counts just the images
+    
+    
+     NSDictionary *msg = [NSDictionary dictionaryWithObject:@"Locating all the elements on the page..." forKey:@"string"];
+    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
     
     for (Element *ele in elementArray)
     {
@@ -2107,6 +2124,8 @@ BOOL hasLeadingNumberInString(NSString* s)
                 tagContent = ((Image *)ele).filePath.lastPathComponent;
             }
             [allStyles removeAllObjects];
+            
+            numberOfImages=+1;
         }
         
         
@@ -2283,8 +2302,15 @@ BOOL hasLeadingNumberInString(NSString* s)
         
     }
     
-    [self.currentMessage setString:[NSString stringWithFormat:@"Found %li elements on the page. Starting conversion...", (unsigned long)arrayOfElementDetails.count]];
-    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+    
+    
+    /************ ************ ************ ************ ************ ************ ************ ************ ************ ************ ************/
+    
+    
+    
+    
+    
+
     
     // 0. PURPOSE :  FIND ALL OF THE SOLO ITEMS THEN FIND THE OBJECTS TO THE RIGHT OF THEM
     // Let's do some sorting - left to right, and then top to bottom
@@ -2308,8 +2334,9 @@ BOOL hasLeadingNumberInString(NSString* s)
     self.solos = [NSMutableArray array];
     NSLog(@"GOT : %lu items", [initalSorting count]);
     
-    [self.currentMessage setString:@"Sorting elements"];
-    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+    
+    msg = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Sorting elements"] forKey:@"string"];
+    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
     
     
     // GET SOLOS
@@ -2463,8 +2490,8 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSLog(@"UPDATE GB : %lu", groupingBoxes.count);
     
     
-    [self.currentMessage setString:@"Checking for overlapping elements"];
-    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+    msg = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Checking for overlapping elements"] forKey:@"string"];
+    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
     
     
     ///  Let's account for objects that are neither solo's nor in the right range or solos
@@ -2649,9 +2676,9 @@ BOOL hasLeadingNumberInString(NSString* s)
             NSLog(@"idprevknownas : %@", convertedGroupingBox.idPreviouslyKnownAs);
             NSLog(@"About to add: %@", convertedGroupingBox);
             
-            [self.currentMessage setString:@"Grouping elements together"];
-            [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
         }
+        
+        
         
         // record the elements that are inside the dyRow
         if ([[elem objectForKey:@"tag"] isEqualToString:DYNAMIC_ROW_TAG])
@@ -2708,8 +2735,9 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     /// CALCLULATE TOP (AND BOTTOM MARGINS WHEN NEEDED) FOR EACH OBJECT ON THE PAGE
     
-    [self.currentMessage setString:@"Calculating the margins and paddings"];
-    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+    
+     NSDictionary*msg = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Calculating the margins and paddings"] forKey:@"string"];
+    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
     
     NSLog(@"STAGE1");
     NSMutableDictionary *shapeAboveMe = [NSMutableDictionary dictionary];
@@ -2971,8 +2999,8 @@ BOOL hasLeadingNumberInString(NSString* s)
         // ********************************* //
         
         
-        [self.currentMessage setString:@"Calculating the left and right margins"];
-        [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+        NSDictionary*msg = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Calculating the left and right margins"] forKey:@"string"];
+        //[[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
         
         //  3. Find out whether there are objects to my left or right AND if they're in my range
         BOOL objectToMyLeft;
@@ -3333,9 +3361,9 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     
     
-    
-    [self.currentMessage setString:@"Setting up a location to write files to..."];
-    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+        
+    msg = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Setting up a location to write files to..."] forKey:@"string"];
+    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
     
     
     NSError *errorMsg;
@@ -3866,8 +3894,8 @@ BOOL hasLeadingNumberInString(NSString* s)
 {
 #pragma JS CONVERSION
     
-    [self.currentMessage setString:@"Generating javascript"];
-    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+    NSDictionary*msg = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Generating javascript"] forKey:@"string"] ;
+    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
     
     // ASSUMPTION, YOU CAN ONLY HAVE ONE DYROW ON THE PAGE
     NSMutableArray *bucket = [NSMutableArray new];
@@ -4002,8 +4030,9 @@ BOOL hasLeadingNumberInString(NSString* s)
     
     for (NSMutableDictionary *block in [self.sortedArray copy])
     {
-        [self.currentMessage setString:[NSString stringWithFormat:@"Configuring attributes for %@", [block objectForKey:@"blockid"]]];
-        [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+        NSString *msgString = [NSString stringWithFormat:@"Configuring attributes for %@", [block objectForKey:@"id"]];
+        NSDictionary*msg = [NSDictionary dictionaryWithObject:msgString forKey:@"string"];
+        //[[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
         
         
         s = [NSMutableString string];
@@ -5514,8 +5543,9 @@ BOOL hasLeadingNumberInString(NSString* s)
     } //end of cycling through each element.
     NSLog(@"CODE STORE HAS : %@", codeStore);
     
-    [self.currentMessage setString:@"Piecing together the HTML, CSS, and JavaScript code"];
-    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+    
+    NSDictionary*msg = [NSDictionary dictionaryWithObject:@"Piecing together the HTML, CSS, and JavaScript code" forKey:@"string"];
+    [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
     
     NSMutableString *html = [NSMutableString string];
     NSMutableString *css = [NSMutableString string];
@@ -5587,8 +5617,10 @@ BOOL hasLeadingNumberInString(NSString* s)
     {
         NSLog(@"SUCCESS!");
         NSLog(@"Wrote doc to: %@", self.directoryURLToPlaceFiles);
-        [self.currentMessage setString:@"Saving the generated files to your computer."];
-        [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+        
+        
+        NSDictionary*msg = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Saving the generated files to your computer."] forKey:@"string"] ;
+        [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
     }
     else
     {
@@ -5624,9 +5656,9 @@ BOOL hasLeadingNumberInString(NSString* s)
         {
             
             //  IMPROVE: EXPORT IN THE FORMAT THAT IT CAME AS, NOT NECESSARILY JPEG.
-            
-            [self.currentMessage setString:@"Saving the generated image files to your computer."];
-            [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self];
+                        
+            NSDictionary*msg = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Saving the generated image files to your computer."] forKey:@"string"] ;
+            [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:msg];
             
             NSLog(@"PATH IS - %@", self.outputFolderPath);
             NSMutableString *imagePath = [NSMutableString stringWithString:[self.outputFolderPath stringByDeletingLastPathComponent]];
@@ -5670,9 +5702,8 @@ BOOL hasLeadingNumberInString(NSString* s)
         }
     }
     
-    [self.currentMessage setString:[NSString stringWithFormat:@"Finished the conversion in %@ seconds.", @""]];
     
-    NSDictionary*di = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Finished the conversion in %@ seconds.", @""] forKey:@"string"] ;
+    NSDictionary*di = [NSDictionary dictionaryWithObject:@"Finished the conversion!" forKey:@"string"] ;
     [[NSNotificationCenter defaultCenter]postNotificationName:UPDATE_CONVERSION_PROGRESS_SCREEN object:self userInfo:di];
     
     NSArray *fileURLs = [NSArray arrayWithObjects:self.directoryURLToPlaceFiles, nil];
@@ -5688,6 +5719,8 @@ BOOL hasLeadingNumberInString(NSString* s)
 -(IBAction)generateCode:(id)sender
 {
     
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    [[appDelegate conversionProgressScreen] setIsVisible:YES];
     
     
     [self sortElements];
@@ -5702,7 +5735,7 @@ BOOL hasLeadingNumberInString(NSString* s)
     NSLog(@"self.sorted 3 = %@", self.sortedArray);
     [self pieceItTogether];
     
-
+    //NSLog(@"Last message = %@", self.currentMessage);
 }
 
 

@@ -27,7 +27,7 @@
 
 
 
-
+ 
 @synthesize sortedArray;
 @synthesize jsCode2;
 @synthesize finalGrouping;
@@ -217,6 +217,8 @@ static NSImage *bottomImage;
 	
 	self.isShowFontTab = NO;
     [backgroundColorWell setColor:self.stageBackgroundColor];
+    
+    self.cycleCount = 0;
 	
     return;
 }
@@ -238,6 +240,7 @@ static NSImage *bottomImage;
                                                  selector:@selector(updateElementView:)
                                                      name:REDRAW_ELEMENT_NOTIFICATION
                                                    object:nil];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(updateConversionProgressScreen:)
                                                      name:UPDATE_CONVERSION_PROGRESS_SCREEN
@@ -266,7 +269,27 @@ static NSImage *bottomImage;
 
 -(void)updateConversionProgressScreen:(NSNotification *)notification
 {
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    [[appDelegate statusMessage] setStringValue:[[notification userInfo] objectForKey:@"string"]];
+    
+    
     NSLog(@"Updating brudda! %@", [[notification userInfo] objectForKey:@"string"]);
+    self.cycleCount+=1; // starts on 0.
+    
+    float percentageComplete = (self.cycleCount/self.totalNumberOfCycles) *100;
+    
+    NSLog(@"1. cyclecount = %f. 2. totalNumberOfCycles = %f. 3. percentageComplete = %f", self.cycleCount, self.totalNumberOfCycles, percentageComplete);
+    
+    [[appDelegate percentCompleteMessage] setStringValue:[NSString stringWithFormat:@"%@ %% complete.", [NSNumber numberWithFloat:percentageComplete]]];
+    NSLog(@"percent done is: %f", percentageComplete);
+    
+    [[appDelegate progressIndicator] setDoubleValue:percentageComplete];
+    [[appDelegate progressIndicator] displayIfNeeded];
+    
+    
+    //[self.currentMessage setString:[NSString stringWithString:[[notification userInfo] objectForKey:@"string"]]];
+    
+     
     
 }
 
@@ -3619,7 +3642,7 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
      When I press publish it then produces the JSON, gives it to the python interpreter, returns it to mac app to complete.
 
      
-     */
+     
     Py_SetProgramName("/usr/bin/python");
     Py_Initialize();
     
@@ -3634,7 +3657,7 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
     
     return (PyRun_SimpleFile(mainFile, script_name) == 0);
     
-    
+    */
 }
 
 @end

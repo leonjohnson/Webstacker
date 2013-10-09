@@ -18,6 +18,18 @@
 
 
 @implementation AppDelegate
+{
+    IBOutlet NSProgressIndicator *progressIndicator;
+    IBOutlet NSPanel *conversionProgressScreen;
+    IBOutlet NSTextField *statusMessage;
+    IBOutlet NSTextField *percentCompleteMessage;
+}
+
+@synthesize progressIndicator;
+
+@synthesize conversionProgressScreen;
+@synthesize statusMessage;
+@synthesize percentCompleteMessage;
 
 //@synthesize thewindow = _window;
 @synthesize stageView;
@@ -63,6 +75,11 @@
 @synthesize tagLabel;
 
 
+
+- (void)awakeFromNib;
+{
+    //progressIndicator = localProgressIndicator;
+}
 
 - (BOOL)windowShouldClose:(id)sender
 {
@@ -279,8 +296,7 @@
     [_currentlySelectedLabel bind:@"value" toObject:self withKeyPath:@"sg.currentElement.elementid" options:nil];
     
     [_cssOverride bind:@"attributedString" toObject:self withKeyPath:@"sg.currentElement.extracss" options:nil];
-    
-    
+        
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(clearKerningAndLeadingFields) 

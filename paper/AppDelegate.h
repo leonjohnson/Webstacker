@@ -100,8 +100,6 @@
     IBOutlet NSComboBox *dataSourceField;
     IBOutlet NSTextField *visibilityField;
     
-    IBOutlet NSTextField *statusMessage;
-    
 	BOOL isRestored;
 }
 
@@ -168,6 +166,7 @@
 
 @property(assign) IBOutlet NSPanel *buttonPanel;
 
+@property (assign) IBOutlet NSProgressIndicator *progressIndicator;
 
 
 @property (assign, nonatomic) NSMutableDictionary *masterDataSource;
@@ -180,6 +179,10 @@
 
 //@property (assign, nonatomic) NSNumber *kerningValue;
 //@property (assign, nonatomic) NSNumber *leadingValue;
+
+@property (assign, nonatomic) NSPanel *conversionProgressScreen;
+@property (assign, nonatomic) NSTextField *statusMessage; 
+@property (assign, nonatomic) NSTextField *percentCompleteMessage;
 
 -(IBAction)showBuilderScreen:(id)sender;
 -(IBAction)setTypeFaceFamily:(id)sender;

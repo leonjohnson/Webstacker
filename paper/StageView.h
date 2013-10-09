@@ -259,6 +259,12 @@ typedef NSInteger		ShapeCutCopyType;
 
 @property (assign, nonatomic) NSMutableString *currentMessage;
 
+@property (assign, nonatomic) NSString *numberOfImages;
+
+@property (assign) float totalNumberOfCycles;
+
+@property (assign) float cycleCount;
+
 //Font based methods
 -(IBAction)setFontTrait:(id)sender;
 -(IBAction)setFontSize:(id)sender;
