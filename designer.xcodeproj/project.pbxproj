@@ -867,6 +867,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0440;
+				TargetAttributes = {
+					5877F010155588AA005FF829 = {
+						DevelopmentTeam = N85JUEKJDX;
+					};
+				};
 			};
 			buildConfigurationList = 5877F00B155588A9005FF829 /* Build configuration list for PBXProject "designer" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1090,7 +1095,8 @@
 		5877F030155588AA005FF829 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Leon Johnson Ltd";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1111,7 +1117,8 @@
 		5877F031155588AA005FF829 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Leon Johnson Ltd";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

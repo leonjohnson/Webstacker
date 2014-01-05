@@ -1,4 +1,4 @@
-#import <Python/Python.h>
+//#import <Python/Python.h>
 
 #import "AppDelegate.h"
 #import "Document.h"
@@ -273,7 +273,6 @@ static NSImage *bottomImage;
     [[appDelegate statusMessage] setStringValue:[[notification userInfo] objectForKey:@"string"]];
     
     
-    NSLog(@"Updating brudda! %@", [[notification userInfo] objectForKey:@"string"]);
     self.cycleCount+=1; // starts on 0.
     
     float percentageComplete = (self.cycleCount/self.totalNumberOfCycles) *100;
@@ -498,7 +497,6 @@ static NSImage *bottomImage;
     Singleton *sg = [[Singleton alloc]init];
     if (sg.currentElement.uType == SHAPE_BUTTON)
         [sg.currentElement setButtonText: [sender stringValue]];
-    NSLog(@"sender: %@", sender);
 }
 
 -(IBAction)setTopMarginForRow:(id)TextField;
@@ -506,7 +504,6 @@ static NSImage *bottomImage;
     Singleton *sg = [[Singleton alloc]init];
     if (sg.currentElement.uType == SHAPE_DYNAMIC_ROW)
         [sg.currentElement setTopMarginForRow:[TextField stringValue]];
-    NSLog(@"sender: %@", TextField);
 }
 
 
@@ -1335,8 +1332,6 @@ static NSImage *bottomImage;
  */
 - (void)createContainerElement:(CGFloat)width
 {
-	NSLog( @"Create Container Shape" );
-	
 	Element *shape = [Element createElement:SHAPE_CONTAINER];
 	[shape setBoundRect:NSMakeRect((self.frame.size.width - width) / 2, 0, width, self.frame.size.height)];
 	//shape.isSelected = YES;
@@ -2243,7 +2238,6 @@ static NSImage *bottomImage;
             
         case SHAPE_PLACEHOLDER_IMAGE:
             defaultSizeOfElement = NSMakeSize(200, 200);
-            NSLog(@"IMG PLACEHOLDER SIZE SET!\n \n");
             break;
         
         case SHAPE_DYNAMIC_ROW:
@@ -2422,7 +2416,7 @@ static NSImage *bottomImage;
 	}
 	
 	if ([selElementArray count] > 1) {
-		NSLog( @"You are selected 2 or more pages" );
+		NSLog( @"You have selected 2 or more pages" );
 		return;
 	}
 	
@@ -2432,7 +2426,6 @@ static NSImage *bottomImage;
 	}
      */
     
-    NSLog(@"MOVING or changing size");
     
     // Change the size of the element as requested.
 	if ([[[selElementArray lastObject] layoutType] isEqualToString:PERCENTAGE_BASED_LAYOUT] & (hitTest != SHT_MOVEAPEX))

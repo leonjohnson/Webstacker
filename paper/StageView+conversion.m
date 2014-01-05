@@ -1758,7 +1758,7 @@
     }
     
     if (matchingContainer != nil)
-        NSLog(@"Container found. Nice");
+        NSLog(@"Container found.");
     else
         NSLog(@"CONTAINER NOT FOUND.");
     

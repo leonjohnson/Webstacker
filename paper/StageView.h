@@ -54,7 +54,7 @@ enum
 typedef NSInteger		ShapeCutCopyType;
 
 /*
- StageView is the draw board of all shapes.
+ StageView is the drawing board on which all elements live.
  It contains drawn shape array and drawing shape object.
  Once user draw the shape, new shape is added in shape array.
  
@@ -80,7 +80,7 @@ typedef NSInteger		ShapeCutCopyType;
 	NSMutableArray						*elementArray;
     NSMutableArray                      *selElementArray;
 	
-	NSInteger							nHitTest; // where the mouse last touched down ? Confirm with Ming.
+	NSInteger							nHitTest; // where the mouse last touched down ?
 	
 	NSPoint								ptStart;
 	NSPoint								ptEnd;
