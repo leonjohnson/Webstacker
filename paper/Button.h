@@ -5,7 +5,7 @@
 @interface Button : Element //<elementDelegate>
 {
     
-    id<NSObject> buttonColor;
+    id<NSObject> __strong buttonColor;
     NSSize buttonSize;
     NSRect buttonTextContainer;
     
@@ -14,7 +14,7 @@
 }
 
 
-@property (assign, nonatomic) id<NSObject> buttonColor;
+@property (strong, nonatomic) id<NSObject> buttonColor;
 @property (assign, nonatomic) NSSize buttonSize;
 @property (assign) NSRect buttonTextContainer;
 

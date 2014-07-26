@@ -2,14 +2,14 @@
 
 @interface DocumentSettingsView : NSView
 {
-    IBOutlet NSColorWell *documentSettingsColorWell;
-    IBOutlet NSButton *myButton;
+    IBOutlet NSColorWell *__strong documentSettingsColorWell;
+    IBOutlet NSButton *__strong myButton;
 }
 
 
 
-@property (assign, nonatomic) NSColorWell *documentSettingsColorWell;
-@property (assign, nonatomic) NSButton *myButton;
+@property (strong, nonatomic) NSColorWell *documentSettingsColorWell;
+@property (strong, nonatomic) NSButton *myButton;
 
 
 @end

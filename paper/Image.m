@@ -24,16 +24,11 @@
 
 - (void)dealloc
 {
-	if (filePath) {
-		[filePath release];
-	}
 	
 	if (imageView) {
 		[imageView removeFromSuperview];
-		[imageView release];
 	}
 	
-	[super dealloc];
 }
 
 
@@ -91,7 +86,7 @@
     float *xdpiP = 0;
     float *ydpiP = 0;
     
-    CFURLRef url = (CFURLRef)name;
+    CFURLRef url = (CFURLRef)CFBridgingRetain(name);
     imageSource = CGImageSourceCreateWithURL(url, NULL);
     if (imageSource == NULL)
     {
@@ -133,7 +128,6 @@
 	
 	
 	[self setBoundRect:NSMakeRect(rtFrame.origin.x, rtFrame.origin.y, [img size].width, [img size].height)];
-	[img release];
     NSLog(@"IS THIS AFTER DRAW BORDERS? 2");
 }
 
@@ -149,7 +143,6 @@
 	[imageView setImage:img];
 	
 	[self setBoundRect:NSMakeRect(rtFrame.origin.x, rtFrame.origin.y, [img size].width, [img size].height)];
-	[img release];
     NSLog(@"IS THIS AFTER DRAW BORDERS?");
 }
 

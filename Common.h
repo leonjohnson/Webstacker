@@ -1,9 +1,5 @@
 //
 //  Common.h
-//  DrawShape
-//
-//  Created by Wang Ming on 7/6/12.
-//  Copyright (c) 2012 Cosmo Software. All rights reserved.
 //
 
 // feature1

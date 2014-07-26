@@ -10,12 +10,12 @@
 {
 	NSMutableArray						*ElementTableDataSource;
 	
-	id<DrawShapeTypeDelegate>			delegate;
+	id<DrawShapeTypeDelegate>			__strong delegate;
 }
 
 // ShapeTableView contains various shapes
-@property (assign, nonatomic) IBOutlet NSGalleryTableView			*ShapeTableView;
-@property (assign) id<DrawShapeTypeDelegate>						delegate;
+@property (strong, nonatomic) IBOutlet NSGalleryTableView			*ShapeTableView;
+@property (strong) id<DrawShapeTypeDelegate>						delegate;
 
 /*
  @function:		initElementTableData

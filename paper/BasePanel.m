@@ -73,7 +73,7 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
 }
 
 @interface BasePanelDelegateProxy : NSProxy <NSWindowDelegate>
-@property (nonatomic, assign) id<NSWindowDelegate> secondaryDelegate;
+@property (nonatomic, strong) id<NSWindowDelegate> secondaryDelegate;
 @end
 
 @implementation BasePanelDelegateProxy

@@ -53,7 +53,6 @@
 			NSTableColumn *column = [[NSTableColumn alloc] initWithIdentifier:[NSString stringWithFormat:@"%ld", i]];
 			[[column headerCell] setStringValue:[arrHeaderColumn objectAtIndex:i]];
 			[_tableView addTableColumn:column];
-			[column release];
 		}
 	} else {
 		// create  3 header column by default
@@ -61,7 +60,6 @@
 			NSTableColumn *column = [[NSTableColumn alloc] initWithIdentifier:[NSString stringWithFormat:@"%ld", i]];
 			[[column headerCell] setStringValue:@""];
 			[_tableView addTableColumn:column];
-			[column release];
 		}
 	}
 	
@@ -84,7 +82,6 @@
 		[_arrayDataSource addObject:arrHeaderColumn];
 		[_txtFieldName setStringValue:@""];
 		
-		[arrHeaderColumn release];
 	} else { // reference from data source of app delegate, if modifying method
 		AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 		NSMutableDictionary *dict = (NSMutableDictionary *)[appDelegate.arrayDataSource objectAtIndex:_index];
@@ -116,7 +113,6 @@
 
 - (BOOL)windowShouldClose:(id)sender
 {
-	[_arrayDataSource release];
 	
 	[NSApp stopModal];
 	
@@ -166,7 +162,6 @@
 			[arrRowDatas addObject:@"untitled"];
 		}
 		[_arrayDataSource addObject:arrRowDatas];
-		[arrRowDatas release];
 		
 		[_tableView reloadData];
 		
@@ -207,7 +202,6 @@
 		NSTableColumn *column = [[NSTableColumn alloc] initWithIdentifier:[NSString stringWithFormat:@"%ld", i]];
 		[[column headerCell] setStringValue:[arrHeaderData objectAtIndex:i]];
 		[_tableView addTableColumn:column];
-		[column release];
 	}
 	
 	[_tableView reloadData];
@@ -276,7 +270,6 @@
 		NSTableColumn *column = [[NSTableColumn alloc] initWithIdentifier:[NSString stringWithFormat:@"%ld", i]];
 		[[column headerCell] setStringValue:[arrHeaderData objectAtIndex:i]];
 		[_tableView addTableColumn:column];
-		[column release];
 	}
 	
 	[_tableView reloadData];
@@ -327,7 +320,6 @@
 		[appDelegate.arrayDataSource replaceObjectAtIndex:_index withObject:dict];
 	}
 	
-	[dict release];
 	
 	// print all contents of array
 	NSString *strLog = [NSString stringWithFormat:@"\n"];
@@ -405,7 +397,6 @@
 	[self.window.contentView addSubview:_txtFieldHeader];
 	[_txtFieldHeader setStringValue:[[column headerCell] stringValue]];
 	[[self window] makeFirstResponder:_txtFieldHeader];
-	[_txtFieldHeader release];
 }
 
 

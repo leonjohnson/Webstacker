@@ -358,7 +358,6 @@ void ABNotifierReachabilityDidChange(SCNetworkReachabilityRef target, SCNetworkR
              attributes:nil
              error:nil];
         }
-        [path retain];
     });
     return path;
 }
@@ -519,7 +518,6 @@ void ABNotifierReachabilityDidChange(SCNetworkReachabilityRef target, SCNetworkR
                                     initWithData:responseBody
                                     encoding:NSUTF8StringEncoding];
         ABLog(@"%@", responseString);
-        [responseString release];
 #endif
     }
     

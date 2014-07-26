@@ -8,7 +8,7 @@
 {
 	IBOutlet NSTableView						*_tableViewLayer;
 }
-@property (assign) Element *ele;
+@property (strong) Element *ele;
 /*
  @function:			OnVisible
  @purpose:			This function called when the user click the visible check box of layer table.

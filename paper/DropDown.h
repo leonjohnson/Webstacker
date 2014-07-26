@@ -2,11 +2,11 @@
 
 @interface DropDown : Element
 {
-    NSArray *dataSource;
+    NSArray *__strong dataSource;
 }
 
 - (void)setBoundRect:(NSRect)rt;
 - (void)drawElement:(CGContextRef)context;
 
-@property (nonatomic, assign) NSArray *dataSource;
+@property (nonatomic, strong) NSArray *dataSource;
 @end

@@ -221,7 +221,6 @@
 			[transform translateXBy: -round(rectangleBorderRect.size.width) yBy: 0];
 			[[transform transformBezierPath: rectangleNegativePath] fill];
 			
-			[shadowWithOffset release];
 		}
 		[NSGraphicsContext restoreGraphicsState];
 		
@@ -236,7 +235,6 @@
 		[NSGraphicsContext restoreGraphicsState];
 	}
 	
-	[shadow release];
 }
 
 @end

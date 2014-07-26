@@ -73,7 +73,7 @@
 /* programmatically create button.  This doesn't demonstrate anything new to autolayout.
  */
 - (NSButton *)addPushButtonWithTitle:(NSString *)title identifier:(NSString *)identifier superView:(NSView *)superview {
-    NSButton *pushButton = [[[NSButton alloc] init] autorelease];
+    NSButton *pushButton = [[NSButton alloc] init];
     [pushButton setIdentifier:identifier];
     [pushButton setBezelStyle:NSRoundRectBezelStyle];
     [pushButton setFont:[NSFont systemFontOfSize:12.0]];
@@ -91,7 +91,7 @@
 /* programmatically create text field.  This doesn't demonstrate anything new to autolayout.
  */
 - (NSTextField *)addTextFieldWithidentifier:(NSString *)identifier superView:(NSView *)superview {
-    NSTextField *textField = [[[NSTextField alloc] init] autorelease];
+    NSTextField *textField = [[NSTextField alloc] init];
     [textField setIdentifier:identifier];
     [[textField cell] setControlSize:NSSmallControlSize];
     [textField setBordered:YES];

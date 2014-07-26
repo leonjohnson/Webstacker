@@ -7,14 +7,14 @@
 
 @interface Image : Element
 {
-	NSURL               *filePath;
+	NSURL               *__strong filePath;
 	NSImageView			*imageView;
     NSString            *imgPath;
     CGImageRef          image;
 }
 
-@property (nonatomic, assign) NSURL *filePath;
-@property (nonatomic, assign) NSImageView *imageView;
+@property (nonatomic, strong) NSURL *filePath;
+@property (nonatomic) NSImageView *imageView;
 /*
  @function:		getShapeData
  @params:		nothing

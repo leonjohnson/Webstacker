@@ -476,7 +476,6 @@
 - (void)setShadowList:(NSArray *)shadowList
 {
 	if (_arrayShadows != nil) {
-		[_arrayShadows release];
 		_arrayShadows = nil;
 	}
 	
@@ -527,7 +526,7 @@
 		if ([[tableColumn identifier] isEqualToString:@"Shadow"]) {
 			NSTextField *viewName = [tableView makeViewWithIdentifier:[NSString stringWithFormat:@"ShadowTableViewNameCell%ld", row] owner:self];
 			if (viewName == nil) {
-				viewName = [[[NSTextField alloc] init] autorelease];
+				viewName = [[NSTextField alloc] init];
 				viewName.identifier = [NSString stringWithFormat:@"ShadowTableViewNameCell%ld", row];
 			}
 			

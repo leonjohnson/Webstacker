@@ -26,16 +26,11 @@
 
 - (void)dealloc
 {
-	if (filePath) {
-		[filePath release];
-	}
 	
 	if (imageView) {
 		[imageView removeFromSuperview];
-		[imageView release];
 	}
 	
-	[super dealloc];
 }
 
 

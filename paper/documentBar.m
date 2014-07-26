@@ -57,8 +57,6 @@
     [rectanglePath stroke];
     
     //// Cleanup
-    [shadow release];
-    [dBar release];
 
 
 }

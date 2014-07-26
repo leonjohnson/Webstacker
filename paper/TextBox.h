@@ -10,25 +10,25 @@
 {
 	//NSAttributedString			*text;
 	BOOL				isEditing;
-    NSMutableParagraphStyle * text2Style;
-    NSDictionary *bodyCopy;
-    NSDictionary *headerWhiteStyle;
-    NSDictionary *headerBlackStyle;
-    NSString *choosenStyle;
+    NSMutableParagraphStyle * __strong text2Style;
+    NSDictionary *__strong bodyCopy;
+    NSDictionary *__strong headerWhiteStyle;
+    NSDictionary *__strong headerBlackStyle;
+    NSString *__strong choosenStyle;
     
-    NSMutableDictionary *customTextStyles;
+    NSMutableDictionary *__strong customTextStyles;
 }
 
 //@property (nonatomic, retain)	NSAttributedString *text;
 @property (assign) BOOL	isEditing;
 
-@property (assign, nonatomic) NSMutableParagraphStyle *text2Style;
-@property (assign, nonatomic) NSDictionary *bodyCopy;
-@property (assign, nonatomic) NSDictionary *headerWhiteStyle;
-@property (assign, nonatomic) NSDictionary *headerBlackStyle;
-@property (assign, nonatomic) NSString *choosenStyle;
+@property (strong, nonatomic) NSMutableParagraphStyle *text2Style;
+@property (strong, nonatomic) NSDictionary *bodyCopy;
+@property (strong, nonatomic) NSDictionary *headerWhiteStyle;
+@property (strong, nonatomic) NSDictionary *headerBlackStyle;
+@property (strong, nonatomic) NSString *choosenStyle;
 
-@property (assign, nonatomic) NSMutableDictionary *customTextStyles;
+@property (strong, nonatomic) NSMutableDictionary *customTextStyles;
 
 
 - (void)dealloc;

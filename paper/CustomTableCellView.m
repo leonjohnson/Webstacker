@@ -29,7 +29,6 @@
 
 
 - (void)dealloc {
-    [_secondTextCell release], _secondTextCell = nil;
-    [super dealloc];
+    _secondTextCell = nil;
 }
 @end

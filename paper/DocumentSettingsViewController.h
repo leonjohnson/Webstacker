@@ -5,10 +5,10 @@
 
 {
     //NSPopover *myPopover;
-    NSButton *OKbutton;
-    DocumentSettingsView *dsView;
-    IBOutlet NSTextField *pageTitle_Snow_Leopard;
-    IBOutlet NSTextField *pageTitle;
+    NSButton *__strong OKbutton;
+    DocumentSettingsView *__strong dsView;
+    IBOutlet NSTextField *__strong pageTitle_Snow_Leopard;
+    IBOutlet NSTextField *__strong pageTitle;
 
     
     
@@ -18,10 +18,10 @@
 -(IBAction)saveDocumentSettings:(id)sender;
 - (IBAction)setStageBackgroundColor:(id)sender;
 
-@property (assign) IBOutlet NSButton *OKbutton;
-@property (retain) NSPopover *myPopover;
-@property (assign, nonatomic) DocumentSettingsView *dsView;
+@property (strong) IBOutlet NSButton *OKbutton;
+@property (strong) NSPopover *myPopover;
+@property (strong, nonatomic) DocumentSettingsView *dsView;
 
-@property (assign) NSTextField *pageTitle;
-@property (assign) NSTextField *pageTitle_Snow_Leopard;
+@property (strong) NSTextField *pageTitle;
+@property (strong) NSTextField *pageTitle_Snow_Leopard;
 @end

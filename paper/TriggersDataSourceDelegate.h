@@ -10,6 +10,6 @@
 }
 
 
-@property (assign, nonatomic) NSMutableString *selectedTrigger;
-@property (retain) id<ChangeBuilderWindowElementsAttributes>	delegate;
+@property (strong, nonatomic) NSMutableString *selectedTrigger;
+@property (strong) id<ChangeBuilderWindowElementsAttributes>	delegate;
 @end

@@ -29,9 +29,6 @@
 {
 	AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 	
-	if (_arrayDataSource) {
-		[_arrayDataSource release];
-	}
 	
 	_arrayDataSource = [[NSMutableArray alloc] initWithArray:appDelegate.arrayDataSource];
 	[_tableView reloadData];
@@ -102,7 +99,7 @@
 		
 		NSTextField *viewName = [tableView makeViewWithIdentifier:[NSString stringWithFormat:@"TableViewNameCell%ld", row] owner:self];
 		if (viewName == nil) {
-			viewName = [[[NSTextField alloc] init] autorelease];
+			viewName = [[NSTextField alloc] init];
 			viewName.identifier = [NSString stringWithFormat:@"TableViewNameCell%ld", row];
 		}
 		

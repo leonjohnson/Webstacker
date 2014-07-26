@@ -6,13 +6,13 @@
 @interface SelectedActionsDataSourceDelegate : NSObject <NSTableViewDataSource, NSTableViewDelegate, ChangeSelectedActionsDataSource>
 {
     //delete button    
-    IBOutlet NSTableView *SA_tableview;
-    IBOutlet id <ChangeBuilderWindowElementsAttributes> delegate;
+    IBOutlet NSTableView *__strong SA_tableview;
+    IBOutlet id <ChangeBuilderWindowElementsAttributes> __strong delegate;
     
 }
 //delete button
 
-@property (nonatomic, assign) NSTableView *SA_tableview;
-@property (nonatomic, assign) NSMutableArray *SA_dataSource;
-@property (assign) id<ChangeBuilderWindowElementsAttributes>	delegate;
+@property (nonatomic, strong) NSTableView *SA_tableview;
+@property (nonatomic, strong) NSMutableArray *SA_dataSource;
+@property (strong) id<ChangeBuilderWindowElementsAttributes>	delegate;
 @end

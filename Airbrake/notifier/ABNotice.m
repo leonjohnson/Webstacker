@@ -57,7 +57,7 @@ const int ABNotifierExceptionNoticeType   = 2;
 @property (nonatomic, copy) NSString        *action;
 @property (nonatomic, copy) NSString        *executable;
 @property (nonatomic, copy) NSArray         *callStack;
-@property (nonatomic, retain) NSNumber      *noticeVersion;
+@property (nonatomic, strong) NSNumber      *noticeVersion;
 @property (nonatomic, copy) NSDictionary    *environmentInfo;
 @end
 
@@ -172,7 +172,6 @@ const int ABNotifierExceptionNoticeType   = 2;
                 NSMutableDictionary *mutableInfo = [self.environmentInfo mutableCopy];
                 [mutableInfo addEntriesFromDictionary:[dictionary objectForKey:ABNotifierExceptionParametersKey]];
                 self.environmentInfo = mutableInfo;
-                [mutableInfo release];
                 
             }
             
@@ -186,19 +185,18 @@ const int ABNotifierExceptionNoticeType   = 2;
         }
         @catch (NSException *exception) {
             ABLog(@"%@", exception);
-            [self release];
             return nil;
         }
     }
     return self;
 }
 + (ABNotice *)noticeWithContentsOfFile:(NSString *)path {
-    return [[[ABNotice alloc] initWithContentsOfFile:path] autorelease];
+    return [[ABNotice alloc] initWithContentsOfFile:path];
 }
 - (NSString *)hoptoadXMLString {
     
     // pool
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     // create root
     DDXMLElement *notice = [DDXMLElement elementWithName:@"notice"];
@@ -265,10 +263,10 @@ const int ABNotifierExceptionNoticeType   = 2;
     NSString *XMLString = [[notice XMLString] copy];
     
     // pool
-    [pool drain];
+    //[pool drain];
     
     // return
-    return [XMLString autorelease];
+    //return [XMLString autorelease];
     
 }
 - (NSString *)description {
@@ -283,17 +281,6 @@ const int ABNotifierExceptionNoticeType   = 2;
 	}
 	free(properties);
     return [NSString stringWithFormat:@"%@ %@", [super description], [dictionary description]]; 
-}
-- (void)dealloc {
-	self.exceptionName = nil;
-	self.exceptionReason = nil;
-	self.environmentName = nil;
-	self.environmentInfo = nil;
-    self.bundleVersion = nil;
-    self.action = nil;
-	self.callStack = nil;
-	self.controller = nil;
-	[super dealloc];
 }
 
 @end

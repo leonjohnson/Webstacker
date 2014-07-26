@@ -49,10 +49,8 @@
 {
 	free( handleArray );
 	if (URLString) {
-		[URLString release];
 	}
 	
-	[super dealloc];
 }
 
 +(void)initialize
@@ -777,13 +775,14 @@
 			element = [[DynamicRow alloc] init];
 			break;
             
-        case SHAPE_IMAGE:
+        case SHAPE_IMAGE: {
 			element = [[Image alloc] init];
             //NSNumber *imgType = [dict valueForKey:@"ImageType"];
 			NSData *imgData = [dict valueForKey:@"ImageData"];
 			[((Image *)element) setImageData:imgData];
 			break;
         
+        }
         case SHAPE_PLACEHOLDER_IMAGE:
 			element = [[Image alloc] init];
 			break;
@@ -794,12 +793,13 @@
             NSLog(@"boxed");
             break;
 			
-		case SHAPE_TEXTBOX:
+		case SHAPE_TEXTBOX: {
 			element = [[TextBox alloc] init];
 			NSMutableAttributedString *text = [dict valueForKey:@"Text"];
 			[((TextBox *)element) setContentText:text];
 			break;
 			
+		}
 		case SHAPE_TEXTFIELD:
 			element = [[TextInputField alloc] init];
 			break;
@@ -935,7 +935,7 @@
     [bir setSize:imgSize];
     [self cacheDisplayInRect:[self bounds] toBitmapImageRep:bir];
     
-    NSImage* image = [[[NSImage alloc]initWithSize:imgSize] autorelease];
+    NSImage* image = [[NSImage alloc]initWithSize:imgSize];
     [image addRepresentation:bir];
     return image;
 }

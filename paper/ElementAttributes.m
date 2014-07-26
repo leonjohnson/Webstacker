@@ -166,7 +166,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSColor *colorReceived = sender;
     NSLog(@"color received : %@", colorReceived);
     colorAttributes = [NSColor new];
-    [colorAttributes retain];
     NSLog(@"colorattributes = %@", colorAttributes);
     colorAttributes = colorReceived;
     NSLog(@"Attempting to set color attributes 2");

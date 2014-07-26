@@ -41,14 +41,10 @@
     return self;
 }
 
-- (void)dealloc
-{
-	[super dealloc];
-}
 
 - (NSDictionary *)attributesForMarkString
 {
-    NSMutableParagraphStyle *style = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
+    NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     
     [style setLineBreakMode:NSLineBreakByClipping];
     [style setAlignment:NSLeftTextAlignment];

@@ -11,9 +11,9 @@
 
 @interface HeaderTextField : NSTextField
 {
-	id<HeaderTextDelegate>				headerDelegate;
+	id<HeaderTextDelegate>				__strong headerDelegate;
 }
 
-@property (assign) id<HeaderTextDelegate>				headerDelegate;
+@property (strong) id<HeaderTextDelegate>				headerDelegate;
 
 @end

@@ -3,15 +3,15 @@
 
 @interface Singleton : NSObject
 {
-    NSNumber *mynumber;
-    Element *currentElement;
+    NSNumber *__strong mynumber;
+    Element *__strong currentElement;
     CGContextRef contextref;
-    NSFont *lastSelectedFont;
+    NSFont *__strong lastSelectedFont;
     
 }
 
-@property (assign, nonatomic) Element *currentElement;
-@property (assign, nonatomic) NSNumber *mynumber;
+@property (strong, nonatomic) Element *currentElement;
+@property (strong, nonatomic) NSNumber *mynumber;
 @property (assign, nonatomic) CGContextRef contextref;
-@property (assign, nonatomic) NSFont *lastSelectedFont;
+@property (strong, nonatomic) NSFont *lastSelectedFont;
 @end

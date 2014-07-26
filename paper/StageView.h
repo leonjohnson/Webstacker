@@ -161,105 +161,105 @@ typedef NSInteger		ShapeCutCopyType;
     
     BOOL abortConversion;
 }
-@property (nonatomic, assign) NSMutableArray *sortedArray;
-@property (nonatomic, assign) NSMutableString *jsCode2;
-@property (nonatomic, assign) NSMutableString *pageTitle;
-@property (nonatomic, assign) NSMutableArray *finalGrouping;
-@property (nonatomic, assign) NSMutableArray *solos;
-@property (nonatomic, assign) NSMutableArray *firstAndLastRowsInContainer;
-@property (nonatomic, assign) NSMutableDictionary *textStyles;
-@property (nonatomic, assign) NSURL *directoryURLToPlaceFiles;
-@property (nonatomic, assign) NSString *outputFolderPath;
+@property (nonatomic, strong) NSMutableArray *sortedArray;
+@property (nonatomic, strong) NSMutableString *jsCode2;
+@property (nonatomic, strong) NSMutableString *pageTitle;
+@property (nonatomic, strong) NSMutableArray *finalGrouping;
+@property (nonatomic, strong) NSMutableArray *solos;
+@property (nonatomic, strong) NSMutableArray *firstAndLastRowsInContainer;
+@property (nonatomic, strong) NSMutableDictionary *textStyles;
+@property (nonatomic, strong) NSURL *directoryURLToPlaceFiles;
+@property (nonatomic, strong) NSString *outputFolderPath;
 
 
 //background Appearance
 @property (nonatomic) BOOL showGridlines;
 
-@property (assign) NSPanel *panel;
+@property (strong) NSPanel *panel;
 //Flags
 @property (assign) BOOL elementBeenDroppedToStage;
 
 
 
-@property (nonatomic, assign) Element *currentElement;
-@property (assign) id<SetAttributeDelegate>		attributeDelegate;
-@property (assign) id<SetLayerOrderDelegate>		layerDelegate;
+@property (nonatomic, strong) Element *currentElement;
+@property (strong) id<SetAttributeDelegate>		attributeDelegate;
+@property (strong) id<SetLayerOrderDelegate>		layerDelegate;
 @property (nonatomic, assign) int elementCount;
 @property (nonatomic, assign) int numberOfGroupings;
-@property (nonatomic, assign) NSButton *groupItems;
-@property (nonatomic, assign) NSButton *documentSettingsButton;
-@property (nonatomic, assign) NSPopover *documentSettingsPopover;
-@property (nonatomic, assign) NSMutableArray *groupingBoxes;
-@property (nonatomic, assign) NSMutableArray *rows;
-@property (nonatomic, assign) NSMutableArray *rowMargins;
-@property (nonatomic, assign) NSMutableArray *leftToRightTopToBottom;
+@property (nonatomic, strong) NSButton *groupItems;
+@property (nonatomic, strong) NSButton *documentSettingsButton;
+@property (nonatomic, strong) NSPopover *documentSettingsPopover;
+@property (nonatomic, strong) NSMutableArray *groupingBoxes;
+@property (nonatomic, strong) NSMutableArray *rows;
+@property (nonatomic, strong) NSMutableArray *rowMargins;
+@property (nonatomic, strong) NSMutableArray *leftToRightTopToBottom;
 
-@property (nonatomic, assign) StageTextView *textboxView;
-@property (assign, nonatomic) NSScrollView *sv;
+@property (nonatomic, strong) StageTextView *textboxView;
+@property (strong, nonatomic) NSScrollView *sv;
 
-@property (nonatomic, assign) NSMutableArray *elementArray;
-@property (nonatomic, assign) NSMutableArray *selElementArray;
-@property (nonatomic, assign) DocumentSettingsView *documentSettingsView;
+@property (nonatomic, strong) NSMutableArray *elementArray;
+@property (nonatomic, strong) NSMutableArray *selElementArray;
+@property (nonatomic, strong) DocumentSettingsView *documentSettingsView;
 @property (nonatomic, assign) NSRect documentContainer;
-@property (nonatomic, assign) NSColor *stageBackgroundColor;
+@property (nonatomic, strong) NSColor *stageBackgroundColor;
 
 //TextBox Menu items
 
 // Labels 
-@property (assign) IBOutlet NSTextField *fontFamilyLabel; //
-@property (assign) IBOutlet NSTextField *fontStyleLabel; //
-@property (assign) IBOutlet NSTextField *textSizeLabel; //
-@property (assign) IBOutlet NSTextField *kerningLabel; //
-@property (assign) IBOutlet NSTextField *leadingLabel; //
-@property (assign) IBOutlet NSTextField *fontcolourWellLabel; //
-@property (assign) IBOutlet NSTextField *buttonTextLabel;
+@property (strong) IBOutlet NSTextField *fontFamilyLabel; //
+@property (strong) IBOutlet NSTextField *fontStyleLabel; //
+@property (strong) IBOutlet NSTextField *textSizeLabel; //
+@property (strong) IBOutlet NSTextField *kerningLabel; //
+@property (strong) IBOutlet NSTextField *leadingLabel; //
+@property (strong) IBOutlet NSTextField *fontcolourWellLabel; //
+@property (strong) IBOutlet NSTextField *buttonTextLabel;
 
 // Fields
 
 @property (nonatomic, strong)  IBOutlet NSPopUpButton *typeFaceName;
 @property (nonatomic, strong) IBOutlet NSPopUpButton *typeFaceTrait;
-@property (assign) IBOutlet NSTextField *fontSizeTextField2;
-@property (assign) IBOutlet NSTextField *kerningField;
-@property (assign) IBOutlet NSTextField *leadingField; //
-@property (assign, nonatomic) NSColorWell *fontColorWell; 
-@property (assign, nonatomic) NSSegmentedControl *fontTraitControl;
-@property (assign, nonatomic) NSTextField *buttonTextField;
-@property (assign, nonatomic) IBOutlet NSTextField *stageBackgroundColorAsHex;
+@property (strong) IBOutlet NSTextField *fontSizeTextField2;
+@property (strong) IBOutlet NSTextField *kerningField;
+@property (strong) IBOutlet NSTextField *leadingField; //
+@property (strong, nonatomic) NSColorWell *fontColorWell; 
+@property (strong, nonatomic) NSSegmentedControl *fontTraitControl;
+@property (strong, nonatomic) NSTextField *buttonTextField;
+@property (strong, nonatomic) IBOutlet NSTextField *stageBackgroundColorAsHex;
 
 
 // Stepper
-@property (assign, nonatomic) NSStepper *kerningStepper;
-@property (assign, nonatomic) NSStepper *leadingStepper;
+@property (strong, nonatomic) NSStepper *kerningStepper;
+@property (strong, nonatomic) NSStepper *leadingStepper;
 
 
 
 
 
 
-@property (nonatomic, assign) IBOutlet NSPopover *textPopover;//NSPopover *textPopover;
-//@property (assign) NSTextField *sizeTextField;
+@property (nonatomic, strong) IBOutlet NSPopover *textPopover;//NSPopover *textPopover;
+//@property (strong) NSTextField *sizeTextField;
 
 
 
 
-@property (assign, nonatomic) NSMutableString *layoutType;
-@property (assign, nonatomic) NSMutableArray *orderOfLayers;
+@property (strong, nonatomic) NSMutableString *layoutType;
+@property (strong, nonatomic) NSMutableArray *orderOfLayers;
 
-@property (assign) IBOutlet NSView			*fontView;
-@property (assign) IBOutlet NSSearchField	*searchField;
+@property (strong) IBOutlet NSView			*fontView;
+@property (strong) IBOutlet NSSearchField	*searchField;
 @property (nonatomic) BOOL					isShowFontTab;
 
 @property (nonatomic) BOOL koObservableMapped;
-@property (assign, nonatomic) NSString *koObservable;
+@property (strong, nonatomic) NSString *koObservable;
 
-@property (assign, nonatomic) IBOutlet NSTextField *marginAboveEachRowLabel;
-@property (assign, nonatomic) IBOutlet NSTextField *marginAboveEachRow;
+@property (strong, nonatomic) IBOutlet NSTextField *marginAboveEachRowLabel;
+@property (strong, nonatomic) IBOutlet NSTextField *marginAboveEachRow;
 
-@property (assign, nonatomic) NSMutableArray *idsInsideDyRow;
+@property (strong, nonatomic) NSMutableArray *idsInsideDyRow;
 
-@property (assign, nonatomic) NSMutableString *currentMessage;
+@property (strong, nonatomic) NSMutableString *currentMessage;
 
-@property (assign, nonatomic) NSString *numberOfImages;
+@property (strong, nonatomic) NSString *numberOfImages;
 
 @property (assign) float totalNumberOfCycles;
 

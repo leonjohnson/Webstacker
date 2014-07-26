@@ -17,7 +17,7 @@
 	if (self) {
 		isEditing = TRUE;
 		contentText = [[NSMutableAttributedString alloc]initWithString:@""];
-        text2Style = [[[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
+        text2Style = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
         bodyCopy = [NSDictionary dictionaryWithObjectsAndKeys: 
                                   [NSFont fontWithName: @"Helvetica Neue Light" size: 14], NSFontAttributeName,
                                   [NSColor grayColor], NSForegroundColorAttributeName,
@@ -42,11 +42,9 @@
 - (void)dealloc
 {
 	if (contentText) {
-		[contentText release];
 		contentText = nil;
 	}
 	
-	[super dealloc];
 }
 
 
@@ -74,7 +72,6 @@
 - (void)setText:(NSAttributedString *)txt //Called when finish editing textview.
 {
 	if (contentText) {
-		[contentText release];
 		contentText = nil;
 	}
 	

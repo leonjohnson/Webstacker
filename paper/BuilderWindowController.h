@@ -9,21 +9,21 @@
     IBOutlet NSTabView *builderTabs;
     
     //Test views
-    Button *buttonView;
+    Button *__strong buttonView;
     
     //Buttons
-    IBOutlet NSButton *deleteButton;
-    IBOutlet NSButton *addButton;
-    IBOutlet NSButton *nextButton;
-    IBOutlet NSButton *backButton;
-    IBOutlet NSButton *saveButton;
+    IBOutlet NSButton *__strong deleteButton;
+    IBOutlet NSButton *__strong addButton;
+    IBOutlet NSButton *__strong nextButton;
+    IBOutlet NSButton *__strong backButton;
+    IBOutlet NSButton *__strong saveButton;
     
     //Enter a name for this action
     IBOutlet NSTextField *actionName;
     
     //Triggers
-    IBOutlet NSScrollView *triggerScrollView;
-    IBOutlet NSTableView *triggerTableView;
+    IBOutlet NSScrollView *__strong triggerScrollView;
+    IBOutlet NSTableView *__strong triggerTableView;
     
 
     int indexOfSelectedTrigger;
@@ -31,7 +31,7 @@
     
     
     //Actions
-    IBOutlet NSTextField *actionsLabel;
+    IBOutlet NSTextField *__strong actionsLabel;
     IBOutlet NSView *actionView;
     IBOutlet NSTableView *actionsTableView;
     IBOutlet NSScrollView *actionsScrollView;
@@ -42,43 +42,43 @@
     IBOutlet NSTableView *actionsSelectedTableView;
   
     //Datasources
-    NSMutableDictionary *actionList;
-    NSMutableArray *ds; // This contains the list of actions to use in .js
+    NSMutableDictionary *__strong actionList;
+    NSMutableArray *__strong ds; // This contains the list of actions to use in .js
 }
 
 -(IBAction)addActionToMyList:(id)sender;
 
-@property (assign, nonatomic) Button *buttonView;
+@property (strong, nonatomic) Button *buttonView;
 
 //Action
-@property (retain, nonatomic) NSTextField *actionName;
+@property (strong, nonatomic) NSTextField *actionName;
 //Buttons
-@property (assign, nonatomic) NSButton *deleteButton;
-@property (assign, nonatomic) NSButton *addButton;
-@property (assign, nonatomic) NSButton *nextButton;
-@property (assign, nonatomic) NSButton *backButton;
-@property (assign, nonatomic) NSButton *saveButton;
+@property (strong, nonatomic) NSButton *deleteButton;
+@property (strong, nonatomic) NSButton *addButton;
+@property (strong, nonatomic) NSButton *nextButton;
+@property (strong, nonatomic) NSButton *backButton;
+@property (strong, nonatomic) NSButton *saveButton;
 
 //Triggers
-@property (assign, nonatomic) NSScrollView *triggerScrollView;
-@property (assign, nonatomic) NSTableView *triggerTableView;
+@property (strong, nonatomic) NSScrollView *triggerScrollView;
+@property (strong, nonatomic) NSTableView *triggerTableView;
 
 @property (assign, nonatomic) NSUInteger *indexRowSelected;
 
-@property (assign, nonatomic) NSView *triggerView;
+@property (strong, nonatomic) NSView *triggerView;
 
-@property (assign, nonatomic) NSTableView *actionsTableView;
-@property (assign, nonatomic) NSScrollView *actionsScrollView;
+@property (strong, nonatomic) NSTableView *actionsTableView;
+@property (strong, nonatomic) NSScrollView *actionsScrollView;
 
 //Actions
-@property (assign, nonatomic) NSTextField *actionsLabel;
+@property (strong, nonatomic) NSTextField *actionsLabel;
 
 
 //Selected Actions
-@property (assign, nonatomic) NSScrollView *actionsSelectedScrollView;
-@property (assign, nonatomic) NSTableView *actionsSelectedTableView;
+@property (strong, nonatomic) NSScrollView *actionsSelectedScrollView;
+@property (strong, nonatomic) NSTableView *actionsSelectedTableView;
 
 //Data sources
-@property (assign, nonatomic) NSMutableDictionary *actionList;
-@property (assign, nonatomic) NSMutableArray *ds;
+@property (strong, nonatomic) NSMutableDictionary *actionList;
+@property (strong, nonatomic) NSMutableArray *ds;
 @end

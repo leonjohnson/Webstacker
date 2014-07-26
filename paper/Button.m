@@ -235,7 +235,7 @@
     
     
     //// Text 2 Drawing
-    NSMutableParagraphStyle* text2Style = [[[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
+    NSMutableParagraphStyle* text2Style = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     [text2Style setAlignment: NSCenterTextAlignment];
     
     NSDictionary* text2FontAttributes = [NSDictionary dictionaryWithObjectsAndKeys:

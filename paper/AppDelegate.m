@@ -19,10 +19,10 @@
 
 @implementation AppDelegate
 {
-    IBOutlet NSProgressIndicator *progressIndicator;
-    IBOutlet NSPanel *conversionProgressScreen;
-    IBOutlet NSTextField *statusMessage;
-    IBOutlet NSTextField *percentCompleteMessage;
+    IBOutlet NSProgressIndicator *__strong progressIndicator;
+    IBOutlet NSPanel *__strong conversionProgressScreen;
+    IBOutlet NSTextField *__strong statusMessage;
+    IBOutlet NSTextField *__strong percentCompleteMessage;
 }
 
 @synthesize progressIndicator;
@@ -90,10 +90,6 @@
 }
 
 
-- (void)dealloc
-{
-    [super dealloc];
-}
 
 /*- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender
 {
@@ -120,7 +116,7 @@
     // Check if this trial version of the app has expired and should close
     NSDateFormatter* df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"MM/dd/yyyy"];
-    NSDate* expiryDate = [df dateFromString:@"12/01/2013"];
+    NSDate* expiryDate = [df dateFromString:@"12/01/2015"];
     NSDate * today = [NSDate date];
     NSComparisonResult result = [today compare:expiryDate];
     switch (result)
@@ -151,13 +147,12 @@
 
     // Create the attributes dictionary, you can change the font size
     // to whatever is useful to you
-    NSMutableDictionary *sAttribs = [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
+    NSMutableDictionary *sAttribs = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                       [NSFont boldSystemFontOfSize:10.0],NSFontAttributeName,
                                       //shadow, NSShadowAttributeName,
                                       fillColor, NSForegroundColorAttributeName,
-                                      nil] autorelease];
+                                      nil];
     // The shadow object has been assigned to the dictionary, so release
-    [shadow release];
     // Create a new attributed string with your attributes dictionary attached
     NSAttributedString *s = [[NSAttributedString alloc] initWithString:@"Background color"
                                                             attributes:sAttribs];
@@ -171,7 +166,6 @@
     [backgroundColorLabel setStringValue:NSLocalizedString(@"Shape color", nil)];
     [borderWidthLabel setStringValue:NSLocalizedString(@"Border Width", nil)];
     // Clean up
-    [s release];
     
 }
 

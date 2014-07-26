@@ -9,5 +9,5 @@
 #import <Cocoa/Cocoa.h>
 
 @interface CustomTableCellView : NSTableCellView
-@property (nonatomic, retain) IBOutlet NSTextField *secondTextCell;
+@property (nonatomic, strong) IBOutlet NSTextField *secondTextCell;
 @end

@@ -3,13 +3,13 @@
 
 @interface NSGalleryTableView : NSTableView
 {
-	id<DrawShapeDelegate>					drawShapeDelegate;
+	id<DrawShapeDelegate>					__strong drawShapeDelegate;
 	
 	BOOL									isDrag;
 	NSInteger								DragIndex;
 }
 
-@property (assign) id<DrawShapeDelegate>				drawShapeDelegate;
+@property (strong) id<DrawShapeDelegate>				drawShapeDelegate;
 @property (assign) BOOL									isDrag;
 @property (assign) NSInteger							DragIndex;
 

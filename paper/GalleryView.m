@@ -52,7 +52,7 @@
 	NSMutableArray *resourceArray = [NSMutableArray arrayWithArray:[[NSBundle mainBundle] pathsForResourcesOfType:@"png" inDirectory:nil]];
 	ElementTableDataSource = [[NSMutableArray alloc] init];
 	
-	for (NSString *fileName in resourceArray) 
+	for (__strong NSString *fileName in resourceArray) 
     {
         fileName = [[fileName componentsSeparatedByString:@"/"] lastObject]; //get the file path and take just what's after the "/"
 		
@@ -107,7 +107,7 @@
 
 - (NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-	ImageAndTextCell *cell = [[[ImageAndTextCell alloc] init] autorelease];
+	ImageAndTextCell *cell = [[ImageAndTextCell alloc] init];
 	
 	return cell;
 }

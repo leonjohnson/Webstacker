@@ -26,26 +26,26 @@
 	IBOutlet GalleryView				*galleryView;
 	NSData								*dataFromeFile;
 	NSInteger							scale;
-    Singleton *sg;
-    DarkTitleViewButtons *darkButtons;
+    Singleton *__strong sg;
+    DarkTitleViewButtons *__strong darkButtons;
     
-    DocumentBar				*titleView;
+    DocumentBar				*__strong titleView;
 }
 
 
 // shape stage view, user can draw shape on it.
-@property(assign) IBOutlet CustomScrollView			*mainStageScrollView;
-@property(assign) IBOutlet StageView				*stageView;
-@property(assign) IBOutlet DocumentBar				*titleView;
+@property(strong) IBOutlet CustomScrollView			*mainStageScrollView;
+@property(strong) IBOutlet StageView				*stageView;
+@property(strong) IBOutlet DocumentBar				*titleView;
 
 @property (nonatomic) BOOL				RulerVisible;
 @property (nonatomic) BOOL				GridLineVisible;
 @property (nonatomic) NSInteger			scale;
-@property (assign, nonatomic) Singleton *sg;
-@property (nonatomic, assign) DarkTitleViewButtons *darkButtons;
+@property (strong, nonatomic) Singleton *sg;
+@property (nonatomic, strong) DarkTitleViewButtons *darkButtons;
 
-@property (assign, nonatomic) NSMutableSet *elementsReferedToInBuilderScripts;
-@property (assign, nonatomic) NSString *builderScriptName;
+@property (strong, nonatomic) NSMutableSet *elementsReferedToInBuilderScripts;
+@property (strong, nonatomic) NSString *builderScriptName;
 
 
 //  Window Delegate

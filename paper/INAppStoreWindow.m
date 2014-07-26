@@ -108,7 +108,7 @@ static inline CGGradientRef createGradientWithColors(NSColor *startingColor, NSC
 }
 
 @interface INAppStoreWindowDelegateProxy : NSProxy <NSWindowDelegate>
-@property (nonatomic, assign) id<NSWindowDelegate> secondaryDelegate;
+@property (nonatomic, strong) id<NSWindowDelegate> secondaryDelegate;
 @end
 
 @implementation INAppStoreWindowDelegateProxy

@@ -21,7 +21,7 @@ static Singleton *sharedSingletonManager = nil;
 
 + (id)allocWithZone:(NSZone *)zone
 {
-    return [[self sharedInstance] retain];
+    return [self sharedInstance];
 }
 
 -(id)init
@@ -37,24 +37,6 @@ static Singleton *sharedSingletonManager = nil;
     return self;
 }
 
-- (id)retain
-{
-    return self;
-}
 
-- (NSUInteger)retainCount
-{
-    return NSUIntegerMax;  //denotes an object that cannot be released
-}
-/*
-- (void)release
-{
-    //do nothing
-}
-*/
-- (id)autorelease
-{
-    return self;
-}
 
 @end

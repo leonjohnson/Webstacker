@@ -20,22 +20,22 @@
 {
 
 	Singleton *sg;
-    IBOutlet DocumentBar                *dBar;
+    IBOutlet DocumentBar                *__strong dBar;
     
-    IBOutlet GalleryView				*galleryPanel;
-	IBOutlet StageView					*stageView;
-	IBOutlet AttributePanel				*attributePanel;
+    IBOutlet GalleryView				*__strong galleryPanel;
+	IBOutlet StageView					*__strong stageView;
+	IBOutlet AttributePanel				*__strong attributePanel;
 	BOOL								attributePanelVisible;
 	
-	IBOutlet AlignmentPanel				*alignmentPanel;
+	IBOutlet AlignmentPanel				*__strong alignmentPanel;
     BOOL								alignmentPanelVisible;
     
 	IBOutlet NSTextField				*spacingTextField;
     
-    IBOutlet NSColorWell                *fontColorWell;
+    IBOutlet NSColorWell                *__strong fontColorWell;
     IBOutlet NSPanel					*fontPanel;
-    IBOutlet NSPopUpButton              *typeFaceName;
-    IBOutlet NSPopUpButton              *typeFaceTrait;
+    IBOutlet NSPopUpButton              *__strong typeFaceName;
+    IBOutlet NSPopUpButton              *__strong typeFaceTrait;
     BOOL								fontPanelVisible;
     BOOL                                buttonPanelVisible;
 	
@@ -52,11 +52,11 @@
     
     IBOutlet NSSegmentedControl         *fontTraitControl;
     
-    IBOutlet NSColorWell *pl;
-    NSNumber *nu;
+    IBOutlet NSColorWell *__strong pl;
+    NSNumber *__strong nu;
     
     IBOutlet NSTextField                *fontSizeTextField2;
-    IBOutlet NSComboBox *fontSizeComboBox;
+    IBOutlet NSComboBox *__strong fontSizeComboBox;
     
     //For the border width
     IBOutlet NSSlider *borderWidthSlider;
@@ -64,9 +64,9 @@
     IBOutlet NSMatrix *borderSelection;
     
     //For the border radius
-    IBOutlet NSSlider *borderRadiusSlider;
+    IBOutlet NSSlider *__strong borderRadiusSlider;
     IBOutlet NSMatrix *borderCornerSelection;
-    IBOutlet NSTextField *borderRadiusValue;
+    IBOutlet NSTextField *__strong borderRadiusValue;
     
     IBOutlet NSButtonCell *topLeftRadius;
     IBOutlet NSButtonCell *topRightRadius;
@@ -75,9 +75,9 @@
     
     
     //For the Button
-    IBOutlet NSTextField *buttonURLField;
+    IBOutlet NSTextField *__strong buttonURLField;
     IBOutlet NSTextField *buttonLabel;
-    IBOutlet NSPanel *buttonPanel;
+    IBOutlet NSPanel *__strong buttonPanel;
     
     
     //For the border radius
@@ -86,103 +86,103 @@
     IBOutlet NSTextField *opacityValue;
     
     //For the color inputbox
-    IBOutlet NSTextField *colorHexValue;
+    IBOutlet NSTextField *__strong colorHexValue;
     
     //For the ID label
-    IBOutlet NSTextField *elementidField;
-    IBOutlet NSTextField *labelWarningField;
+    IBOutlet NSTextField *__strong elementidField;
+    IBOutlet NSTextField *__strong labelWarningField;
         
     //Layout type - px or %
     //IBOutlet NSPopUpButton *layoutType;
     
     //data fields
-    IBOutlet NSComboBox *actionField;
-    IBOutlet NSComboBox *dataSourceField;
-    IBOutlet NSTextField *visibilityField;
+    IBOutlet NSComboBox *__strong actionField;
+    IBOutlet NSComboBox *__strong dataSourceField;
+    IBOutlet NSTextField *__strong visibilityField;
     
 	BOOL isRestored;
 }
 
 // Labels on Attributes Panel
-@property (assign) IBOutlet NSTextField *xCoordinateLabel;
-@property (assign) IBOutlet NSTextField *yCoordinateLabel;
-@property (assign) IBOutlet NSTextField *layoutTypeLabel;
-@property (assign) IBOutlet NSTextField *widthLabel;
-@property (assign) IBOutlet NSTextField *heightLabel;
-@property (assign) IBOutlet NSTextField *backgroundColorLabel;
-@property (assign) IBOutlet NSTextField *borderWidthLabel;
-@property (assign) IBOutlet NSTextField *borderRadiusLabel;
-@property (assign) IBOutlet NSTextField *topLeftLabel;
-@property (assign) IBOutlet NSTextField *topRightLabel;
-@property (assign) IBOutlet NSTextField *bottomLeftLabel;
-@property (assign) IBOutlet NSTextField *bottomRightLabel;
-@property (assign) IBOutlet NSTextField *tagLabel;
-@property (assign) IBOutlet NSTextField *currentlySelectedLabel;
-@property (assign) IBOutlet NSTextView *cssOverride;
+@property (strong) IBOutlet NSTextField *xCoordinateLabel;
+@property (strong) IBOutlet NSTextField *yCoordinateLabel;
+@property (strong) IBOutlet NSTextField *layoutTypeLabel;
+@property (strong) IBOutlet NSTextField *widthLabel;
+@property (strong) IBOutlet NSTextField *heightLabel;
+@property (strong) IBOutlet NSTextField *backgroundColorLabel;
+@property (strong) IBOutlet NSTextField *borderWidthLabel;
+@property (strong) IBOutlet NSTextField *borderRadiusLabel;
+@property (strong) IBOutlet NSTextField *topLeftLabel;
+@property (strong) IBOutlet NSTextField *topRightLabel;
+@property (strong) IBOutlet NSTextField *bottomLeftLabel;
+@property (strong) IBOutlet NSTextField *bottomRightLabel;
+@property (strong) IBOutlet NSTextField *tagLabel;
+@property (strong) IBOutlet NSTextField *currentlySelectedLabel;
+@property (strong) IBOutlet NSTextView *cssOverride;
 
 
 
-@property(assign) IBOutlet NSComboBox *actionField;
-@property(assign) IBOutlet NSComboBox *dataSourceField;
-@property(assign) IBOutlet NSTextField *visibilityField;
+@property(strong) IBOutlet NSComboBox *actionField;
+@property(strong) IBOutlet NSComboBox *dataSourceField;
+@property(strong) IBOutlet NSTextField *visibilityField;
 
-@property (assign) IBOutlet NSTextField *colorHexValue;
-@property (assign) IBOutlet NSTextField *labelWarningField;
-@property (assign) IBOutlet NSTextField *elementidField;
+@property (strong) IBOutlet NSTextField *colorHexValue;
+@property (strong) IBOutlet NSTextField *labelWarningField;
+@property (strong) IBOutlet NSTextField *elementidField;
 
-@property (assign) IBOutlet NSColorWell *borderColour; 
-@property (assign) IBOutlet NSTextField *borderHexValue;;
+@property (strong) IBOutlet NSColorWell *borderColour; 
+@property (strong) IBOutlet NSTextField *borderHexValue;;
 
-@property(assign) IBOutlet DataSourcePanel *dataSourcePanel;
-
-
+@property(strong) IBOutlet DataSourcePanel *dataSourcePanel;
 
 
-@property (assign, nonatomic) DocumentBar *dBar;
-
-@property (assign, nonatomic) Singleton *sg;
-
-@property (assign, nonatomic) NSColorWell *pl;
-@property (assign, nonatomic) NSNumber *nu;
-@property (assign, nonatomic) NSComboBox *fontSizeComboBox;
-
-@property (assign, nonatomic) NSSlider *sl;
-@property (assign, nonatomic) NSTextField *borderValue;
-
-@property (assign, nonatomic) NSSlider *borderRadiusSlider;
-@property (assign, nonatomic) NSTextField *borderRadiusValue;
-
-@property (assign, nonatomic) NSTextField *buttonURLField;
-
-@property (assign, nonatomic) NSColorWell *fontColorWell;
-@property (assign, nonatomic) NSPopUpButton *typeFaceName;
-@property (assign, nonatomic) NSPopUpButton *typeFaceTrait;
-
-@property (assign, nonatomic) StageView *stageView;
-@property(assign) IBOutlet GalleryView *galleryPanel;
-@property(assign) IBOutlet LayerPanel *layerPanel;
-@property(assign) IBOutlet AttributePanel *attributePanel;
-@property(assign) IBOutlet AlignmentPanel *alignmentPanel;
-
-@property(assign) IBOutlet NSPanel *buttonPanel;
-
-@property (assign) IBOutlet NSProgressIndicator *progressIndicator;
 
 
-@property (assign, nonatomic) NSMutableDictionary *masterDataSource;
+@property (strong, nonatomic) DocumentBar *dBar;
+
+@property ( nonatomic) Singleton *sg;
+
+@property (strong, nonatomic) NSColorWell *pl;
+@property (strong, nonatomic) NSNumber *nu;
+@property (strong, nonatomic) NSComboBox *fontSizeComboBox;
+
+@property (strong, nonatomic) NSSlider *sl;
+@property (strong, nonatomic) NSTextField *borderValue;
+
+@property (strong, nonatomic) NSSlider *borderRadiusSlider;
+@property (strong, nonatomic) NSTextField *borderRadiusValue;
+
+@property (strong, nonatomic) NSTextField *buttonURLField;
+
+@property (strong, nonatomic) NSColorWell *fontColorWell;
+@property (strong, nonatomic) NSPopUpButton *typeFaceName;
+@property (strong, nonatomic) NSPopUpButton *typeFaceTrait;
+
+@property (strong, nonatomic) StageView *stageView;
+@property(strong) IBOutlet GalleryView *galleryPanel;
+@property(strong) IBOutlet LayerPanel *layerPanel;
+@property(strong) IBOutlet AttributePanel *attributePanel;
+@property(strong) IBOutlet AlignmentPanel *alignmentPanel;
+
+@property(strong) IBOutlet NSPanel *buttonPanel;
+
+@property (strong) IBOutlet NSProgressIndicator *progressIndicator;
+
+
+@property (strong, nonatomic) NSMutableDictionary *masterDataSource;
 
 // for Data Source Window
-@property(assign) NSMutableArray *arrayDataSource;
+@property(strong) NSMutableArray *arrayDataSource;
 
-@property (assign, nonatomic) NSMutableArray *actionsArray;
+@property (strong, nonatomic) NSMutableArray *actionsArray;
 //@property (assign, nonatomic) NSPopUpButton *layoutType;
 
 //@property (assign, nonatomic) NSNumber *kerningValue;
 //@property (assign, nonatomic) NSNumber *leadingValue;
 
-@property (assign, nonatomic) NSPanel *conversionProgressScreen;
-@property (assign, nonatomic) NSTextField *statusMessage; 
-@property (assign, nonatomic) NSTextField *percentCompleteMessage;
+@property (strong, nonatomic) NSPanel *conversionProgressScreen;
+@property (strong, nonatomic) NSTextField *statusMessage; 
+@property (strong, nonatomic) NSTextField *percentCompleteMessage;
 
 -(IBAction)showBuilderScreen:(id)sender;
 -(IBAction)setTypeFaceFamily:(id)sender;
@@ -243,5 +243,6 @@
  */
 - (void)hideDinamicFontTab;
 
+- (void)OpenNewDocument:(CGFloat)width;
 
 @end

@@ -2,7 +2,7 @@
 
 @interface GroupingBox : Element
 {
-    NSMutableArray *insideTheBox;
+    NSMutableArray *__strong insideTheBox;
     int marginTop;
     int marginRight;
     //int highestYcoordiante;
@@ -16,12 +16,12 @@
     float lowestElementBottomYco;
     
 }
-@property (nonatomic, assign) NSMutableArray *insideTheBox;
+@property (nonatomic, strong) NSMutableArray *insideTheBox;
 @property int marginTop;
 @property int marginRight;
 //@property int highestYcoordiante;
-@property (retain, nonatomic) NSString *idPreviouslyKnownAs;
-@property (retain, nonatomic) NSMutableArray *nestedGroupingBoxes;
+@property (strong, nonatomic) NSString *idPreviouslyKnownAs;
+@property (strong, nonatomic) NSMutableArray *nestedGroupingBoxes;
 @property int xcoordinate;
 @property int ycoordinate;
 @property int width;

@@ -6,7 +6,7 @@
     NSInteger selRow;
     NSMutableArray *commandsAndActions;
     NSTableView *actionsTableView;
-    IBOutlet NSTableView *selectedActionsTableview;
+    IBOutlet NSTableView *__strong selectedActionsTableview;
     IBOutlet id <ChangeBuilderWindowElementsAttributes> delegate;
     NSMutableArray *arrayToCheck;
     
@@ -14,9 +14,9 @@
 
 //Actions
 @property NSInteger selRow;
-@property (nonatomic, retain) NSMutableArray *commandsAndActions;
-@property (assign, nonatomic) NSTextField *actionsLabel;
-@property (assign, nonatomic) NSTableView *selectedActionsTableview;
-@property (retain) id<ChangeBuilderWindowElementsAttributes>	delegate;
-@property (retain) NSMutableArray *arrayToCheck;
+@property (nonatomic, strong) NSMutableArray *commandsAndActions;
+@property (strong, nonatomic) NSTextField *actionsLabel;
+@property (strong, nonatomic) NSTableView *selectedActionsTableview;
+@property (strong) id<ChangeBuilderWindowElementsAttributes>	delegate;
+@property (strong) NSMutableArray *arrayToCheck;
 @end

@@ -173,13 +173,11 @@ static NSImage *bottomImage;
     //[scrollView setRulersVisible:YES];
     
     // Centring the view in the scrollview
-    id documentView = [[scrollView documentView] retain];
+    id documentView = [scrollView documentView];
     id newClipView = [[SBCenteringClipView alloc] initWithFrame:[[scrollView contentView] frame]];
     [newClipView setBackgroundColor:[NSColor windowBackgroundColor]];
     [scrollView setContentView:newClipView];
-    [newClipView release];
     [scrollView setDocumentView:documentView];
-    [documentView release];
     
     
     //Fonts panel
@@ -1859,7 +1857,7 @@ static NSImage *bottomImage;
 		if (nHitTest)
         {
             stageClicked = NO;
-            currentElement = [shape retain];
+            currentElement = shape;
             Singleton *sg = [[Singleton alloc]init];
             sg.currentElement = currentElement;
             
@@ -2395,7 +2393,7 @@ static NSImage *bottomImage;
 	}
 	
 	if ( ((Element *)[selElementArray lastObject]).URLString != nil ) {
-		[((Element *)[selElementArray lastObject]).URLString release];
+		((Element *)[selElementArray lastObject]).URLString;
 	}
 	
 	[((Element *)[selElementArray lastObject]) setURLString:url];
@@ -2520,7 +2518,6 @@ static NSImage *bottomImage;
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [super dealloc];
 }
 
 
@@ -2615,7 +2612,6 @@ static NSImage *bottomImage;
             return;
         }
         
-        [currentElement retain];
         [currentElement removeFromSuperviewWithoutNeedingDisplay];
         [elementArray removeObject:currentElement];
         
@@ -2707,7 +2703,6 @@ static NSImage *bottomImage;
         {
 			[clipBoardArray removeObject:element];
 		}
-		[element release];
 		
 		return;
 	}
@@ -2731,7 +2726,6 @@ static NSImage *bottomImage;
 	
 	if (clipBoardArray != nil) {
 		[clipBoardArray removeAllObjects];
-		[clipBoardArray release];
 		clipBoardArray = nil;
 	}
 	
@@ -2755,7 +2749,6 @@ static NSImage *bottomImage;
 	
 	if (clipBoardArray != nil) {
 		[clipBoardArray removeAllObjects];
-		[clipBoardArray release];
 		clipBoardArray = nil;
 	}
 	
@@ -2799,7 +2792,6 @@ static NSImage *bottomImage;
 			}
 			
 			[clipBoardArray removeAllObjects];
-			[clipBoardArray release];
 			clipBoardArray = nil;
 			
 			CutOrCopyFlag = SHAPE_NORMAL;
@@ -2813,7 +2805,6 @@ static NSImage *bottomImage;
 	}
 	
 	[bufferArray removeAllObjects];
-	[bufferArray release];
 }
 
 
@@ -3011,9 +3002,6 @@ static NSImage *bottomImage;
 	[selElementArray removeAllObjects];
 	[clipBoardArray removeAllObjects];
 	
-	[elementArray release];
-	[selElementArray release];
-	[clipBoardArray release];
 	
 	elementArray = [[NSMutableArray alloc] init];
     selElementArray = [[NSMutableArray alloc] init];
@@ -3087,7 +3075,6 @@ static NSImage *bottomImage;
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:savedDataDict];
     
-    [savedDataDict release];
     
     
     return data;
@@ -3424,7 +3411,7 @@ static CGPatternRef createImagePatternPattern(CGAffineTransform *additionalTrans
         fprintf(stderr, "Couldn't allocate pattern info data! \n");
         return NULL;
     }
-    NSImage *theImage = [[NSImage alloc]initWithContentsOfURL:(NSURL*)url];
+    NSImage *theImage = [[NSImage alloc]initWithContentsOfURL:(NSURL*)CFBridgingRelease(url)];
     NSRect imgRect = NSMakeRect(0, 0, theImage.size.width, theImage.size.height);
     CGImageRef imgRef = [theImage CGImageForProposedRect:&imgRect context:NULL hints:NULL];
     patternInfoP->imageDoc = imgRef;
@@ -3541,7 +3528,6 @@ static void drawWithImagePattern(CGContextRef context, CFURLRef url)
 	NSFontManager *fontManager = [NSFontManager sharedFontManager];
     NSArray *typeFaceFamilies = [fontManager availableFontFamilies];
 	
-	[fontFaceArray release];
 	fontFaceArray = [[NSMutableArray alloc] init];
 	
 	for (NSString *fontName in typeFaceFamilies) {

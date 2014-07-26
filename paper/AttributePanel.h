@@ -36,9 +36,9 @@ SetAttributeDelegate
     IBOutlet NSTextField			*urlTextField;
     
     //Layout type - px or %
-    IBOutlet NSPopUpButton *layoutTypeDisplay;
+    IBOutlet NSPopUpButton *__strong layoutTypeDisplay;
 	
-	id<ChangeElementAttributeDelegate>		changeAttributeDelegate;
+	id<ChangeElementAttributeDelegate>		__strong changeAttributeDelegate;
 	
 	
 	/*
@@ -50,19 +50,19 @@ SetAttributeDelegate
 }
 
 
-@property (assign) id<ChangeElementAttributeDelegate>		changeAttributeDelegate;
-@property (assign, nonatomic) IBOutlet NSPopUpButton *layoutTypeDisplay;
-@property (assign) IBOutlet NSTextField						*RadioField;
-@property (assign) IBOutlet NSSlider						*RadioSlider;
-@property (assign) IBOutlet NSTextField						*DistanceField;
-@property (assign) IBOutlet NSSlider						*DistanceSlider;
-@property (assign) IBOutlet NSColorWell						*ColorWell;
-@property (assign) IBOutlet NSTextField						*OpacityField;
-@property (assign) IBOutlet NSSlider						*OpacitySlider;
-@property (assign) IBOutlet NSSlider						*BlurSlider;
-@property (assign) IBOutlet NSTextField						*BlurField;
-@property (assign) IBOutlet NSMatrix						*Direction;
-@property (assign) IBOutlet NSTabView						*_tabView;
+@property (strong) id<ChangeElementAttributeDelegate>		changeAttributeDelegate;
+@property (strong, nonatomic) IBOutlet NSPopUpButton *layoutTypeDisplay;
+@property (strong) IBOutlet NSTextField						*RadioField;
+@property (strong) IBOutlet NSSlider						*RadioSlider;
+@property (strong) IBOutlet NSTextField						*DistanceField;
+@property (strong) IBOutlet NSSlider						*DistanceSlider;
+@property (strong) IBOutlet NSColorWell						*ColorWell;
+@property (strong) IBOutlet NSTextField						*OpacityField;
+@property (strong) IBOutlet NSSlider						*OpacitySlider;
+@property (strong) IBOutlet NSSlider						*BlurSlider;
+@property (strong) IBOutlet NSTextField						*BlurField;
+@property (strong) IBOutlet NSMatrix						*Direction;
+@property (strong) IBOutlet NSTabView						*_tabView;
 
 
 //- (void)setTab:(NSInteger)index;

@@ -175,62 +175,62 @@ typedef NSInteger LayoutTag;
 @property (nonatomic) CGFloat						shadowOpacity;
 @property (nonatomic) CGFloat						shadowBlur;
 @property (nonatomic) BOOL							shadowDirection;
-@property (assign) NSMutableArray					*arrayShadows;
-@property (assign, nonatomic) NSAttributedString *extracss;
+@property (strong) NSMutableArray					*arrayShadows;
+@property (strong, nonatomic) NSAttributedString *extracss;
 
 
-@property (assign, nonatomic) NSColor *elementHighlightColor;
+@property (strong, nonatomic) NSColor *elementHighlightColor;
 
 @property (assign, nonatomic) ElementType				uType;
-@property (readonly, assign, nonatomic) NSMutableString *elementid;
+@property (readonly, strong, nonatomic) NSMutableString *elementid;
 @property (nonatomic) BOOL							 isSelected;
 @property (nonatomic) BOOL                           isUnderneathOtherElement;
 @property (nonatomic) NSRect						rtFrame;
-@property (assign) id<OperationInsideElementDelegate>				insideOperationElement;
+@property (strong) id<OperationInsideElementDelegate>				insideOperationElement;
 
 
 @property float    width_as_percentage;
 @property float    height_as_percentage;
-@property (assign, nonatomic) NSString *layoutType;
+@property (strong, nonatomic) NSString *layoutType;
 
-@property (assign, nonatomic) NSString *elementTag;
+@property (strong, nonatomic) NSString *elementTag;
 
 @property BOOL    topLeftBorderRadius;
 @property BOOL    topRightBorderRadius;
 @property BOOL    bottomLeftBorderRadius;
 @property BOOL    bottomRightBorderRadius;
 
-@property (assign, nonatomic) NSNumber    *borderWidth;
-@property (assign, nonatomic) NSNumber *borderRadius;
+@property (strong, nonatomic) NSNumber    *borderWidth;
+@property (strong, nonatomic) NSNumber *borderRadius;
 
 @property (readonly, nonatomic) NSDictionary *color;
-@property (readonly, retain, nonatomic) NSColor *colorAttributes;
-@property (assign, nonatomic) NSMutableDictionary *border;
+@property (readonly, strong, nonatomic) NSColor *colorAttributes;
+@property (strong, nonatomic) NSMutableDictionary *border;
 
-@property (assign, nonatomic) NSNumber *opacityTypeSelected;
+@property (strong, nonatomic) NSNumber *opacityTypeSelected;
 
 
-@property (assign, nonatomic) NSMutableAttributedString *contentText;
-@property (assign, nonatomic) NSString *spanGrouping;
+@property (strong, nonatomic) NSMutableAttributedString *contentText;
+@property (strong, nonatomic) NSString *spanGrouping;
 
-@property (assign, nonatomic) NSString *URLString;
+@property (strong, nonatomic) NSString *URLString;
 
-@property (assign, nonatomic) NSString *imgName;
+@property (strong, nonatomic) NSString *imgName;
 
-@property (assign, nonatomic) NSMutableArray *elementsAboveMe;
+@property (strong, nonatomic) NSMutableArray *elementsAboveMe;
 
-@property (assign) NSString *buttonText;
+@property (strong) NSString *buttonText;
 
-@property (assign, nonatomic) NSString *actionStringEntered;
-@property (assign, nonatomic) NSString *dataSourceStringEntered;
-@property (assign, nonatomic) NSString *visibilityActionStringEntered; //
+@property (strong, nonatomic) NSString *actionStringEntered;
+@property (strong, nonatomic) NSString *dataSourceStringEntered;
+@property (strong, nonatomic) NSString *visibilityActionStringEntered; //
 
-@property (assign, nonatomic) NSString *prefixText;
+@property (strong, nonatomic) NSString *prefixText;
 
 @property (nonatomic) BOOL							isPtInElement;
 
-@property (assign, nonatomic) NSString *jsid;
-@property (assign, nonatomic) NSString *topMarginForRow;
+@property (strong, nonatomic) NSString *jsid;
+@property (strong, nonatomic) NSString *topMarginForRow;
 
 @property (nonatomic) BOOL							canMove;
 

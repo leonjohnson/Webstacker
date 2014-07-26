@@ -116,7 +116,7 @@
 		
 		NSTextField *viewName = [tableView makeViewWithIdentifier:[NSString stringWithFormat:@"TableViewNameCell%ld", index] owner:self];
 		if (viewName == nil) {
-			viewName = [[[NSTextField alloc] init] autorelease];
+			viewName = [[NSTextField alloc] init];
 			viewName.identifier = [NSString stringWithFormat:@"TableViewNameCell%ld", index];
 		}
 		
@@ -189,7 +189,7 @@
 		
 		NSButton *checkVisible = [tableView makeViewWithIdentifier:[NSString stringWithFormat:@"TableViewVisibleCell%ld", row] owner:self];
 		if (checkVisible == nil) {
-			checkVisible = [[[NSButton alloc] init] autorelease];
+			checkVisible = [[NSButton alloc] init];
 			checkVisible.identifier = [NSString stringWithFormat:@"TableViewVisibleCell%ld", row];
 		}
 		

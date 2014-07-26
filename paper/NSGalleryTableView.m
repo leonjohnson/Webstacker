@@ -76,7 +76,7 @@
                      [NSColor colorWithDeviceRed:0.085 green:0.431 blue:0.736 alpha:1.0], 1.0, nil] retain]; //160 80
         */
 		
-        pathColor = [[NSColor colorWithDeviceRed:0.5 green:0.5 blue:0.5 alpha:1.0] retain];
+        pathColor = [NSColor colorWithDeviceRed:0.5 green:0.5 blue:0.5 alpha:1.0];
     }
     else
     {
@@ -86,7 +86,7 @@
                      [NSColor colorWithDeviceRed:0.085 green:0.17 blue:0.436 alpha:1.0], 0.7, nil] retain]; //160 80
          */
 		
-        pathColor = [[NSColor colorWithDeviceRed:0.5 green:0.5 blue:0.5 alpha:1.0] retain];
+        pathColor = [NSColor colorWithDeviceRed:0.5 green:0.5 blue:0.5 alpha:1.0];
     }
 	
 	// draw highlight for the visible, selected rows
