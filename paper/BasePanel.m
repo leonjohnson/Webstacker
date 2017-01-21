@@ -1,11 +1,3 @@
-//
-//  BasePanel.m
-//  DrawShap
-//
-//  Created by Bai Jin on 12/25/12.
-//  Copyright (c) 2012 Cosmo Software. All rights reserved.
-//
-
 #import "BasePanel.h"
 #import "Common.h"
 
